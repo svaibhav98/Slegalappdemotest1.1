@@ -315,18 +315,13 @@ export default function HomeScreen() {
           {quickAccessItems.map((item, index) => (
             <TouchableOpacity 
               key={index} 
-              style={[
-                styles.quickAccessCard,
-                item.featured && styles.quickAccessCardFeatured
-              ]} 
+              style={styles.quickAccessCard} 
               onPress={() => router.push(item.route as any)} 
               activeOpacity={0.85}
             >
               <View style={[
                 styles.quickAccessIconContainer,
-                item.featured 
-                  ? styles.quickAccessIconFeatured 
-                  : { backgroundColor: item.bgColor }
+                { backgroundColor: item.bgColor }
               ]}>
                 <Ionicons 
                   name={item.icon as any} 
@@ -334,10 +329,7 @@ export default function HomeScreen() {
                   color={item.iconColor} 
                 />
               </View>
-              <Text style={[
-                styles.quickAccessLabel,
-                item.featured && styles.quickAccessLabelFeatured
-              ]}>
+              <Text style={styles.quickAccessLabel}>
                 {item.label}
               </Text>
             </TouchableOpacity>
