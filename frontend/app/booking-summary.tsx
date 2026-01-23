@@ -35,7 +35,7 @@ export default function BookingSummaryScreen() {
   const [lawyer, setLawyer] = useState<Lawyer | null>(null);
   const [selectedPackage, setSelectedPackage] = useState<LawyerPackage | null>(null);
   const [loading, setLoading] = useState(true);
-  const [slots, setSlots] = useState(2);
+  const [slots, setSlots] = useState(1);
 
   useEffect(() => {
     const lawyerData = getLawyerById(lawyerId as string);
