@@ -444,6 +444,10 @@ const styles = StyleSheet.create({
     minHeight: 200,
     position: 'relative',
   },
+  heroBannerBg: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: '#3D2B5A',
+  },
   heroOrangeGlow: {
     position: 'absolute',
     top: 0,
