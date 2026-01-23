@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, RefreshControl, TextInput, Modal } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, RefreshControl, TextInput, Modal, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { Colors } from '../../constants/Colors';
 import { Header, Card, EmptyState } from '../../components/CommonComponents';
 import { caseAPI } from '../../utils/api';
 
 export default function CasesScreen() {
+  const router = useRouter();
   const [cases, setCases] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [selectedTab, setSelectedTab] = useState('all');
-  const [newCase, setNewCase] = useState({ title: '', description: '', court: '', case_number: '', hearing_date: '', status: 'active' });
+  const [selectedTab, setSelectedTab] = useState('upcoming');
+  const [newCase, setNewCase] = useState({ title: '', description: '', court: '', case_number: '', hearing_date: '', status: 'upcoming' });
 
   useEffect(() => {
     loadCases();
@@ -20,28 +22,21 @@ export default function CasesScreen() {
   const loadCases = async () => {
     try {
       const response = await caseAPI.listCases();
-      const fetchedCases = response.cases || [];
+      let fetchedCases = response.cases || [];
       
-      // Add sample data if empty
       if (fetchedCases.length === 0) {
-        const sampleCases = [
-          { id: '1', title: 'Property Dispute - Plot 123', description: 'Boundary dispute with neighbor regarding property line', court: 'District Court, Delhi', case_number: 'DC/2024/001', hearing_date: '2025-02-15', status: 'active', created_at: '2024-12-01' },
-          { id: '2', title: 'Tenant Eviction Case', description: 'Eviction proceedings for commercial property', court: 'Civil Court, Mumbai', case_number: 'CC/2024/089', hearing_date: '2025-02-20', status: 'active', created_at: '2024-11-15' },
-          { id: '3', title: 'Consumer Complaint - Defective Product', description: 'Complaint against manufacturer for defective electronics', court: 'Consumer Forum, Bangalore', case_number: 'CF/2024/234', hearing_date: '2025-01-30', status: 'active', created_at: '2024-10-20' },
-          { id: '4', title: 'Employment Dispute', description: 'Wrongful termination and compensation claim', court: 'Labour Court, Pune', case_number: 'LC/2023/456', hearing_date: '', status: 'closed', created_at: '2023-08-10' },
+        fetchedCases = [
+          { id: '1', title: 'Property Boundary Dispute', description: 'Dispute with neighbor regarding property line demarcation', court: 'District Court, Delhi', case_number: 'DC/2024/001', hearing_date: '2025-02-15', status: 'upcoming', created_at: '2024-12-01', reminder_date: '2025-02-13', notes: [] },
+          { id: '2', title: 'Tenant Eviction Case', description: 'Eviction proceedings for commercial property lease violation', court: 'Civil Court, Mumbai', case_number: 'CC/2024/089', hearing_date: '2025-02-20', status: 'upcoming', created_at: '2024-11-15', reminder_date: '2025-02-18', notes: [] },
+          { id: '3', title: 'Consumer Complaint - Electronics', description: 'Complaint against manufacturer for defective product and refund', court: 'Consumer Forum, Bangalore', case_number: 'CF/2024/234', hearing_date: '2025-02-10', status: 'ongoing', created_at: '2024-10-20', last_hearing: '2025-01-15', notes: [] },
+          { id: '4', title: 'Employment Wrongful Termination', description: 'Wrongful termination claim with compensation demand', court: 'Labour Court, Pune', case_number: 'LC/2023/456', hearing_date: '', status: 'closed', created_at: '2023-08-10', closed_date: '2024-12-01', notes: [] },
+          { id: '5', title: 'Family Property Division', description: 'Property inheritance dispute among family members', court: 'Family Court, Chennai', case_number: 'FC/2024/112', hearing_date: '2025-03-05', status: 'ongoing', created_at: '2024-09-01', last_hearing: '2025-01-20', notes: [] },
         ];
-        setCases(sampleCases);
-      } else {
-        setCases(fetchedCases);
       }
+      setCases(fetchedCases);
     } catch (error) {
       console.error('Error loading cases:', error);
-      // Show sample data on error too
-      const sampleCases = [
-        { id: '1', title: 'Property Dispute - Plot 123', description: 'Boundary dispute with neighbor', court: 'District Court', case_number: 'DC/2024/001', hearing_date: '2025-02-15', status: 'active' },
-        { id: '2', title: 'Tenant Eviction Case', description: 'Eviction proceedings', court: 'Civil Court', case_number: 'CC/2024/089', hearing_date: '2025-02-20', status: 'active' },
-      ];
-      setCases(sampleCases);
+      setCases([]);
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -49,15 +44,20 @@ export default function CasesScreen() {
   };
 
   const handleAddCase = async () => {
-    if (!newCase.title || !newCase.description) return;
+    if (!newCase.title || !newCase.description) {
+      Alert.alert('Error', 'Please fill in all required fields');
+      return;
+    }
 
     try {
-      await caseAPI.createCase(newCase);
+      const caseWithId = { ...newCase, id: Date.now().toString(), created_at: new Date().toISOString(), notes: [] };
+      setCases([...cases, caseWithId]);
       setShowAddModal(false);
-      setNewCase({ title: '', description: '', court: '', case_number: '', hearing_date: '', status: 'active' });
-      loadCases();
+      setNewCase({ title: '', description: '', court: '', case_number: '', hearing_date: '', status: 'upcoming' });
+      Alert.alert('Success', 'Case added successfully');
     } catch (error) {
       console.error('Error creating case:', error);
+      Alert.alert('Error', 'Failed to add case');
     }
   };
 
@@ -67,51 +67,48 @@ export default function CasesScreen() {
   };
 
   const getStatusColor = (status: string) => {
-    const colors: any = { active: Colors.info, pending: Colors.warning, closed: Colors.textSecondary, resolved: Colors.success };
+    const colors: any = { upcoming: Colors.warning, ongoing: Colors.info, closed: Colors.textSecondary };
     return colors[status] || Colors.gray400;
   };
 
-  const isUpcoming = (hearingDate: string) => {
-    if (!hearingDate) return false;
-    const today = new Date();
-    const hearing = new Date(hearingDate);
-    return hearing >= today;
-  };
-
   const getFilteredCases = () => {
-    if (selectedTab === 'all') return cases;
-    if (selectedTab === 'upcoming') return cases.filter(c => isUpcoming(c.hearing_date) && c.status !== 'closed');
+    if (selectedTab === 'upcoming') return cases.filter(c => c.status === 'upcoming');
+    if (selectedTab === 'ongoing') return cases.filter(c => c.status === 'ongoing');
     if (selectedTab === 'closed') return cases.filter(c => c.status === 'closed');
     return cases;
   };
 
   const filteredCases = getFilteredCases();
 
+  const getUpcomingCount = () => cases.filter(c => c.status === 'upcoming').length;
+  const getOngoingCount = () => cases.filter(c => c.status === 'ongoing').length;
+  const getClosedCount = () => cases.filter(c => c.status === 'closed').length;
+
   return (
     <View style={styles.container}>
       <Header title="My Cases" subtitle="Track and manage your legal cases" rightAction={
-        <TouchableOpacity style={styles.addButton} onPress={() => setShowAddModal(true)}>
+        <TouchableOpacity style={styles.addButton} onPress={() => setShowAddModal(true)} activeOpacity={0.8}>
           <Ionicons name="add-circle" size={28} color={Colors.primary} />
         </TouchableOpacity>
       } />
 
       <View style={styles.tabsContainer}>
-        <TouchableOpacity style={[styles.tab, selectedTab === 'all' && styles.tabActive]} onPress={() => setSelectedTab('all')}>
-          <Text style={[styles.tabText, selectedTab === 'all' && styles.tabTextActive]}>All</Text>
-          <View style={[styles.tabBadge, selectedTab === 'all' && styles.tabBadgeActive]}>
-            <Text style={[styles.tabBadgeText, selectedTab === 'all' && styles.tabBadgeTextActive]}>{cases.length}</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.tab, selectedTab === 'upcoming' && styles.tabActive]} onPress={() => setSelectedTab('upcoming')}>
+        <TouchableOpacity style={[styles.tab, selectedTab === 'upcoming' && styles.tabActive]} onPress={() => setSelectedTab('upcoming')} activeOpacity={0.8}>
           <Text style={[styles.tabText, selectedTab === 'upcoming' && styles.tabTextActive]}>Upcoming</Text>
           <View style={[styles.tabBadge, selectedTab === 'upcoming' && styles.tabBadgeActive]}>
-            <Text style={[styles.tabBadgeText, selectedTab === 'upcoming' && styles.tabBadgeTextActive]}>{cases.filter(c => isUpcoming(c.hearing_date) && c.status !== 'closed').length}</Text>
+            <Text style={[styles.tabBadgeText, selectedTab === 'upcoming' && styles.tabBadgeTextActive]}>{getUpcomingCount()}</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.tab, selectedTab === 'closed' && styles.tabActive]} onPress={() => setSelectedTab('closed')}>
+        <TouchableOpacity style={[styles.tab, selectedTab === 'ongoing' && styles.tabActive]} onPress={() => setSelectedTab('ongoing')} activeOpacity={0.8}>
+          <Text style={[styles.tabText, selectedTab === 'ongoing' && styles.tabTextActive]}>Ongoing</Text>
+          <View style={[styles.tabBadge, selectedTab === 'ongoing' && styles.tabBadgeActive]}>
+            <Text style={[styles.tabBadgeText, selectedTab === 'ongoing' && styles.tabBadgeTextActive]}>{getOngoingCount()}</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.tab, selectedTab === 'closed' && styles.tabActive]} onPress={() => setSelectedTab('closed')} activeOpacity={0.8}>
           <Text style={[styles.tabText, selectedTab === 'closed' && styles.tabTextActive]}>Closed</Text>
           <View style={[styles.tabBadge, selectedTab === 'closed' && styles.tabBadgeActive]}>
-            <Text style={[styles.tabBadgeText, selectedTab === 'closed' && styles.tabBadgeTextActive]}>{cases.filter(c => c.status === 'closed').length}</Text>
+            <Text style={[styles.tabBadgeText, selectedTab === 'closed' && styles.tabBadgeTextActive]}>{getClosedCount()}</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -119,41 +116,57 @@ export default function CasesScreen() {
       {loading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={Colors.primary} />
+          <Text style={styles.loadingText}>Loading cases...</Text>
         </View>
       ) : filteredCases.length === 0 ? (
-        <EmptyState icon="folder-open-outline" title={`No ${selectedTab} cases`} subtitle="Add your first case to start tracking" action={selectedTab === 'all' ? { label: 'Add Case', onPress: () => setShowAddModal(true) } : undefined} />
+        <EmptyState icon="folder-open-outline" title={`No ${selectedTab} cases`} subtitle={selectedTab === 'upcoming' ? 'Add your first case to start tracking' : `You don't have any ${selectedTab} cases yet`} action={selectedTab === 'upcoming' ? { label: 'Add Case', onPress: () => setShowAddModal(true) } : undefined} />
       ) : (
-        <ScrollView style={styles.content} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[Colors.primary]} />}>
+        <ScrollView style={styles.content} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[Colors.primary]} tintColor={Colors.primary} />}>
           {filteredCases.map((caseItem, index) => (
-            <Card key={index} style={styles.caseCard}>
-              <View style={styles.caseHeader}>
-                <View style={styles.caseIcon}>
-                  <Ionicons name="document-text" size={24} color={Colors.primary} />
-                </View>
-                <View style={styles.caseInfo}>
-                  <Text style={styles.caseTitle}>{caseItem.title}</Text>
-                  <View style={styles.caseMeta}>
-                    <View style={[styles.statusBadge, { backgroundColor: getStatusColor(caseItem.status) + '20' }]}>
-                      <Text style={[styles.statusText, { color: getStatusColor(caseItem.status) }]}>{caseItem.status}</Text>
+            <TouchableOpacity key={index} activeOpacity={0.9} onPress={() => router.push(`/case-detail/${caseItem.id}` as any)}>
+              <Card style={styles.caseCard}>
+                <View style={styles.caseHeader}>
+                  <View style={styles.caseIcon}>
+                    <Ionicons name="document-text" size={24} color={Colors.primary} />
+                  </View>
+                  <View style={styles.caseInfo}>
+                    <Text style={styles.caseTitle}>{caseItem.title}</Text>
+                    <View style={styles.caseMeta}>
+                      <View style={[styles.statusBadge, { backgroundColor: getStatusColor(caseItem.status) + '20' }]}>
+                        <Text style={[styles.statusText, { color: getStatusColor(caseItem.status) }]}>{caseItem.status}</Text>
+                      </View>
+                      {caseItem.case_number && <Text style={styles.caseNumber}> • {caseItem.case_number}</Text>}
                     </View>
-                    {caseItem.case_number && <Text style={styles.caseNumber}> • {caseItem.case_number}</Text>}
                   </View>
                 </View>
-              </View>
-              <Text style={styles.caseDescription} numberOfLines={2}>{caseItem.description}</Text>
-              {caseItem.court && <Text style={styles.courtText}><Ionicons name="business" size={14} color={Colors.textSecondary} /> {caseItem.court}</Text>}
-              {caseItem.hearing_date && (
-                <View style={styles.hearingDate}>
-                  <Ionicons name="calendar" size={16} color={isUpcoming(caseItem.hearing_date) ? Colors.info : Colors.textSecondary} />
-                  <Text style={[styles.hearingText, { color: isUpcoming(caseItem.hearing_date) ? Colors.info : Colors.textSecondary }]}>Next hearing: {caseItem.hearing_date}</Text>
+                <Text style={styles.caseDescription} numberOfLines={2}>{caseItem.description}</Text>
+                {caseItem.court && <Text style={styles.courtText}><Ionicons name="business" size={14} color={Colors.textSecondary} /> {caseItem.court}</Text>}
+                {caseItem.hearing_date && caseItem.status !== 'closed' && (
+                  <View style={styles.hearingDate}>
+                    <Ionicons name="calendar" size={16} color={Colors.info} />
+                    <Text style={styles.hearingText}>Next hearing: {caseItem.hearing_date}</Text>
+                  </View>
+                )}
+                {caseItem.status === 'closed' && caseItem.closed_date && (
+                  <View style={styles.closedBanner}>
+                    <Ionicons name="checkmark-circle" size={16} color={Colors.success} />
+                    <Text style={styles.closedText}>Closed on {caseItem.closed_date}</Text>
+                  </View>
+                )}
+                <View style={styles.caseFooter}>
+                  <TouchableOpacity style={styles.actionChip}>
+                    <Ionicons name="notifications-outline" size={16} color={Colors.text} />
+                    <Text style={styles.actionChipText}>Reminders</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.viewDetailsButton}>
+                    <Text style={styles.viewDetailsText}>View Details</Text>
+                    <Ionicons name="chevron-forward" size={16} color={Colors.primary} />
+                  </TouchableOpacity>
                 </View>
-              )}
-              <TouchableOpacity style={styles.viewButton}>
-                <Text style={styles.viewButtonText}>View Details</Text>
-                <Ionicons name="chevron-forward" size={16} color={Colors.primary} />
-              </TouchableOpacity>
-            </Card>
+              </Card>
+            </TouchableOpacity>
           ))}
+          <View style={{ height: 100 }} />
         </ScrollView>
       )}
 
@@ -168,16 +181,16 @@ export default function CasesScreen() {
             </View>
             <ScrollView>
               <Text style={styles.inputLabel}>Case Title *</Text>
-              <TextInput style={styles.input} placeholder="e.g., Property Dispute" value={newCase.title} onChangeText={(text) => setNewCase({ ...newCase, title: text })} />
+              <TextInput style={styles.input} placeholder="e.g., Property Dispute" placeholderTextColor={Colors.gray400} value={newCase.title} onChangeText={(text) => setNewCase({ ...newCase, title: text })} />
               <Text style={styles.inputLabel}>Description *</Text>
-              <TextInput style={[styles.input, styles.textArea]} placeholder="Brief description of the case" value={newCase.description} onChangeText={(text) => setNewCase({ ...newCase, description: text })} multiline numberOfLines={4} />
+              <TextInput style={[styles.input, styles.textArea]} placeholder="Brief description of the case" placeholderTextColor={Colors.gray400} value={newCase.description} onChangeText={(text) => setNewCase({ ...newCase, description: text })} multiline numberOfLines={4} />
               <Text style={styles.inputLabel}>Court</Text>
-              <TextInput style={styles.input} placeholder="e.g., District Court" value={newCase.court} onChangeText={(text) => setNewCase({ ...newCase, court: text })} />
+              <TextInput style={styles.input} placeholder="e.g., District Court" placeholderTextColor={Colors.gray400} value={newCase.court} onChangeText={(text) => setNewCase({ ...newCase, court: text })} />
               <Text style={styles.inputLabel}>Case Number</Text>
-              <TextInput style={styles.input} placeholder="e.g., 123/2025" value={newCase.case_number} onChangeText={(text) => setNewCase({ ...newCase, case_number: text })} />
+              <TextInput style={styles.input} placeholder="e.g., 123/2025" placeholderTextColor={Colors.gray400} value={newCase.case_number} onChangeText={(text) => setNewCase({ ...newCase, case_number: text })} />
               <Text style={styles.inputLabel}>Next Hearing Date</Text>
-              <TextInput style={styles.input} placeholder="YYYY-MM-DD" value={newCase.hearing_date} onChangeText={(text) => setNewCase({ ...newCase, hearing_date: text })} />
-              <TouchableOpacity style={[styles.submitButton, (!newCase.title || !newCase.description) && styles.submitButtonDisabled]} onPress={handleAddCase} disabled={!newCase.title || !newCase.description}>
+              <TextInput style={styles.input} placeholder="YYYY-MM-DD" placeholderTextColor={Colors.gray400} value={newCase.hearing_date} onChangeText={(text) => setNewCase({ ...newCase, hearing_date: text })} />
+              <TouchableOpacity style={[styles.submitButton, (!newCase.title || !newCase.description) && styles.submitButtonDisabled]} onPress={handleAddCase} disabled={!newCase.title || !newCase.description} activeOpacity={0.9}>
                 <Text style={styles.submitButtonText}>Add Case</Text>
               </TouchableOpacity>
             </ScrollView>
@@ -192,39 +205,45 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background },
   addButton: { padding: 4 },
   tabsContainer: { flexDirection: 'row', paddingHorizontal: 20, paddingVertical: 12, backgroundColor: Colors.surface, borderBottomWidth: 1, borderBottomColor: Colors.border },
-  tab: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: 10, paddingHorizontal: 16, borderRadius: 8, marginHorizontal: 4 },
-  tabActive: { backgroundColor: Colors.primary },
+  tab: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: 10, paddingHorizontal: 12, borderRadius: 10, marginHorizontal: 4 },
+  tabActive: { backgroundColor: Colors.primary, shadowColor: Colors.primary, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.3, shadowRadius: 4, elevation: 3 },
   tabText: { fontSize: 14, fontWeight: '600', color: Colors.textSecondary, marginRight: 6 },
   tabTextActive: { color: '#FFFFFF' },
-  tabBadge: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: 10, backgroundColor: Colors.gray200 },
+  tabBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10, backgroundColor: Colors.gray200 },
   tabBadgeActive: { backgroundColor: '#FFFFFF30' },
-  tabBadgeText: { fontSize: 12, fontWeight: 'bold', color: Colors.text },
+  tabBadgeText: { fontSize: 12, fontWeight: '700', color: Colors.text },
   tabBadgeTextActive: { color: '#FFFFFF' },
-  content: { flex: 1, paddingHorizontal: 20, paddingTop: 12 },
+  content: { flex: 1, paddingHorizontal: 20, paddingTop: 16 },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  caseCard: { marginBottom: 16 },
+  loadingText: { marginTop: 12, fontSize: 14, color: Colors.textSecondary },
+  caseCard: { marginBottom: 16, borderRadius: 16, shadowColor: '#000', shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.08, shadowRadius: 8, elevation: 4 },
   caseHeader: { flexDirection: 'row', marginBottom: 12 },
   caseIcon: { width: 48, height: 48, borderRadius: 24, backgroundColor: Colors.primaryLight + '30', justifyContent: 'center', alignItems: 'center', marginRight: 12 },
   caseInfo: { flex: 1 },
-  caseTitle: { fontSize: 16, fontWeight: '600', color: Colors.text, marginBottom: 6 },
+  caseTitle: { fontSize: 16, fontWeight: '700', color: Colors.text, marginBottom: 6, letterSpacing: -0.3 },
   caseMeta: { flexDirection: 'row', alignItems: 'center' },
-  statusBadge: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6 },
-  statusText: { fontSize: 12, fontWeight: '600', textTransform: 'capitalize' },
-  caseNumber: { fontSize: 12, color: Colors.textSecondary, marginLeft: 8 },
-  caseDescription: { fontSize: 14, color: Colors.textSecondary, lineHeight: 20, marginBottom: 8 },
-  courtText: { fontSize: 13, color: Colors.textSecondary, marginBottom: 8 },
-  hearingDate: { flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.info + '15', padding: 10, borderRadius: 8, marginBottom: 12 },
-  hearingText: { fontSize: 13, color: Colors.text, marginLeft: 8, fontWeight: '500' },
-  viewButton: { flexDirection: 'row', alignItems: 'center' },
-  viewButtonText: { fontSize: 14, fontWeight: '600', color: Colors.primary, marginRight: 4 },
-  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
-  modalContent: { backgroundColor: Colors.background, borderTopLeftRadius: 24, borderTopRightRadius: 24, maxHeight: '90%', padding: 20 },
-  modalHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
-  modalTitle: { fontSize: 20, fontWeight: 'bold', color: Colors.text },
-  inputLabel: { fontSize: 14, fontWeight: '600', color: Colors.text, marginBottom: 8, marginTop: 12 },
-  input: { borderWidth: 1, borderColor: Colors.border, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 12, fontSize: 14, color: Colors.text, backgroundColor: Colors.surface },
+  statusBadge: { paddingHorizontal: 10, paddingVertical: 5, borderRadius: 8 },
+  statusText: { fontSize: 12, fontWeight: '700', textTransform: 'capitalize' },
+  caseNumber: { fontSize: 12, color: Colors.textSecondary, marginLeft: 4, fontWeight: '500' },
+  caseDescription: { fontSize: 14, color: Colors.text, lineHeight: 20, marginBottom: 10, opacity: 0.8 },
+  courtText: { fontSize: 13, color: Colors.textSecondary, marginBottom: 10 },
+  hearingDate: { flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.info + '15', padding: 10, borderRadius: 10, marginBottom: 12 },
+  hearingText: { fontSize: 13, color: Colors.info, marginLeft: 8, fontWeight: '600' },
+  closedBanner: { flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.success + '15', padding: 10, borderRadius: 10, marginBottom: 12 },
+  closedText: { fontSize: 13, color: Colors.success, marginLeft: 8, fontWeight: '600' },
+  caseFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderTopWidth: 1, borderTopColor: Colors.border, paddingTop: 12 },
+  actionChip: { flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.surface, paddingHorizontal: 12, paddingVertical: 8, borderRadius: 8, gap: 4 },
+  actionChipText: { fontSize: 12, fontWeight: '600', color: Colors.text },
+  viewDetailsButton: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  viewDetailsText: { fontSize: 14, fontWeight: '700', color: Colors.primary, letterSpacing: -0.2 },
+  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'flex-end' },
+  modalContent: { backgroundColor: Colors.background, borderTopLeftRadius: 28, borderTopRightRadius: 28, maxHeight: '90%', padding: 24 },
+  modalHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 },
+  modalTitle: { fontSize: 22, fontWeight: '700', color: Colors.text, letterSpacing: -0.5 },
+  inputLabel: { fontSize: 15, fontWeight: '600', color: Colors.text, marginBottom: 10, marginTop: 16, letterSpacing: -0.3 },
+  input: { borderWidth: 2, borderColor: Colors.border, borderRadius: 14, paddingHorizontal: 18, paddingVertical: 14, fontSize: 15, color: Colors.text, backgroundColor: Colors.surface, fontWeight: '500' },
   textArea: { height: 100, textAlignVertical: 'top' },
-  submitButton: { marginTop: 24, backgroundColor: Colors.primary, borderRadius: 12, paddingVertical: 16, alignItems: 'center' },
+  submitButton: { marginTop: 28, backgroundColor: Colors.primary, borderRadius: 14, paddingVertical: 16, alignItems: 'center', shadowColor: Colors.primary, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 5 },
   submitButtonDisabled: { opacity: 0.5 },
-  submitButtonText: { fontSize: 16, fontWeight: '600', color: '#FFFFFF' },
+  submitButtonText: { fontSize: 16, fontWeight: '700', color: '#FFFFFF', letterSpacing: 0.5 },
 });
