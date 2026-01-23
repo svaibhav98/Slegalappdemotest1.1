@@ -607,8 +607,9 @@ const styles = StyleSheet.create({
   generateButtonText: { fontSize: 16, fontWeight: '700', color: COLORS.white },
   
   // Success Screen
-  successContainer: { flex: 1, backgroundColor: COLORS.background, justifyContent: 'space-between' },
-  successContent: { flex: 1, alignItems: 'center', paddingTop: 80, paddingHorizontal: 20 },
+  successContainer: { flex: 1, backgroundColor: COLORS.background },
+  successScrollView: { flex: 1 },
+  successContent: { alignItems: 'center', paddingTop: 80, paddingHorizontal: 20, paddingBottom: 40 },
   successIconWrapper: { marginBottom: 24 },
   successTitle: { fontSize: 28, fontWeight: '800', color: COLORS.success, marginBottom: 8 },
   successSubtitle: { fontSize: 16, color: COLORS.textSecondary, textAlign: 'center', marginBottom: 32 },
