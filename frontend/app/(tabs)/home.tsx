@@ -474,21 +474,7 @@ export default function HomeScreen() {
           </TouchableOpacity>
         ))}
 
-        {/* Additional activity cards for demo */}
-        <TouchableOpacity style={styles.activityCard} activeOpacity={0.9}>
-          <View style={styles.activityImagePlaceholder}>
-            <Ionicons name="document-text" size={32} color={COLORS.textMuted} />
-          </View>
-          <View style={styles.activityContent}>
-            <Text style={styles.activityTitle}>Cou</Text>
-            <Text style={styles.activitySubtitle}>Lorem</Text>
-            <Text style={styles.activityDescription} numberOfLines={2}>
-              adipiscing elit, s{`\n`}labus lotus 130 L
-            </Text>
-          </View>
-        </TouchableOpacity>
-
-        <View style={{ height: 120 }} />
+        <View style={{ height: 40 }} />
       </ScrollView>
 
       {/* Floating AI Button */}
