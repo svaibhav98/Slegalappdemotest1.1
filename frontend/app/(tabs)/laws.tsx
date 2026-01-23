@@ -82,8 +82,8 @@ export default function LawsScreen() {
           
           <View style={styles.headerCenter}>
             <Text style={styles.headerTitle}>Laws & Govt. Schemes</Text>
-            <Text style={styles.headerSubtitle}>
-              Explore key laws and government schemes in simple language
+            <Text style={styles.headerSubtitle} numberOfLines={2}>
+              Explore key laws and government schemes
             </Text>
           </View>
           
