@@ -387,6 +387,22 @@ export default function DocumentsScreen() {
             <Text style={styles.successActionText}>Download</Text>
           </TouchableOpacity>
         </View>
+
+        {/* Lawyer Review CTA */}
+        <TouchableOpacity 
+          style={styles.lawyerReviewCTA}
+          onPress={() => router.push('/lawyers')}
+          activeOpacity={0.9}
+        >
+          <View style={styles.lawyerReviewContent}>
+            <Ionicons name="shield-checkmark" size={24} color={COLORS.primary} />
+            <View style={styles.lawyerReviewText}>
+              <Text style={styles.lawyerReviewTitle}>Get Lawyer Review</Text>
+              <Text style={styles.lawyerReviewSubtitle}>Expert verification for ₹200</Text>
+            </View>
+          </View>
+          <Ionicons name="chevron-forward" size={20} color={COLORS.primary} />
+        </TouchableOpacity>
       </View>
 
       {/* Bottom Buttons */}
