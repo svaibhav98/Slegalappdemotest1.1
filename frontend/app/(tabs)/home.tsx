@@ -249,7 +249,14 @@ export default function HomeScreen() {
         </TouchableOpacity>
         
         <View style={styles.headerCenter}>
-          <Text style={styles.greetingText}>{greeting}, Vaibhav 👋</Text>
+          <View style={styles.headerLogoRow}>
+            <Image 
+              source={require('../../assets/logo-transparent.png')} 
+              style={styles.headerLogo} 
+              resizeMode="contain"
+            />
+            <Text style={styles.greetingText}>{greeting}, Vaibhav 👋</Text>
+          </View>
           <Text style={styles.welcomeText}>
             Welcome to <Text style={styles.brandText}>SunoLegal</Text>
           </Text>
