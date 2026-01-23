@@ -452,10 +452,10 @@ export default function DocumentsScreen() {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#3B82F6" />
+      <StatusBar barStyle="light-content" backgroundColor="#1A1A2E" />
       
       {/* Header */}
-      <LinearGradient colors={['#3B82F6', '#2563EB']} style={styles.header}>
+      <LinearGradient colors={['#1A1A2E', '#2B2D42']} style={styles.header}>
         <View style={styles.headerContent}>
           <Image source={require('../../assets/logo.jpg')} style={styles.logo} resizeMode="contain" />
           <View style={styles.headerText}>
