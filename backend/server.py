@@ -15,34 +15,37 @@ load_dotenv()
 
 # Initialize Firebase Admin (simplified config for MVP)
 # For production, use service account JSON file
+FIREBASE_ENABLED = False
 try:
     # Check if already initialized
     firebase_admin.get_app()
+    FIREBASE_ENABLED = True
 except ValueError:
-    # Initialize with minimal config for development
-    # In production, replace this with credentials.Certificate('path/to/serviceAccount.json')
-    cred = credentials.Certificate({
-        "type": "service_account",
-        "project_id": os.getenv("FIREBASE_PROJECT_ID", "sunolegal-mvp"),
-        "private_key_id": os.getenv("FIREBASE_PRIVATE_KEY_ID", ""),
-        "private_key": os.getenv("FIREBASE_PRIVATE_KEY", "").replace('\\n', '\n'),
-        "client_email": os.getenv("FIREBASE_CLIENT_EMAIL", ""),
-        "client_id": os.getenv("FIREBASE_CLIENT_ID", ""),
-        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-        "token_uri": "https://oauth2.googleapis.com/token",
-        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs"
-    })
-    firebase_admin.initialize_app(cred)
+    # Try to initialize if credentials are available
+    try:
+        # For now, use a mock initialization for development
+        # In production, replace with actual service account JSON
+        # firebase_admin.initialize_app(credentials.Certificate('path/to/serviceAccount.json'))
+        
+        # For MVP, we'll skip Firebase Admin initialization
+        # Auth will be handled on frontend only
+        print("⚠️  Firebase Admin not initialized - using mock mode for MVP")
+        print("   To enable Firebase: Provide service account JSON and uncomment initialization")
+        FIREBASE_ENABLED = False
+    except Exception as e:
+        print(f"⚠️  Firebase initialization skipped: {e}")
+        FIREBASE_ENABLED = False
 
 # Initialize Firestore (only if Firebase is enabled)
 db = None
 if FIREBASE_ENABLED:
     try:
         db = firestore.client()
-        print(\"✅ Firestore connected successfully\")
+        print("✅ Firestore connected successfully")
     except Exception as e:
-        print(f\"⚠️  Firestore connection failed: {e}\")\nelse:
-    print(\"⚠️  Running in mock mode - Firestore not available\")
+        print(f"⚠️  Firestore connection failed: {e}")
+else:
+    print("⚠️  Running in mock mode - Firestore not available")
 
 # Initialize Razorpay
 RAZORPAY_KEY_ID = os.getenv("RAZORPAY_KEY_ID", "rzp_test_demo")
