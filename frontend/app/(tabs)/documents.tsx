@@ -511,7 +511,8 @@ const styles = StyleSheet.create({
   headerText: { flex: 1 },
   headerTitle: { fontSize: 22, fontWeight: '700', color: COLORS.white },
   headerSubtitle: { fontSize: 14, color: COLORS.white, opacity: 0.9, marginTop: 2 },
-  addButton: { width: 44, height: 44, borderRadius: 22, backgroundColor: 'rgba(255,255,255,0.25)', justifyContent: 'center', alignItems: 'center' },
+  addButton: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, paddingVertical: 10, borderRadius: 20, backgroundColor: 'rgba(255,255,255,0.2)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)' },
+  addButtonText: { fontSize: 13, fontWeight: '600', color: COLORS.white },
   
   // Tab Bar
   tabBar: { flexDirection: 'row', backgroundColor: COLORS.white, paddingHorizontal: 20, paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: COLORS.border },
