@@ -430,6 +430,28 @@ async def list_lawyers(
 ):
     """List lawyers with optional filters"""
     try:
+        if not FIREBASE_ENABLED or not db:
+            # Use mock database
+            lawyer_list = mock_db["lawyers"].copy()
+            
+            # Apply filters
+            if city:
+                lawyer_list = [l for l in lawyer_list if l.get("city") == city]
+            if specialization:
+                lawyer_list = [l for l in lawyer_list if specialization in l.get("specialization", [])]
+            if language:
+                lawyer_list = [l for l in lawyer_list if language in l.get("languages", [])]
+            if min_price:
+                lawyer_list = [l for l in lawyer_list if l.get("price", 0) >= min_price]
+            if max_price:
+                lawyer_list = [l for l in lawyer_list if l.get("price", 0) <= max_price]
+            
+            return {
+                "success": True,
+                "lawyers": lawyer_list,
+                "count": len(lawyer_list)
+            }
+        
         # Start with base query
         query = db.collection("lawyers")
         
@@ -732,6 +754,24 @@ async def list_laws(
 ):
     """List laws and schemes with filters"""
     try:
+        if not FIREBASE_ENABLED or not db:
+            # Use mock database
+            law_list = mock_db["laws"].copy()
+            
+            # Apply filters
+            if category:
+                law_list = [l for l in law_list if l.get("category") == category]
+            if state:
+                law_list = [l for l in law_list if l.get("state") == state]
+            if search:
+                law_list = [l for l in law_list if search.lower() in l.get("title", "").lower()]
+            
+            return {
+                "success": True,
+                "laws": law_list,
+                "count": len(law_list)
+            }
+        
         query = db.collection("laws")
         
         if category:
@@ -846,8 +886,14 @@ async def seed_sample_data():
             }
         ]
         
-        for lawyer in sample_lawyers:
-            db.collection("lawyers").add(lawyer)
+        if FIREBASE_ENABLED and db:
+            for lawyer in sample_lawyers:
+                db.collection("lawyers").add(lawyer)
+        else:
+            # Add to mock database
+            for lawyer in sample_lawyers:
+                lawyer["id"] = f"lawyer_{len(mock_db['lawyers'])}"
+                mock_db["lawyers"].append(lawyer)
         
         # Sample laws
         sample_laws = [
@@ -916,12 +962,19 @@ async def seed_sample_data():
             }
         ]
         
-        for law in sample_laws:
-            db.collection("laws").add(law)
+        if FIREBASE_ENABLED and db:
+            for law in sample_laws:
+                db.collection("laws").add(law)
+        else:
+            # Add to mock database
+            for law in sample_laws:
+                law["id"] = f"law_{len(mock_db['laws'])}"
+                mock_db["laws"].append(law)
         
         return {
             "success": True,
-            "message": f"Added {len(sample_lawyers)} lawyers and {len(sample_laws)} laws to database"
+            "message": f"Added {len(sample_lawyers)} lawyers and {len(sample_laws)} laws to database",
+            "mode": "mock" if not FIREBASE_ENABLED else "firebase"
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
