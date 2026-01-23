@@ -80,6 +80,15 @@ export default function JoinLawyerScreen() {
     'Kannada',
   ];
 
+  // Safe back navigation
+  const handleBack = () => {
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      router.replace('/(tabs)/home');
+    }
+  };
+
   const handleUpload = async (field: keyof typeof uploads) => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
@@ -100,7 +109,7 @@ export default function JoinLawyerScreen() {
     }
     console.log('Form submitted:', formData, uploads);
     alert('Application submitted for verification! We will contact you within 2-3 working days.');
-    router.back();
+    handleBack();
   };
 
   const renderPickerModal = (
@@ -119,7 +128,7 @@ export default function JoinLawyerScreen() {
         <View style={styles.modalContent}>
           <View style={styles.modalHeader}>
             <Text style={styles.modalTitle}>{title}</Text>
-            <TouchableOpacity onPress={onClose}>
+            <TouchableOpacity onPress={onClose} style={styles.modalCloseBtn}>
               <Ionicons name="close" size={24} color={COLORS.textPrimary} />
             </TouchableOpacity>
           </View>
@@ -155,14 +164,20 @@ export default function JoinLawyerScreen() {
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity
-            onPress={() => router.back()}
+            onPress={handleBack}
             style={styles.backButton}
-            activeOpacity={0.8}
+            activeOpacity={0.7}
           >
             <Ionicons name="chevron-back" size={24} color={COLORS.white} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Join as a Lawyer</Text>
-          <View style={styles.headerSpacer} />
+          <TouchableOpacity
+            onPress={handleBack}
+            style={styles.closeButton}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="close" size={24} color={COLORS.white} />
+          </TouchableOpacity>
         </View>
 
         <ScrollView
@@ -364,9 +379,17 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.headerBg,
   },
   backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  closeButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     backgroundColor: 'rgba(255,255,255,0.15)',
     justifyContent: 'center',
     alignItems: 'center',
@@ -375,12 +398,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
     color: COLORS.white,
-    flex: 1,
-    textAlign: 'center',
-    marginLeft: -40,
-  },
-  headerSpacer: {
-    width: 40,
   },
 
   // Content
@@ -535,6 +552,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
     color: COLORS.textPrimary,
+  },
+  modalCloseBtn: {
+    padding: 4,
   },
   modalOption: {
     paddingVertical: 16,

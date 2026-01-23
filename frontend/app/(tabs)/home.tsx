@@ -9,6 +9,7 @@ import {
   Image,
   Dimensions,
   StatusBar,
+  Modal,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../../contexts/AuthContext';
@@ -39,11 +40,18 @@ const COLORS = {
   red: '#EF4444',
 };
 
+interface DrawerMenuItem {
+  icon: string;
+  label: string;
+  route: string;
+}
+
 export default function HomeScreen() {
   const { user, signOut } = useAuth();
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(false);
   const [greeting, setGreeting] = useState('Good Morning');
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   useEffect(() => {
     const hour = new Date().getHours();
@@ -60,11 +68,30 @@ export default function HomeScreen() {
 
   const handleSignOut = async () => {
     try {
+      setDrawerOpen(false);
       await signOut();
       router.replace('/auth/login');
     } catch (error) {
       console.error('Sign out error:', error);
     }
+  };
+
+  const drawerMenuItems: DrawerMenuItem[] = [
+    { icon: 'home', label: 'Home', route: '/(tabs)/home' },
+    { icon: 'sparkles', label: 'NyayAI Assistant', route: '/(tabs)/chat' },
+    { icon: 'people', label: 'Find Lawyers', route: '/lawyers' },
+    { icon: 'document-text', label: 'Documents', route: '/(tabs)/documents' },
+    { icon: 'folder', label: 'My Cases', route: '/(tabs)/cases' },
+    { icon: 'book', label: 'Laws & Schemes', route: '/(tabs)/laws' },
+    { icon: 'briefcase', label: 'Join as Lawyer', route: '/join-lawyer' },
+    { icon: 'bookmark', label: 'Saved Items', route: '/(tabs)/laws' },
+    { icon: 'settings', label: 'Settings', route: '/(tabs)/home' },
+    { icon: 'help-circle', label: 'Help & Support', route: '/(tabs)/home' },
+  ];
+
+  const handleMenuItemPress = (route: string) => {
+    setDrawerOpen(false);
+    router.push(route as any);
   };
 
   const quickAccessItems = [
@@ -135,13 +162,86 @@ export default function HomeScreen() {
     },
   ];
 
+  // Drawer Component
+  const renderDrawer = () => (
+    <Modal
+      visible={drawerOpen}
+      animationType="none"
+      transparent={true}
+      onRequestClose={() => setDrawerOpen(false)}
+    >
+      <View style={styles.drawerOverlay}>
+        <TouchableOpacity 
+          style={styles.drawerBackdrop} 
+          activeOpacity={1} 
+          onPress={() => setDrawerOpen(false)}
+        />
+        <View style={styles.drawerContainer}>
+          {/* Drawer Header */}
+          <LinearGradient colors={[COLORS.headerBg, COLORS.headerBgLight]} style={styles.drawerHeader}>
+            <View style={styles.drawerUserInfo}>
+              <View style={styles.drawerAvatar}>
+                <Ionicons name="person" size={32} color={COLORS.white} />
+              </View>
+              <View style={styles.drawerUserText}>
+                <Text style={styles.drawerUserName}>Vaibhav</Text>
+                <Text style={styles.drawerUserEmail}>vaibhav@email.com</Text>
+              </View>
+            </View>
+            <TouchableOpacity style={styles.drawerCloseBtn} onPress={() => setDrawerOpen(false)}>
+              <Ionicons name="close" size={24} color={COLORS.white} />
+            </TouchableOpacity>
+          </LinearGradient>
+
+          {/* Drawer Menu Items */}
+          <ScrollView style={styles.drawerMenu} showsVerticalScrollIndicator={false}>
+            {drawerMenuItems.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                style={styles.drawerMenuItem}
+                onPress={() => handleMenuItemPress(item.route)}
+                activeOpacity={0.7}
+              >
+                <View style={styles.drawerMenuIcon}>
+                  <Ionicons name={item.icon as any} size={22} color={COLORS.textPrimary} />
+                </View>
+                <Text style={styles.drawerMenuLabel}>{item.label}</Text>
+                <Ionicons name="chevron-forward" size={18} color={COLORS.textMuted} />
+              </TouchableOpacity>
+            ))}
+
+            {/* Logout Button */}
+            <TouchableOpacity
+              style={[styles.drawerMenuItem, styles.drawerLogout]}
+              onPress={handleSignOut}
+              activeOpacity={0.7}
+            >
+              <View style={[styles.drawerMenuIcon, { backgroundColor: COLORS.red + '15' }]}>
+                <Ionicons name="log-out" size={22} color={COLORS.red} />
+              </View>
+              <Text style={[styles.drawerMenuLabel, { color: COLORS.red }]}>Logout</Text>
+            </TouchableOpacity>
+          </ScrollView>
+
+          {/* Drawer Footer */}
+          <View style={styles.drawerFooter}>
+            <Text style={styles.drawerFooterText}>SunoLegal v1.0.0</Text>
+          </View>
+        </View>
+      </View>
+    </Modal>
+  );
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={COLORS.headerBg} />
       
+      {/* Drawer */}
+      {renderDrawer()}
+      
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.menuButton}>
+        <TouchableOpacity style={styles.menuButton} onPress={() => setDrawerOpen(true)}>
           <Ionicons name="menu" size={24} color={COLORS.white} />
         </TouchableOpacity>
         
@@ -189,10 +289,10 @@ export default function HomeScreen() {
             <View style={styles.heroPurpleGlow} />
             <View style={styles.heroContent}>
               <Text style={styles.heroTitle}>
-                NyayAI, Made Simple{'\n'}for <Text style={styles.heroTitleHindi}>भारत</Text>
+                NyayAI, Made Simple{`\n`}for <Text style={styles.heroTitleHindi}>भारत</Text>
               </Text>
               <Text style={styles.heroSubtitle}>
-                Your trusted AI assistant for laws, documents,{'\n'}and legal help in everyday language
+                Your trusted AI assistant for laws, documents,{`\n`}and legal help in everyday language
               </Text>
               <TouchableOpacity 
                 style={styles.heroButton} 
@@ -334,7 +434,7 @@ export default function HomeScreen() {
             <Text style={styles.activityTitle}>Cou</Text>
             <Text style={styles.activitySubtitle}>Lorem</Text>
             <Text style={styles.activityDescription} numberOfLines={2}>
-              adipiscing elit, s{'\n'}labus lotus 130 L
+              adipiscing elit, s{`\n`}labus lotus 130 L
             </Text>
           </View>
         </TouchableOpacity>
@@ -363,6 +463,100 @@ const styles = StyleSheet.create({
   container: { 
     flex: 1, 
     backgroundColor: COLORS.headerBg,
+  },
+  
+  // Drawer Styles
+  drawerOverlay: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  drawerBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  drawerContainer: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    bottom: 0,
+    width: width * 0.8,
+    backgroundColor: COLORS.white,
+  },
+  drawerHeader: {
+    paddingTop: 60,
+    paddingBottom: 24,
+    paddingHorizontal: 20,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+  },
+  drawerUserInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  drawerAvatar: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 14,
+  },
+  drawerUserText: {},
+  drawerUserName: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: COLORS.white,
+  },
+  drawerUserEmail: {
+    fontSize: 14,
+    color: 'rgba(255,255,255,0.7)',
+    marginTop: 2,
+  },
+  drawerCloseBtn: {
+    padding: 8,
+  },
+  drawerMenu: {
+    flex: 1,
+    paddingTop: 12,
+  },
+  drawerMenuItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+  },
+  drawerMenuIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    backgroundColor: COLORS.surface,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 14,
+  },
+  drawerMenuLabel: {
+    flex: 1,
+    fontSize: 16,
+    fontWeight: '500',
+    color: COLORS.textPrimary,
+  },
+  drawerLogout: {
+    marginTop: 20,
+    borderTopWidth: 1,
+    borderTopColor: COLORS.surface,
+    paddingTop: 20,
+  },
+  drawerFooter: {
+    paddingVertical: 20,
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: COLORS.surface,
+  },
+  drawerFooterText: {
+    fontSize: 12,
+    color: COLORS.textMuted,
   },
   
   // Header Styles
