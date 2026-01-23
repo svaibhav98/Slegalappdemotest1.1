@@ -4,15 +4,13 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  TextInput,
   StatusBar,
   ScrollView,
-  ActivityIndicator,
-  Alert,
+  Image,
 } from 'react-native';
 import { Stack, useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { getLawyerById, createBooking, Lawyer, LawyerPackage } from '../services/lawyersData';
+import { getLawyerById, Lawyer, LawyerPackage } from '../services/lawyersData';
 
 const COLORS = {
   primary: '#FF9933',
@@ -23,22 +21,53 @@ const COLORS = {
   textMuted: '#9CA3AF',
   border: '#E5E7EB',
   success: '#10B981',
-  error: '#EF4444',
+  teal: '#14B8A6',
 };
+
+interface PaymentMethod {
+  id: string;
+  name: string;
+  email: string;
+  icon: 'paypal' | 'google' | 'apple';
+  iconColor: string;
+  bgColor: string;
+}
+
+const PAYMENT_METHODS: PaymentMethod[] = [
+  {
+    id: 'paypal',
+    name: 'Paypal Account',
+    email: 'jo******uff@mail.com',
+    icon: 'paypal',
+    iconColor: '#003087',
+    bgColor: '#E8F4FD',
+  },
+  {
+    id: 'google',
+    name: 'Google Account',
+    email: 'ze*********211@mail.com',
+    icon: 'google',
+    iconColor: '#4285F4',
+    bgColor: '#F1F3F4',
+  },
+  {
+    id: 'apple',
+    name: 'Apple Account',
+    email: 'li***********ohn@mail.com',
+    icon: 'apple',
+    iconColor: '#000000',
+    bgColor: '#F5F5F7',
+  },
+];
 
 export default function PaymentScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
-  const { lawyerId, packageId, mode, scheduledDateTime } = params;
+  const { lawyerId, packageId, mode, scheduledDateTime, slots, totalPrice } = params;
   
   const [lawyer, setLawyer] = useState<Lawyer | null>(null);
   const [selectedPackage, setSelectedPackage] = useState<LawyerPackage | null>(null);
-  const [paymentMethod, setPaymentMethod] = useState<'card' | 'upi' | 'wallet'>('card');
-  const [processing, setProcessing] = useState(false);
-  const [cardNumber, setCardNumber] = useState('');
-  const [expiryDate, setExpiryDate] = useState('');
-  const [cvv, setCvv] = useState('');
-  const [upiId, setUpiId] = useState('');
+  const [selectedMethod, setSelectedMethod] = useState<string>('paypal');
 
   useEffect(() => {
     const lawyerData = getLawyerById(lawyerId as string);
@@ -51,50 +80,82 @@ export default function PaymentScreen() {
 
   const handleBack = () => router.back();
 
-  const handlePayment = async () => {
-    setProcessing(true);
-    
-    // Simulate payment processing
-    setTimeout(() => {
-      // Create booking
-      const booking = createBooking({
-        lawyerId: lawyerId as string,
-        lawyerName: lawyer?.name || '',
-        userId: 'user-1',
-        packageType: selectedPackage?.type || 'chat',
-        packageName: selectedPackage?.name || '',
-        price: selectedPackage?.price || 0,
-        duration: selectedPackage?.duration || 10,
-        status: 'confirmed',
-        paymentStatus: 'paid',
-        scheduledDateTime: scheduledDateTime as string || '',
-      });
-      
-      setProcessing(false);
-      
-      router.replace({
-        pathname: '/booking-confirmation',
+  const handleContinue = () => {
+    if (selectedMethod === 'card') {
+      router.push({
+        pathname: '/add-card',
         params: { 
-          bookingId: booking.id,
           lawyerId: lawyerId as string,
-          packageType: selectedPackage?.type || 'chat',
+          packageId: packageId as string,
+          mode: mode as string,
+          scheduledDateTime: scheduledDateTime as string || '',
+          slots: slots as string,
+          totalPrice: totalPrice as string,
         }
       });
-    }, 2000);
-  };
-
-  const formatCardNumber = (text: string) => {
-    const cleaned = text.replace(/\D/g, '');
-    const formatted = cleaned.match(/.{1,4}/g)?.join(' ') || cleaned;
-    return formatted.substring(0, 19);
-  };
-
-  const formatExpiryDate = (text: string) => {
-    const cleaned = text.replace(/\D/g, '');
-    if (cleaned.length >= 2) {
-      return cleaned.substring(0, 2) + '/' + cleaned.substring(2, 4);
+    } else {
+      // Process mock payment directly
+      processPayment();
     }
-    return cleaned;
+  };
+
+  const handleAddCard = () => {
+    router.push({
+      pathname: '/add-card',
+      params: { 
+        lawyerId: lawyerId as string,
+        packageId: packageId as string,
+        mode: mode as string,
+        scheduledDateTime: scheduledDateTime as string || '',
+        slots: slots as string,
+        totalPrice: totalPrice as string,
+      }
+    });
+  };
+
+  const processPayment = () => {
+    // Navigate to confirmation after mock payment
+    const { createBooking } = require('../services/lawyersData');
+    const booking = createBooking({
+      lawyerId: lawyerId as string,
+      lawyerName: lawyer?.name || '',
+      userId: 'user-1',
+      packageType: selectedPackage?.type || 'chat',
+      packageName: selectedPackage?.name || '',
+      price: parseInt(totalPrice as string) || selectedPackage?.price || 0,
+      duration: (selectedPackage?.duration || 10) * parseInt(slots as string || '1'),
+      status: 'confirmed',
+      paymentStatus: 'paid',
+      scheduledDateTime: scheduledDateTime as string || '',
+    });
+
+    router.replace({
+      pathname: '/booking-confirmation',
+      params: { 
+        bookingId: booking.id,
+        lawyerId: lawyerId as string,
+        packageType: selectedPackage?.type || 'chat',
+      }
+    });
+  };
+
+  const renderPaymentIcon = (icon: string, color: string) => {
+    switch (icon) {
+      case 'paypal':
+        return (
+          <Text style={[styles.iconText, { color }]}>P</Text>
+        );
+      case 'google':
+        return (
+          <Text style={[styles.iconText, { color }]}>G</Text>
+        );
+      case 'apple':
+        return (
+          <Ionicons name="logo-apple" size={24} color={color} />
+        );
+      default:
+        return null;
+    }
   };
 
   if (!lawyer || !selectedPackage) return null;
@@ -105,130 +166,74 @@ export default function PaymentScreen() {
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
       
       <View style={styles.container}>
+        {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity style={styles.backButton} onPress={handleBack}>
             <Ionicons name="arrow-back" size={22} color={COLORS.textPrimary} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Payment</Text>
-          <View style={styles.headerSpacer} />
+          
+          <View style={styles.logoContainer}>
+            <Image 
+              source={require('../assets/logo.jpg')} 
+              style={styles.logo}
+              resizeMode="contain"
+            />
+            <View style={styles.logoTextContainer}>
+              <Text style={styles.logoTitle}>Suno<Text style={styles.logoTitleAccent}>Legal</Text></Text>
+              <Text style={styles.logoSubtitle}>Nyay-AI Powered Legal Assistant</Text>
+            </View>
+          </View>
         </View>
 
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-          {/* Amount */}
-          <View style={styles.amountCard}>
-            <Text style={styles.amountLabel}>Total Amount</Text>
-            <Text style={styles.amountValue}>₹{selectedPackage.price}</Text>
-            <Text style={styles.amountSubtext}>{selectedPackage.name} • {selectedPackage.duration} min with {lawyer.name}</Text>
+          {/* Title */}
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>Which <Text style={styles.titleHighlight}>Payment</Text> do you want to use?</Text>
           </View>
 
           {/* Payment Methods */}
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Payment Method</Text>
-            
+          <Text style={styles.sectionTitle}>Choose Payment</Text>
+          
+          {PAYMENT_METHODS.map((method) => (
             <TouchableOpacity
-              style={[styles.methodCard, paymentMethod === 'card' && styles.methodCardSelected]}
-              onPress={() => setPaymentMethod('card')}
+              key={method.id}
+              style={[
+                styles.methodCard,
+                selectedMethod === method.id && styles.methodCardSelected
+              ]}
+              onPress={() => setSelectedMethod(method.id)}
+              activeOpacity={0.8}
             >
-              <Ionicons name="card" size={24} color={paymentMethod === 'card' ? COLORS.primary : COLORS.textSecondary} />
-              <Text style={[styles.methodText, paymentMethod === 'card' && styles.methodTextSelected]}>Debit/Credit Card</Text>
-              {paymentMethod === 'card' && <Ionicons name="checkmark-circle" size={22} color={COLORS.primary} />}
+              <View style={[styles.methodIconContainer, { backgroundColor: method.bgColor }]}>
+                {renderPaymentIcon(method.icon, method.iconColor)}
+              </View>
+              <View style={styles.methodInfo}>
+                <Text style={styles.methodName}>{method.name}</Text>
+                <Text style={styles.methodEmail}>{method.email}</Text>
+              </View>
+              <View style={styles.radioOuter}>
+                {selectedMethod === method.id && <View style={styles.radioInner} />}
+              </View>
             </TouchableOpacity>
-            
-            <TouchableOpacity
-              style={[styles.methodCard, paymentMethod === 'upi' && styles.methodCardSelected]}
-              onPress={() => setPaymentMethod('upi')}
-            >
-              <Ionicons name="wallet" size={24} color={paymentMethod === 'upi' ? COLORS.primary : COLORS.textSecondary} />
-              <Text style={[styles.methodText, paymentMethod === 'upi' && styles.methodTextSelected]}>UPI</Text>
-              {paymentMethod === 'upi' && <Ionicons name="checkmark-circle" size={22} color={COLORS.primary} />}
-            </TouchableOpacity>
-          </View>
+          ))}
 
-          {/* Card Form */}
-          {paymentMethod === 'card' && (
-            <View style={styles.formSection}>
-              <View style={styles.inputGroup}>
-                <Text style={styles.inputLabel}>Card Number</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="1234 5678 9012 3456"
-                  placeholderTextColor={COLORS.textMuted}
-                  value={cardNumber}
-                  onChangeText={(text) => setCardNumber(formatCardNumber(text))}
-                  keyboardType="numeric"
-                  maxLength={19}
-                />
-              </View>
-              <View style={styles.rowInputs}>
-                <View style={[styles.inputGroup, { flex: 1, marginRight: 10 }]}>
-                  <Text style={styles.inputLabel}>Expiry Date</Text>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="MM/YY"
-                    placeholderTextColor={COLORS.textMuted}
-                    value={expiryDate}
-                    onChangeText={(text) => setExpiryDate(formatExpiryDate(text))}
-                    keyboardType="numeric"
-                    maxLength={5}
-                  />
-                </View>
-                <View style={[styles.inputGroup, { flex: 1, marginLeft: 10 }]}>
-                  <Text style={styles.inputLabel}>CVV</Text>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="123"
-                    placeholderTextColor={COLORS.textMuted}
-                    value={cvv}
-                    onChangeText={setCvv}
-                    keyboardType="numeric"
-                    maxLength={3}
-                    secureTextEntry
-                  />
-                </View>
-              </View>
-            </View>
-          )}
-
-          {/* UPI Form */}
-          {paymentMethod === 'upi' && (
-            <View style={styles.formSection}>
-              <View style={styles.inputGroup}>
-                <Text style={styles.inputLabel}>UPI ID</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="yourname@upi"
-                  placeholderTextColor={COLORS.textMuted}
-                  value={upiId}
-                  onChangeText={setUpiId}
-                  autoCapitalize="none"
-                />
-              </View>
-            </View>
-          )}
-
-          {/* Demo Notice */}
-          <View style={styles.demoNotice}>
-            <Ionicons name="information-circle" size={18} color={COLORS.primary} />
-            <Text style={styles.demoText}>This is a demo payment. No real transaction will occur.</Text>
-          </View>
+          {/* Add New Card */}
+          <TouchableOpacity style={styles.addCardButton} onPress={handleAddCard}>
+            <Ionicons name="add" size={22} color={COLORS.primary} />
+            <Text style={styles.addCardText}>Add New Card</Text>
+          </TouchableOpacity>
 
           <View style={{ height: 100 }} />
         </ScrollView>
 
+        {/* Bottom CTA */}
         <View style={styles.bottomContainer}>
-          <TouchableOpacity
-            style={styles.payButton}
-            onPress={handlePayment}
-            disabled={processing}
+          <TouchableOpacity 
+            style={styles.continueButton} 
+            onPress={handleContinue}
+            activeOpacity={0.9}
           >
-            {processing ? (
-              <ActivityIndicator color={COLORS.white} />
-            ) : (
-              <>
-                <Ionicons name="lock-closed" size={18} color={COLORS.white} />
-                <Text style={styles.payButtonText}>Pay ₹{selectedPackage.price}</Text>
-              </>
-            )}
+            <Text style={styles.continueButtonText}>Continue</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -237,30 +242,177 @@ export default function PaymentScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: COLORS.background },
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 50, paddingHorizontal: 20, paddingBottom: 16, backgroundColor: COLORS.white },
-  backButton: { width: 44, height: 44, borderRadius: 22, backgroundColor: COLORS.background, justifyContent: 'center', alignItems: 'center' },
-  headerTitle: { fontSize: 18, fontWeight: '700', color: COLORS.textPrimary },
-  headerSpacer: { width: 44 },
-  content: { flex: 1, padding: 20 },
-  amountCard: { backgroundColor: COLORS.primary, borderRadius: 20, padding: 24, alignItems: 'center', marginBottom: 24 },
-  amountLabel: { fontSize: 14, color: COLORS.white, opacity: 0.9 },
-  amountValue: { fontSize: 40, fontWeight: '800', color: COLORS.white, marginVertical: 8 },
-  amountSubtext: { fontSize: 13, color: COLORS.white, opacity: 0.85, textAlign: 'center' },
-  section: { marginBottom: 24 },
-  sectionTitle: { fontSize: 16, fontWeight: '700', color: COLORS.textPrimary, marginBottom: 14 },
-  methodCard: { flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.white, borderRadius: 14, padding: 16, marginBottom: 10, borderWidth: 2, borderColor: 'transparent' },
-  methodCardSelected: { borderColor: COLORS.primary, backgroundColor: COLORS.primary + '08' },
-  methodText: { flex: 1, fontSize: 15, fontWeight: '500', color: COLORS.textSecondary, marginLeft: 14 },
-  methodTextSelected: { color: COLORS.textPrimary },
-  formSection: { marginBottom: 24 },
-  inputGroup: { marginBottom: 16 },
-  inputLabel: { fontSize: 14, fontWeight: '600', color: COLORS.textPrimary, marginBottom: 8 },
-  input: { backgroundColor: COLORS.white, borderWidth: 1, borderColor: COLORS.border, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 14, fontSize: 15, color: COLORS.textPrimary },
-  rowInputs: { flexDirection: 'row' },
-  demoNotice: { flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.primary + '15', borderRadius: 12, padding: 14 },
-  demoText: { flex: 1, fontSize: 13, color: COLORS.primary, marginLeft: 10, fontWeight: '500' },
-  bottomContainer: { padding: 20, backgroundColor: COLORS.white, borderTopWidth: 1, borderTopColor: COLORS.border },
-  payButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: COLORS.primary, borderRadius: 14, paddingVertical: 18 },
-  payButtonText: { fontSize: 16, fontWeight: '700', color: COLORS.white, marginLeft: 8 },
+  container: { 
+    flex: 1, 
+    backgroundColor: COLORS.background,
+  },
+  
+  // Header
+  header: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    paddingTop: 50, 
+    paddingHorizontal: 20, 
+    paddingBottom: 16, 
+    backgroundColor: COLORS.white,
+  },
+  backButton: { 
+    width: 44, 
+    height: 44, 
+    borderRadius: 22, 
+    backgroundColor: COLORS.background, 
+    justifyContent: 'center', 
+    alignItems: 'center',
+  },
+  logoContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 44,
+  },
+  logo: {
+    width: 40,
+    height: 40,
+    marginRight: 10,
+  },
+  logoTextContainer: {
+    alignItems: 'flex-start',
+  },
+  logoTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: COLORS.textPrimary,
+  },
+  logoTitleAccent: {
+    color: COLORS.teal,
+  },
+  logoSubtitle: {
+    fontSize: 9,
+    color: COLORS.textSecondary,
+  },
+
+  // Content
+  content: { 
+    flex: 1,
+    backgroundColor: COLORS.white,
+  },
+  titleContainer: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 24,
+  },
+  title: {
+    fontSize: 26,
+    fontWeight: '700',
+    color: COLORS.textPrimary,
+    lineHeight: 34,
+  },
+  titleHighlight: {
+    color: COLORS.primary,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: COLORS.textPrimary,
+    paddingHorizontal: 20,
+    marginBottom: 16,
+  },
+
+  // Method Card
+  methodCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.white,
+    marginHorizontal: 20,
+    marginBottom: 12,
+    padding: 16,
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: COLORS.border,
+  },
+  methodCardSelected: {
+    borderColor: COLORS.teal,
+    backgroundColor: '#F0FDFA',
+  },
+  methodIconContainer: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 14,
+  },
+  iconText: {
+    fontSize: 24,
+    fontWeight: '700',
+  },
+  methodInfo: {
+    flex: 1,
+  },
+  methodName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: COLORS.textPrimary,
+  },
+  methodEmail: {
+    fontSize: 13,
+    color: COLORS.textSecondary,
+    marginTop: 2,
+  },
+  radioOuter: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: COLORS.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  radioInner: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: COLORS.primary,
+  },
+
+  // Add Card Button
+  addCardButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 20,
+    marginTop: 8,
+    padding: 16,
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: COLORS.primary,
+    borderStyle: 'dashed',
+  },
+  addCardText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: COLORS.primary,
+    marginLeft: 8,
+  },
+
+  // Bottom
+  bottomContainer: { 
+    padding: 20, 
+    backgroundColor: COLORS.white, 
+    borderTopWidth: 1, 
+    borderTopColor: COLORS.border,
+  },
+  continueButton: { 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    backgroundColor: COLORS.primary, 
+    borderRadius: 30, 
+    paddingVertical: 18,
+  },
+  continueButtonText: { 
+    fontSize: 16, 
+    fontWeight: '700', 
+    color: COLORS.white,
+  },
 });

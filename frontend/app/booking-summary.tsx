@@ -11,6 +11,7 @@ import {
 import { Stack, useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { getLawyerById, Lawyer, LawyerPackage } from '../services/lawyersData';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const COLORS = {
   primary: '#FF9933',
@@ -21,6 +22,9 @@ const COLORS = {
   textMuted: '#9CA3AF',
   border: '#E5E7EB',
   success: '#10B981',
+  teal: '#14B8A6',
+  star: '#F59E0B',
+  headerDark: '#1F2937',
 };
 
 export default function BookingSummaryScreen() {
@@ -31,13 +35,14 @@ export default function BookingSummaryScreen() {
   const [lawyer, setLawyer] = useState<Lawyer | null>(null);
   const [selectedPackage, setSelectedPackage] = useState<LawyerPackage | null>(null);
   const [loading, setLoading] = useState(true);
+  const [slots, setSlots] = useState(2);
 
   useEffect(() => {
     const lawyerData = getLawyerById(lawyerId as string);
     if (lawyerData) {
       setLawyer(lawyerData);
       const pkg = lawyerData.packages.find(p => p.id === packageId);
-      setSelectedPackage(pkg || null);
+      setSelectedPackage(pkg || lawyerData.packages[1]); // Default to chat package
     }
     setLoading(false);
   }, [lawyerId, packageId]);
@@ -50,6 +55,8 @@ export default function BookingSummaryScreen() {
         packageId: packageId as string,
         mode: mode as string,
         scheduledDateTime: scheduledDateTime as string || '',
+        slots: slots.toString(),
+        totalPrice: ((selectedPackage?.price || 0) * slots).toString(),
       }
     });
   };
@@ -58,17 +65,24 @@ export default function BookingSummaryScreen() {
     router.back();
   };
 
-  const formatDateTime = (dateTime: string) => {
-    if (!dateTime) return 'Next available';
-    const date = new Date(dateTime);
-    return date.toLocaleDateString('en-US', { 
-      weekday: 'short',
-      month: 'short', 
-      day: 'numeric', 
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+  const incrementSlots = () => {
+    if (slots < 5) setSlots(slots + 1);
   };
+
+  const decrementSlots = () => {
+    if (slots > 1) setSlots(slots - 1);
+  };
+
+  const getPackageIcon = (type: string) => {
+    switch (type) {
+      case 'voice': return 'call';
+      case 'chat': return 'chatbubble-ellipses';
+      case 'video': return 'videocam';
+      default: return 'chatbubble';
+    }
+  };
+
+  const totalCost = (selectedPackage?.price || 0) * slots;
 
   if (loading || !lawyer || !selectedPackage) {
     return (
@@ -81,84 +95,116 @@ export default function BookingSummaryScreen() {
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
-      <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
+      <StatusBar barStyle="light-content" backgroundColor={COLORS.headerDark} />
       
       <View style={styles.container}>
-        {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-            <Ionicons name="arrow-back" size={22} color={COLORS.textPrimary} />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Booking Summary</Text>
-          <View style={styles.headerSpacer} />
+        {/* Header with Dark Background */}
+        <LinearGradient 
+          colors={['#1F2937', '#374151']} 
+          style={styles.headerGradient}
+        >
+          <View style={styles.header}>
+            <TouchableOpacity style={styles.backButton} onPress={handleBack}>
+              <Ionicons name="arrow-back" size={22} color={COLORS.white} />
+            </TouchableOpacity>
+            <Text style={styles.headerTitle}>Booking</Text>
+            <View style={styles.headerSpacer} />
+          </View>
+          
+          {/* Curved bottom */}
+          <View style={styles.curveContainer}>
+            <View style={styles.curveBackground} />
+          </View>
+        </LinearGradient>
+
+        {/* Lawyer Profile Card - Overlapping */}
+        <View style={styles.profileContainer}>
+          <View style={styles.profileImageWrapper}>
+            <Image source={{ uri: lawyer.image }} style={styles.profileImage} />
+            {lawyer.isVerified && (
+              <View style={styles.verifiedBadge}>
+                <Ionicons name="checkmark-circle" size={24} color={COLORS.success} />
+              </View>
+            )}
+          </View>
+          
+          <Text style={styles.lawyerName}>{lawyer.name}</Text>
+          <View style={styles.practiceRow}>
+            <Text style={styles.practiceArea}>{lawyer.practiceArea}</Text>
+            <Text style={styles.separator}>|</Text>
+            <View style={styles.availabilityDot} />
+            <Text style={styles.availabilityText}>Availability</Text>
+          </View>
+
+          {/* Stats Badges */}
+          <View style={styles.statsRow}>
+            <View style={[styles.statBadge, { backgroundColor: '#FEF3C7' }]}>
+              <Ionicons name="star" size={16} color={COLORS.star} />
+              <Text style={styles.statText}>{lawyer.rating} ({lawyer.reviewCount})</Text>
+            </View>
+            <View style={[styles.statBadge, { backgroundColor: '#FFEDD5' }]}>
+              <Ionicons name="briefcase" size={16} color={COLORS.primary} />
+              <Text style={styles.statText}>{lawyer.experience}+ Years</Text>
+            </View>
+          </View>
         </View>
 
+        {/* Selected Package */}
         <View style={styles.content}>
-          {/* Lawyer Info */}
-          <View style={styles.lawyerCard}>
-            <Image source={{ uri: lawyer.image }} style={styles.lawyerImage} />
-            <View style={styles.lawyerInfo}>
-              <Text style={styles.lawyerName}>{lawyer.name}</Text>
-              <Text style={styles.lawyerPractice}>{lawyer.practiceArea}</Text>
-              <View style={styles.ratingRow}>
-                <Ionicons name="star" size={14} color="#F59E0B" />
-                <Text style={styles.ratingText}>{lawyer.rating} ({lawyer.reviewCount} reviews)</Text>
+          <Text style={styles.sectionTitle}>Selected Package</Text>
+          <View style={styles.packageCard}>
+            <View style={[styles.packageIcon, { backgroundColor: '#E0F2FE' }]}>
+              <Ionicons name={getPackageIcon(selectedPackage.type) as any} size={24} color={COLORS.primary} />
+            </View>
+            <View style={styles.packageInfo}>
+              <Text style={styles.packageName}>Messaging with {lawyer.name.split(' ').pop()}</Text>
+              <Text style={styles.packagePrice}>
+                <Text style={styles.priceAmount}>₹{selectedPackage.price}</Text>
+                <Text style={styles.priceDuration}>/{selectedPackage.duration} Minutes</Text>
+              </Text>
+            </View>
+            <View style={styles.packageRadio}>
+              <View style={styles.radioOuter}>
+                <View style={styles.radioInner} />
               </View>
             </View>
           </View>
 
-          {/* Booking Details */}
-          <View style={styles.detailsCard}>
-            <Text style={styles.sectionTitle}>Consultation Details</Text>
-            
-            <View style={styles.detailRow}>
-              <Ionicons name={selectedPackage.type === 'voice' ? 'call' : selectedPackage.type === 'chat' ? 'chatbubble' : 'videocam'} size={20} color={COLORS.primary} />
-              <View style={styles.detailContent}>
-                <Text style={styles.detailLabel}>Type</Text>
-                <Text style={styles.detailValue}>{selectedPackage.name}</Text>
-              </View>
-            </View>
-            
-            <View style={styles.detailRow}>
-              <Ionicons name="time" size={20} color={COLORS.primary} />
-              <View style={styles.detailContent}>
-                <Text style={styles.detailLabel}>Duration</Text>
-                <Text style={styles.detailValue}>{selectedPackage.duration} minutes</Text>
-              </View>
-            </View>
-            
-            <View style={styles.detailRow}>
-              <Ionicons name="calendar" size={20} color={COLORS.primary} />
-              <View style={styles.detailContent}>
-                <Text style={styles.detailLabel}>Schedule</Text>
-                <Text style={styles.detailValue}>{mode === 'instant' ? 'Instant (Next available)' : formatDateTime(scheduledDateTime as string)}</Text>
-              </View>
-            </View>
+          {/* Slots Counter */}
+          <Text style={styles.sectionTitle}>Slots</Text>
+          <View style={styles.slotsContainer}>
+            <TouchableOpacity 
+              style={styles.slotButton} 
+              onPress={decrementSlots}
+              disabled={slots <= 1}
+            >
+              <Ionicons name="remove" size={24} color={slots <= 1 ? COLORS.textMuted : COLORS.primary} />
+            </TouchableOpacity>
+            <Text style={styles.slotsCount}>{slots.toString().padStart(2, '0')}</Text>
+            <TouchableOpacity 
+              style={styles.slotButton} 
+              onPress={incrementSlots}
+              disabled={slots >= 5}
+            >
+              <Ionicons name="add" size={24} color={slots >= 5 ? COLORS.textMuted : COLORS.primary} />
+            </TouchableOpacity>
           </View>
 
-          {/* Price Summary */}
-          <View style={styles.priceCard}>
-            <Text style={styles.sectionTitle}>Payment Summary</Text>
-            <View style={styles.priceRow}>
-              <Text style={styles.priceLabel}>Consultation Fee</Text>
-              <Text style={styles.priceValue}>₹{selectedPackage.price}</Text>
-            </View>
-            <View style={styles.priceRow}>
-              <Text style={styles.priceLabel}>Platform Fee</Text>
-              <Text style={styles.priceValue}>₹0</Text>
-            </View>
-            <View style={[styles.priceRow, styles.totalRow]}>
-              <Text style={styles.totalLabel}>Total</Text>
-              <Text style={styles.totalValue}>₹{selectedPackage.price}</Text>
-            </View>
+          {/* Total Cost */}
+          <View style={styles.totalRow}>
+            <Text style={styles.totalLabel}>Total cost</Text>
+            <Text style={styles.totalValue}>₹{totalCost}</Text>
           </View>
         </View>
 
         {/* Bottom CTA */}
         <View style={styles.bottomContainer}>
-          <TouchableOpacity style={styles.payButton} onPress={handleProceedToPayment} activeOpacity={0.9}>
+          <TouchableOpacity 
+            style={styles.payButton} 
+            onPress={handleProceedToPayment} 
+            activeOpacity={0.9}
+          >
             <Text style={styles.payButtonText}>Proceed to Payment</Text>
-            <Ionicons name="arrow-forward" size={20} color={COLORS.white} />
           </TouchableOpacity>
         </View>
       </View>
@@ -167,34 +213,268 @@ export default function BookingSummaryScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: COLORS.background },
-  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: COLORS.background },
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 50, paddingHorizontal: 20, paddingBottom: 16, backgroundColor: COLORS.white },
-  backButton: { width: 44, height: 44, borderRadius: 22, backgroundColor: COLORS.background, justifyContent: 'center', alignItems: 'center' },
-  headerTitle: { fontSize: 18, fontWeight: '700', color: COLORS.textPrimary },
+  container: { 
+    flex: 1, 
+    backgroundColor: COLORS.background,
+  },
+  loadingContainer: { 
+    flex: 1, 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    backgroundColor: COLORS.background,
+  },
+  
+  // Header
+  headerGradient: {
+    paddingTop: 50,
+    paddingBottom: 60,
+  },
+  header: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    justifyContent: 'space-between', 
+    paddingHorizontal: 20,
+    paddingBottom: 20,
+  },
+  backButton: { 
+    width: 44, 
+    height: 44, 
+    borderRadius: 22, 
+    backgroundColor: 'rgba(255,255,255,0.1)', 
+    justifyContent: 'center', 
+    alignItems: 'center',
+  },
+  headerTitle: { 
+    fontSize: 18, 
+    fontWeight: '700', 
+    color: COLORS.white,
+  },
   headerSpacer: { width: 44 },
-  content: { flex: 1, padding: 20 },
-  lawyerCard: { flexDirection: 'row', backgroundColor: COLORS.white, borderRadius: 16, padding: 16, marginBottom: 20, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 8, elevation: 3 },
-  lawyerImage: { width: 70, height: 70, borderRadius: 35, marginRight: 16 },
-  lawyerInfo: { flex: 1, justifyContent: 'center' },
-  lawyerName: { fontSize: 18, fontWeight: '700', color: COLORS.textPrimary },
-  lawyerPractice: { fontSize: 14, color: COLORS.success, marginTop: 2 },
-  ratingRow: { flexDirection: 'row', alignItems: 'center', marginTop: 6 },
-  ratingText: { fontSize: 12, color: COLORS.textSecondary, marginLeft: 4 },
-  detailsCard: { backgroundColor: COLORS.white, borderRadius: 16, padding: 20, marginBottom: 20 },
-  sectionTitle: { fontSize: 16, fontWeight: '700', color: COLORS.textPrimary, marginBottom: 16 },
-  detailRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: COLORS.border },
-  detailContent: { flex: 1, marginLeft: 14 },
-  detailLabel: { fontSize: 12, color: COLORS.textMuted },
-  detailValue: { fontSize: 15, fontWeight: '600', color: COLORS.textPrimary, marginTop: 2 },
-  priceCard: { backgroundColor: COLORS.white, borderRadius: 16, padding: 20 },
-  priceRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10 },
-  priceLabel: { fontSize: 14, color: COLORS.textSecondary },
-  priceValue: { fontSize: 14, fontWeight: '500', color: COLORS.textPrimary },
-  totalRow: { borderTopWidth: 1, borderTopColor: COLORS.border, marginTop: 8, paddingTop: 16 },
-  totalLabel: { fontSize: 16, fontWeight: '700', color: COLORS.textPrimary },
-  totalValue: { fontSize: 20, fontWeight: '800', color: COLORS.primary },
-  bottomContainer: { padding: 20, backgroundColor: COLORS.white, borderTopWidth: 1, borderTopColor: COLORS.border },
-  payButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: COLORS.primary, borderRadius: 14, paddingVertical: 18 },
-  payButtonText: { fontSize: 16, fontWeight: '700', color: COLORS.white, marginRight: 8 },
+  curveContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 30,
+    overflow: 'hidden',
+  },
+  curveBackground: {
+    position: 'absolute',
+    bottom: 0,
+    left: -20,
+    right: -20,
+    height: 60,
+    backgroundColor: COLORS.background,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+  },
+
+  // Profile
+  profileContainer: {
+    alignItems: 'center',
+    marginTop: -50,
+    paddingHorizontal: 20,
+  },
+  profileImageWrapper: {
+    position: 'relative',
+  },
+  profileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 20,
+    borderWidth: 4,
+    borderColor: COLORS.white,
+  },
+  verifiedBadge: {
+    position: 'absolute',
+    bottom: -4,
+    right: -4,
+    backgroundColor: COLORS.white,
+    borderRadius: 12,
+    padding: 2,
+  },
+  lawyerName: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: COLORS.textPrimary,
+    marginTop: 12,
+  },
+  practiceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 4,
+  },
+  practiceArea: {
+    fontSize: 14,
+    color: COLORS.primary,
+    fontWeight: '500',
+  },
+  separator: {
+    marginHorizontal: 8,
+    color: COLORS.textMuted,
+  },
+  availabilityDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: COLORS.success,
+    marginRight: 6,
+  },
+  availabilityText: {
+    fontSize: 14,
+    color: COLORS.textSecondary,
+  },
+  statsRow: {
+    flexDirection: 'row',
+    marginTop: 16,
+    gap: 12,
+  },
+  statBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 20,
+  },
+  statText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: COLORS.textPrimary,
+    marginLeft: 6,
+  },
+
+  // Content
+  content: { 
+    flex: 1, 
+    paddingHorizontal: 20,
+    paddingTop: 24,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: COLORS.textPrimary,
+    marginBottom: 12,
+  },
+  packageCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.white,
+    borderRadius: 16,
+    padding: 16,
+    borderWidth: 2,
+    borderColor: COLORS.teal,
+    marginBottom: 24,
+  },
+  packageIcon: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 14,
+  },
+  packageInfo: {
+    flex: 1,
+  },
+  packageName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: COLORS.textPrimary,
+  },
+  packagePrice: {
+    marginTop: 4,
+  },
+  priceAmount: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: COLORS.teal,
+  },
+  priceDuration: {
+    fontSize: 14,
+    color: COLORS.textSecondary,
+  },
+  packageRadio: {
+    marginLeft: 10,
+  },
+  radioOuter: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: COLORS.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  radioInner: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: COLORS.primary,
+  },
+
+  // Slots
+  slotsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.white,
+    borderRadius: 16,
+    padding: 8,
+    marginBottom: 24,
+  },
+  slotButton: {
+    width: 56,
+    height: 56,
+    borderRadius: 12,
+    backgroundColor: COLORS.background,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  slotsCount: {
+    flex: 1,
+    fontSize: 28,
+    fontWeight: '700',
+    color: COLORS.textPrimary,
+    textAlign: 'center',
+  },
+
+  // Total
+  totalRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: COLORS.border,
+  },
+  totalLabel: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: COLORS.textPrimary,
+  },
+  totalValue: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: COLORS.textPrimary,
+  },
+
+  // Bottom
+  bottomContainer: { 
+    padding: 20, 
+    backgroundColor: COLORS.white, 
+    borderTopWidth: 1, 
+    borderTopColor: COLORS.border,
+  },
+  payButton: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    backgroundColor: COLORS.primary, 
+    borderRadius: 30, 
+    paddingVertical: 18,
+  },
+  payButtonText: { 
+    fontSize: 16, 
+    fontWeight: '700', 
+    color: COLORS.white,
+  },
 });
