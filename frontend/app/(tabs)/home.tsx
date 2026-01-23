@@ -162,6 +162,9 @@ export default function HomeScreen() {
     },
   ];
 
+  // Get top 3-4 lawyers for home screen
+  const topLawyers = LAWYERS_DATA.filter(l => l.isAvailable).slice(0, 4);
+
   // Drawer Component
   const renderDrawer = () => (
     <Modal
