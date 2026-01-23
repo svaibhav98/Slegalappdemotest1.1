@@ -60,7 +60,7 @@ export default function LoginScreen() {
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
-          <Image source={require('../../assets/logo.jpg')} style={styles.logo} resizeMode="contain" />
+          <Image source={require('../../assets/logo-transparent.png')} style={styles.logo} resizeMode="contain" />
           <Text style={styles.title}>SunoLegal</Text>
           <Text style={styles.subtitle}>Nyay (Justice) for All</Text>
           <Text style={styles.tagline}>Your trusted AI legal assistant for India</Text>
