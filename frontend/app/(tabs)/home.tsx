@@ -182,13 +182,15 @@ export default function HomeScreen() {
       >
         {/* Hero Banner */}
         <View style={styles.heroBannerContainer}>
-          <LinearGradient
-            colors={['#1E1F3B', '#3D2B5A', '#6B3FA0', '#E68A00', '#FF9933']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.heroBanner}
-          >
-            <View style={styles.heroGlow} />
+          <View style={styles.heroBanner}>
+            <LinearGradient
+              colors={['#1E1F3B', '#4B2B6D', '#8B5A2B', '#E68A00', '#FF9933']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={StyleSheet.absoluteFill}
+            />
+            <View style={styles.heroOrangeGlow} />
+            <View style={styles.heroPurpleGlow} />
             <View style={styles.heroContent}>
               <Text style={styles.heroTitle}>
                 NyayAI, Made Simple{'\n'}for <Text style={styles.heroTitleHindi}>भारत</Text>
@@ -204,7 +206,7 @@ export default function HomeScreen() {
                 <Text style={styles.heroButtonText}>Explore NyayAI</Text>
               </TouchableOpacity>
             </View>
-          </LinearGradient>
+          </View>
         </View>
 
         {/* Quick Access Section */}
