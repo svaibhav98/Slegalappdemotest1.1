@@ -9,15 +9,20 @@ export default function Index() {
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading) {
-      if (user) {
-        // User is logged in, redirect to main app
-        router.replace('/(tabs)/home');
-      } else {
-        // User is not logged in, redirect to login
-        router.replace('/auth/login');
+    // For demo purposes, add a short delay to allow auth state to load
+    const timer = setTimeout(() => {
+      if (!loading) {
+        if (user) {
+          // User is logged in, redirect to main app
+          router.replace('/(tabs)/home');
+        } else {
+          // User is not logged in, redirect to login
+          router.replace('/auth/login');
+        }
       }
-    }
+    }, 500);
+
+    return () => clearTimeout(timer);
   }, [user, loading]);
 
   return (
