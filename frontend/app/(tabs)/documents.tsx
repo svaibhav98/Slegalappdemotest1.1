@@ -257,7 +257,7 @@ export default function DocumentsScreen() {
           </TouchableOpacity>
         ))}
       </View>
-      <View style={{ height: 100 }} />
+      <View style={{ height: 40 }} />
     </ScrollView>
   );
 
