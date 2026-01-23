@@ -47,6 +47,17 @@ if FIREBASE_ENABLED:
 else:
     print("⚠️  Running in mock mode - Firestore not available")
 
+# In-memory mock database for MVP
+mock_db = {
+    "users": [],
+    "lawyers": [],
+    "chats": [],
+    "documents": [],
+    "bookings": [],
+    "cases": [],
+    "laws": []
+}
+
 # Initialize Razorpay
 RAZORPAY_KEY_ID = os.getenv("RAZORPAY_KEY_ID", "rzp_test_demo")
 RAZORPAY_KEY_SECRET = os.getenv("RAZORPAY_KEY_SECRET", "demo_secret")
