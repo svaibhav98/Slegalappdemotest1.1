@@ -202,7 +202,9 @@ export default function VerificationPendingScreen() {
           <View style={{ height: 40 }} />
         </ScrollView>
       </View>
-    </>\n  );\n}
+    </>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
