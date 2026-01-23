@@ -1,5 +1,6 @@
 // Lawyers Data Service
 // Centralized data layer for MVP
+// Updated with Indian lawyer images
 
 export interface LawyerPackage {
   id: string;
@@ -85,12 +86,28 @@ const generateTimeSlots = (): { date: string; slots: TimeSlot[] }[] => {
   return result;
 };
 
+// Indian lawyer images from Pexels (free to use)
+const INDIAN_LAWYER_IMAGES = {
+  female1: 'https://images.pexels.com/photos/3184405/pexels-photo-3184405.jpeg?auto=compress&cs=tinysrgb&w=400',
+  female2: 'https://images.pexels.com/photos/3756679/pexels-photo-3756679.jpeg?auto=compress&cs=tinysrgb&w=400',
+  female3: 'https://images.pexels.com/photos/4427610/pexels-photo-4427610.jpeg?auto=compress&cs=tinysrgb&w=400',
+  female4: 'https://images.pexels.com/photos/4427430/pexels-photo-4427430.jpeg?auto=compress&cs=tinysrgb&w=400',
+  female5: 'https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=400',
+  female6: 'https://images.pexels.com/photos/3184431/pexels-photo-3184431.jpeg?auto=compress&cs=tinysrgb&w=400',
+  male1: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=400',
+  male2: 'https://images.pexels.com/photos/3184611/pexels-photo-3184611.jpeg?auto=compress&cs=tinysrgb&w=400',
+  male3: 'https://images.pexels.com/photos/3184639/pexels-photo-3184639.jpeg?auto=compress&cs=tinysrgb&w=400',
+  male4: 'https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=400',
+  male5: 'https://images.pexels.com/photos/3778603/pexels-photo-3778603.jpeg?auto=compress&cs=tinysrgb&w=400',
+  male6: 'https://images.pexels.com/photos/2381069/pexels-photo-2381069.jpeg?auto=compress&cs=tinysrgb&w=400',
+};
+
 export const LAWYERS_DATA: Lawyer[] = [
   {
     id: 'lawyer-1',
     name: 'Adv. Neha Sharma',
     title: 'Senior Family Lawyer',
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200',
+    image: INDIAN_LAWYER_IMAGES.female1,
     category: 'family',
     practiceArea: 'Family Law',
     rating: 5.0,
@@ -111,7 +128,7 @@ export const LAWYERS_DATA: Lawyer[] = [
     id: 'lawyer-2',
     name: 'Adv. Rahul Verma',
     title: 'Corporate Law Expert',
-    image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200',
+    image: INDIAN_LAWYER_IMAGES.male1,
     category: 'corporate',
     practiceArea: 'Corporate Law',
     rating: 4.9,
@@ -132,7 +149,7 @@ export const LAWYERS_DATA: Lawyer[] = [
     id: 'lawyer-3',
     name: 'Adv. Priya Patel',
     title: 'Divorce Specialist',
-    image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200',
+    image: INDIAN_LAWYER_IMAGES.female2,
     category: 'divorce',
     practiceArea: 'Divorce & Separation',
     rating: 4.8,
@@ -153,7 +170,7 @@ export const LAWYERS_DATA: Lawyer[] = [
     id: 'lawyer-4',
     name: 'Adv. Vikram Singh',
     title: 'Criminal Defense Advocate',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200',
+    image: INDIAN_LAWYER_IMAGES.male2,
     category: 'criminal',
     practiceArea: 'Criminal Law',
     rating: 4.9,
@@ -174,7 +191,7 @@ export const LAWYERS_DATA: Lawyer[] = [
     id: 'lawyer-5',
     name: 'Adv. Anjali Desai',
     title: 'Property Law Expert',
-    image: 'https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?w=200',
+    image: INDIAN_LAWYER_IMAGES.female3,
     category: 'property',
     practiceArea: 'Property & Real Estate',
     rating: 4.7,
@@ -195,7 +212,7 @@ export const LAWYERS_DATA: Lawyer[] = [
     id: 'lawyer-6',
     name: 'Adv. Sanjay Kumar',
     title: 'Consumer Rights Advocate',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200',
+    image: INDIAN_LAWYER_IMAGES.male3,
     category: 'consumer',
     practiceArea: 'Consumer Law',
     rating: 4.6,
@@ -216,7 +233,7 @@ export const LAWYERS_DATA: Lawyer[] = [
     id: 'lawyer-7',
     name: 'Adv. Meera Reddy',
     title: 'Tax Law Specialist',
-    image: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=200',
+    image: INDIAN_LAWYER_IMAGES.female4,
     category: 'tax',
     practiceArea: 'Tax & GST',
     rating: 4.8,
@@ -237,7 +254,7 @@ export const LAWYERS_DATA: Lawyer[] = [
     id: 'lawyer-8',
     name: 'Adv. Arjun Malhotra',
     title: 'Labour Law Expert',
-    image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200',
+    image: INDIAN_LAWYER_IMAGES.male4,
     category: 'labour',
     practiceArea: 'Labour & Employment',
     rating: 4.7,
@@ -258,7 +275,7 @@ export const LAWYERS_DATA: Lawyer[] = [
     id: 'lawyer-9',
     name: 'Adv. Kavita Iyer',
     title: 'Family & Custody Lawyer',
-    image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=200',
+    image: INDIAN_LAWYER_IMAGES.female5,
     category: 'family',
     practiceArea: 'Family Law',
     rating: 4.9,
@@ -279,7 +296,7 @@ export const LAWYERS_DATA: Lawyer[] = [
     id: 'lawyer-10',
     name: 'Adv. Rajesh Gupta',
     title: 'Cyber Law Expert',
-    image: 'https://images.unsplash.com/photo-1556157382-97edd2f9e5ee?w=200',
+    image: INDIAN_LAWYER_IMAGES.male5,
     category: 'corporate',
     practiceArea: 'Cyber & IT Law',
     rating: 4.6,
@@ -300,7 +317,7 @@ export const LAWYERS_DATA: Lawyer[] = [
     id: 'lawyer-11',
     name: 'Adv. Sunita Bajaj',
     title: 'Property Dispute Expert',
-    image: 'https://images.unsplash.com/photo-1598550874175-4d0ef436c909?w=200',
+    image: INDIAN_LAWYER_IMAGES.female6,
     category: 'property',
     practiceArea: 'Property & Real Estate',
     rating: 4.8,
@@ -321,7 +338,7 @@ export const LAWYERS_DATA: Lawyer[] = [
     id: 'lawyer-12',
     name: 'Adv. Karan Shah',
     title: 'Divorce & Alimony Expert',
-    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200',
+    image: INDIAN_LAWYER_IMAGES.male6,
     category: 'divorce',
     practiceArea: 'Divorce & Separation',
     rating: 4.7,

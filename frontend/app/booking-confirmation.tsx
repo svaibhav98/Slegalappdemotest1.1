@@ -71,7 +71,7 @@ export default function BookingConfirmationScreen() {
       <StatusBar barStyle="light-content" backgroundColor={COLORS.headerDark} />
       
       <View style={styles.container}>
-        {/* Header with Dark Background */}
+        {/* Header with Dark Background - Extended height for image */}
         <LinearGradient 
           colors={['#1F2937', '#374151']} 
           style={styles.headerGradient}
@@ -81,18 +81,17 @@ export default function BookingConfirmationScreen() {
             <Text style={styles.headerTitle}>Booking Confirmed</Text>
             <View style={styles.headerSpacer} />
           </View>
-          
-          {/* Curved bottom */}
-          <View style={styles.curveContainer}>
-            <View style={styles.curveBackground} />
-          </View>
         </LinearGradient>
 
         <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
-          {/* Lawyer Profile Card - Overlapping */}
+          {/* Lawyer Profile Card - Properly positioned with full image visibility */}
           <View style={styles.profileContainer}>
             <View style={styles.profileImageWrapper}>
-              <Image source={{ uri: lawyer.image }} style={styles.profileImage} />
+              <Image 
+                source={{ uri: lawyer.image }} 
+                style={styles.profileImage}
+                resizeMode="cover"
+              />
               {lawyer.isVerified && (
                 <View style={styles.verifiedBadge}>
                   <Ionicons name="checkmark-circle" size={24} color={COLORS.success} />
@@ -178,10 +177,10 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
   },
   
-  // Header
+  // Header - Extended to allow profile image overlap
   headerGradient: {
     paddingTop: 50,
-    paddingBottom: 60,
+    paddingBottom: 80, // Extra padding for image overlap
   },
   header: { 
     flexDirection: 'row', 
@@ -196,43 +195,35 @@ const styles = StyleSheet.create({
     color: COLORS.white,
   },
   headerSpacer: { width: 44 },
-  curveContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 30,
-    overflow: 'hidden',
-  },
-  curveBackground: {
-    position: 'absolute',
-    bottom: 0,
-    left: -20,
-    right: -20,
-    height: 60,
-    backgroundColor: COLORS.background,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-  },
 
   // ScrollContent
   scrollContent: {
     flex: 1,
+    marginTop: -60, // Pull content up to overlap with header
   },
 
-  // Profile
+  // Profile - Centered with proper image sizing
   profileContainer: {
     alignItems: 'center',
-    marginTop: -50,
     paddingHorizontal: 20,
+    paddingTop: 10,
   },
   profileImageWrapper: {
     position: 'relative',
+    width: 120,
+    height: 120,
+    borderRadius: 24,
+    backgroundColor: COLORS.white,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    elevation: 8,
   },
   profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 20,
+    width: 120,
+    height: 120,
+    borderRadius: 24,
     borderWidth: 4,
     borderColor: COLORS.white,
   },
@@ -248,7 +239,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: '700',
     color: COLORS.textPrimary,
-    marginTop: 12,
+    marginTop: 16,
   },
   practiceRow: {
     flexDirection: 'row',
