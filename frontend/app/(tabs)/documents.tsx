@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Modal, TextInput } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Modal, TextInput, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Colors } from '../../constants/Colors';
-import { Header, Card, EmptyState } from '../../components/CommonComponents';
+import { Card, EmptyState } from '../../components/CommonComponents';
 import { documentAPI } from '../../utils/api';
 
 export default function DocumentsScreen() {
@@ -63,25 +64,38 @@ export default function DocumentsScreen() {
 
   return (
     <View style={styles.container}>
-      <Header title="Legal Documents" subtitle="Create and manage your documents" rightAction={
-        <TouchableOpacity style={styles.addButton} onPress={() => setShowTemplateModal(true)}>
-          <Ionicons name="add-circle" size={28} color={Colors.primary} />
-        </TouchableOpacity>
-      } />
+      <LinearGradient colors={[Colors.info, Colors.info + 'DD']} style={styles.header}>
+        <View style={styles.headerContent}>
+          <Image source={require('../../assets/logo.jpg')} style={styles.logoSmall} resizeMode="contain" />
+          <View style={styles.headerText}>
+            <Text style={styles.headerTitle}>Legal Documents</Text>
+            <Text style={styles.headerSubtitle}>Generate & manage papers</Text>
+          </View>
+          <TouchableOpacity style={styles.addButton} onPress={() => setShowTemplateModal(true)} activeOpacity={0.8}>
+            <Ionicons name="add" size={26} color="#FFFFFF" />
+          </TouchableOpacity>
+        </View>
+      </LinearGradient>
 
       {loading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={Colors.primary} />
+          <Text style={styles.loadingText}>Loading documents...</Text>
         </View>
       ) : documents.length === 0 ? (
         <View style={styles.emptyContainer}>
-          <EmptyState icon="document-text-outline" title="No documents yet" subtitle="Create your first legal document" action={{ label: 'Create Document', onPress: () => setShowTemplateModal(true) }} />
+          <EmptyState icon="document-text-outline" title="No documents yet" subtitle="Start by choosing a template below" />
           <Text style={styles.templatesTitle}>Available Templates</Text>
           <View style={styles.templateGrid}>
             {templates.map((template) => (
-              <TouchableOpacity key={template.id} style={[styles.templateCard, { backgroundColor: template.color + '15' }]} onPress={() => handleSelectTemplate(template)}>
-                <Ionicons name={template.icon as any} size={32} color={template.color} />
-                <Text style={styles.templateTitle}>{template.title}</Text>
+              <TouchableOpacity key={template.id} style={styles.templateCardLarge} onPress={() => handleSelectTemplate(template)} activeOpacity={0.85}>
+                <LinearGradient colors={[template.color, template.color + 'DD']} style={styles.templateGradient}>
+                  <View style={styles.templateIconWrapper}>
+                    <Ionicons name={template.icon as any} size={32} color="#FFFFFF" />
+                  </View>
+                  <Text style={styles.templateTitleLarge}>{template.title}</Text>
+                  <Text style={styles.templateSubtitle}>{template.fields.length} fields</Text>
+                </LinearGradient>
               </TouchableOpacity>
             ))}
           </View>
@@ -91,29 +105,30 @@ export default function DocumentsScreen() {
           {documents.map((doc, index) => (
             <Card key={index} style={styles.documentCard}>
               <View style={styles.documentHeader}>
-                <View style={styles.documentIcon}>
+                <LinearGradient colors={[Colors.primary + '20', Colors.primary + '10']} style={styles.documentIconGradient}>
                   <Ionicons name="document-text" size={24} color={Colors.primary} />
-                </View>
+                </LinearGradient>
                 <View style={styles.documentInfo}>
                   <Text style={styles.documentTitle}>{doc.type.replace('_', ' ').toUpperCase()}</Text>
-                  <Text style={styles.documentDate}>{new Date(doc.created_at).toLocaleDateString()}</Text>
+                  <Text style={styles.documentDate}>Created {new Date(doc.created_at).toLocaleDateString()}</Text>
                 </View>
                 <TouchableOpacity style={styles.moreButton}>
                   <Ionicons name="ellipsis-vertical" size={20} color={Colors.textSecondary} />
                 </TouchableOpacity>
               </View>
               <View style={styles.documentActions}>
-                <TouchableOpacity style={styles.actionButton}>
+                <TouchableOpacity style={styles.actionButton} activeOpacity={0.8}>
                   <Ionicons name="download-outline" size={18} color={Colors.primary} />
                   <Text style={styles.actionButtonText}>Download</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.actionButton}>
+                <TouchableOpacity style={styles.actionButton} activeOpacity={0.8}>
                   <Ionicons name="share-outline" size={18} color={Colors.info} />
                   <Text style={[styles.actionButtonText, { color: Colors.info }]}>Share</Text>
                 </TouchableOpacity>
               </View>
             </Card>
           ))}
+          <View style={{ height: 80 }} />
         </ScrollView>
       )}
 
@@ -128,13 +143,13 @@ export default function DocumentsScreen() {
             </View>
             <ScrollView>
               {templates.map((template) => (
-                <TouchableOpacity key={template.id} style={styles.templateOption} onPress={() => handleSelectTemplate(template)}>
-                  <View style={[styles.templateOptionIcon, { backgroundColor: template.color + '20' }]}>
+                <TouchableOpacity key={template.id} style={styles.templateOption} onPress={() => handleSelectTemplate(template)} activeOpacity={0.8}>
+                  <LinearGradient colors={[template.color + '25', template.color + '10']} style={styles.templateOptionIconGradient}>
                     <Ionicons name={template.icon as any} size={28} color={template.color} />
-                  </View>
+                  </LinearGradient>
                   <View style={styles.templateOptionInfo}>
                     <Text style={styles.templateOptionTitle}>{template.title}</Text>
-                    <Text style={styles.templateOptionSubtitle}>{template.fields.length} fields</Text>
+                    <Text style={styles.templateOptionSubtitle}>{template.fields.length} fields to fill</Text>
                   </View>
                   <Ionicons name="chevron-forward" size={20} color={Colors.textSecondary} />
                 </TouchableOpacity>
@@ -157,11 +172,12 @@ export default function DocumentsScreen() {
               {selectedTemplate?.fields.map((field: string) => (
                 <View key={field}>
                   <Text style={styles.inputLabel}>{formatFieldName(field)}</Text>
-                  <TextInput style={styles.input} placeholder={`Enter ${formatFieldName(field).toLowerCase()}`} value={formData[field]} onChangeText={(text) => setFormData({ ...formData, [field]: text })} />
+                  <TextInput style={styles.input} placeholder={`Enter ${formatFieldName(field).toLowerCase()}`} placeholderTextColor={Colors.gray400} value={formData[field]} onChangeText={(text) => setFormData({ ...formData, [field]: text })} />
                 </View>
               ))}
-              <TouchableOpacity style={styles.submitButton} onPress={handleGenerateDocument}>
+              <TouchableOpacity style={styles.submitButton} onPress={handleGenerateDocument} activeOpacity={0.9}>
                 <Text style={styles.submitButtonText}>Generate Document</Text>
+                <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
               </TouchableOpacity>
             </ScrollView>
           </View>
@@ -173,35 +189,45 @@ export default function DocumentsScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background },
-  addButton: { padding: 4 },
-  content: { flex: 1, paddingHorizontal: 20, paddingTop: 12 },
+  header: { paddingTop: 50, paddingBottom: 20, paddingHorizontal: 20 },
+  headerContent: { flexDirection: 'row', alignItems: 'center' },
+  logoSmall: { width: 48, height: 48, marginRight: 12, borderRadius: 24, backgroundColor: '#FFFFFF' },
+  headerText: { flex: 1 },
+  headerTitle: { fontSize: 22, fontWeight: '700', color: '#FFFFFF', letterSpacing: -0.5 },
+  headerSubtitle: { fontSize: 14, color: '#FFFFFF', opacity: 0.9, marginTop: 2 },
+  addButton: { width: 44, height: 44, borderRadius: 22, backgroundColor: 'rgba(255,255,255,0.25)', justifyContent: 'center', alignItems: 'center' },
+  content: { flex: 1, paddingHorizontal: 20, paddingTop: 20 },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  loadingText: { marginTop: 12, fontSize: 14, color: Colors.textSecondary },
   emptyContainer: { flex: 1 },
-  templatesTitle: { fontSize: 18, fontWeight: 'bold', color: Colors.text, paddingHorizontal: 20, marginTop: 24, marginBottom: 16 },
+  templatesTitle: { fontSize: 20, fontWeight: '700', color: Colors.text, paddingHorizontal: 20, marginTop: 24, marginBottom: 16, letterSpacing: -0.5 },
   templateGrid: { flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: 20, gap: 12 },
-  templateCard: { width: '48%', aspectRatio: 1, borderRadius: 16, padding: 16, justifyContent: 'center', alignItems: 'center' },
-  templateTitle: { fontSize: 14, fontWeight: '600', color: Colors.text, marginTop: 12, textAlign: 'center' },
-  documentCard: { marginBottom: 16 },
-  documentHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
-  documentIcon: { width: 48, height: 48, borderRadius: 24, backgroundColor: Colors.primaryLight + '30', justifyContent: 'center', alignItems: 'center', marginRight: 12 },
+  templateCardLarge: { width: '48%', aspectRatio: 0.9, borderRadius: 20, overflow: 'hidden', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 10, elevation: 6 },
+  templateGradient: { flex: 1, padding: 20, justifyContent: 'center', alignItems: 'center' },
+  templateIconWrapper: { width: 64, height: 64, borderRadius: 32, backgroundColor: 'rgba(255,255,255,0.25)', justifyContent: 'center', alignItems: 'center', marginBottom: 12, borderWidth: 2, borderColor: 'rgba(255,255,255,0.3)' },
+  templateTitleLarge: { fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 4, textAlign: 'center', letterSpacing: -0.3 },
+  templateSubtitle: { fontSize: 12, color: '#FFFFFF', opacity: 0.9, textAlign: 'center' },
+  documentCard: { marginBottom: 16, borderRadius: 16, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.08, shadowRadius: 8, elevation: 4 },
+  documentHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 14 },
+  documentIconGradient: { width: 56, height: 56, borderRadius: 28, justifyContent: 'center', alignItems: 'center', marginRight: 14 },
   documentInfo: { flex: 1 },
-  documentTitle: { fontSize: 16, fontWeight: '600', color: Colors.text },
-  documentDate: { fontSize: 12, color: Colors.textSecondary, marginTop: 4 },
+  documentTitle: { fontSize: 16, fontWeight: '700', color: Colors.text, marginBottom: 4, letterSpacing: -0.3 },
+  documentDate: { fontSize: 13, color: Colors.textSecondary },
   moreButton: { padding: 8 },
   documentActions: { flexDirection: 'row', gap: 12 },
-  actionButton: { flexDirection: 'row', alignItems: 'center', flex: 1, backgroundColor: Colors.surface, padding: 12, borderRadius: 8, borderWidth: 1, borderColor: Colors.border, justifyContent: 'center' },
-  actionButtonText: { fontSize: 14, fontWeight: '600', color: Colors.primary, marginLeft: 6 },
-  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
-  modalContent: { backgroundColor: Colors.background, borderTopLeftRadius: 24, borderTopRightRadius: 24, maxHeight: '90%', padding: 20 },
-  modalHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
-  modalTitle: { fontSize: 20, fontWeight: 'bold', color: Colors.text },
-  templateOption: { flexDirection: 'row', alignItems: 'center', padding: 16, backgroundColor: Colors.surface, borderRadius: 12, marginBottom: 12, borderWidth: 1, borderColor: Colors.border },
-  templateOptionIcon: { width: 56, height: 56, borderRadius: 28, justifyContent: 'center', alignItems: 'center', marginRight: 16 },
+  actionButton: { flexDirection: 'row', alignItems: 'center', flex: 1, backgroundColor: Colors.background, padding: 12, borderRadius: 10, borderWidth: 2, borderColor: Colors.border, justifyContent: 'center', gap: 6 },
+  actionButtonText: { fontSize: 14, fontWeight: '700', color: Colors.primary },
+  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'flex-end' },
+  modalContent: { backgroundColor: Colors.background, borderTopLeftRadius: 28, borderTopRightRadius: 28, maxHeight: '90%', padding: 24 },
+  modalHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 },
+  modalTitle: { fontSize: 22, fontWeight: '700', color: Colors.text, letterSpacing: -0.5 },
+  templateOption: { flexDirection: 'row', alignItems: 'center', padding: 16, backgroundColor: Colors.surface, borderRadius: 16, marginBottom: 12, borderWidth: 2, borderColor: Colors.border, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 4, elevation: 2 },
+  templateOptionIconGradient: { width: 60, height: 60, borderRadius: 30, justifyContent: 'center', alignItems: 'center', marginRight: 16 },
   templateOptionInfo: { flex: 1 },
-  templateOptionTitle: { fontSize: 16, fontWeight: '600', color: Colors.text },
-  templateOptionSubtitle: { fontSize: 12, color: Colors.textSecondary, marginTop: 4 },
-  inputLabel: { fontSize: 14, fontWeight: '600', color: Colors.text, marginBottom: 8, marginTop: 12 },
-  input: { borderWidth: 1, borderColor: Colors.border, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 12, fontSize: 14, color: Colors.text, backgroundColor: Colors.surface },
-  submitButton: { marginTop: 24, backgroundColor: Colors.primary, borderRadius: 12, paddingVertical: 16, alignItems: 'center' },
-  submitButtonText: { fontSize: 16, fontWeight: '600', color: '#FFFFFF' },
+  templateOptionTitle: { fontSize: 16, fontWeight: '700', color: Colors.text, marginBottom: 4, letterSpacing: -0.3 },
+  templateOptionSubtitle: { fontSize: 13, color: Colors.textSecondary },
+  inputLabel: { fontSize: 15, fontWeight: '600', color: Colors.text, marginBottom: 10, marginTop: 16, letterSpacing: -0.3 },
+  input: { borderWidth: 2, borderColor: Colors.border, borderRadius: 14, paddingHorizontal: 18, paddingVertical: 14, fontSize: 15, color: Colors.text, backgroundColor: Colors.surface, fontWeight: '500' },
+  submitButton: { marginTop: 28, backgroundColor: Colors.primary, borderRadius: 14, paddingVertical: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, shadowColor: Colors.primary, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 5 },
+  submitButtonText: { fontSize: 16, fontWeight: '700', color: '#FFFFFF', letterSpacing: 0.5 },
 });
