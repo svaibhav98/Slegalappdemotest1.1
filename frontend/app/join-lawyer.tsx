@@ -108,8 +108,15 @@ export default function JoinLawyerScreen() {
       return;
     }
     console.log('Form submitted:', formData, uploads);
-    alert('Application submitted for verification! We will contact you within 2-3 working days.');
-    handleBack();
+    
+    // Navigate to verification pending screen
+    router.push({
+      pathname: '/verification-pending',
+      params: {
+        lawyerName: formData.fullName,
+        submittedDate: new Date().toISOString(),
+      },
+    });
   };
 
   const renderPickerModal = (
