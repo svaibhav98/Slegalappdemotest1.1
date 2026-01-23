@@ -87,8 +87,13 @@ export default function LawsScreen() {
             </Text>
           </View>
           
-          <TouchableOpacity style={styles.micButton} activeOpacity={0.8}>
-            <Ionicons name="mic-outline" size={22} color={COLORS.white} />
+          <TouchableOpacity 
+            style={styles.lawyerButton} 
+            onPress={() => router.push('/lawyers')}
+            activeOpacity={0.8}
+          >
+            <Ionicons name="chatbubble-ellipses" size={20} color={COLORS.primary} />
+            <Text style={styles.lawyerButtonText}>Lawyer</Text>
           </TouchableOpacity>
         </View>
 
