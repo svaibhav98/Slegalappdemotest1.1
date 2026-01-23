@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StatusBar,
   Image,
+  ScrollView,
 } from 'react-native';
 import { Stack, useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -18,7 +19,11 @@ const COLORS = {
   background: '#F8F9FA',
   textPrimary: '#1A1A2E',
   textSecondary: '#6B7280',
+  textMuted: '#9CA3AF',
+  border: '#E5E7EB',
   success: '#10B981',
+  star: '#F59E0B',
+  headerDark: '#1F2937',
 };
 
 export default function BookingConfirmationScreen() {
@@ -46,37 +51,91 @@ export default function BookingConfirmationScreen() {
     router.replace('/(tabs)/home');
   };
 
+  // Generate consultation details
+  const consultationId = bookingId || `SL${Date.now().toString().slice(-8)}`;
+  const consultationDate = new Date().toLocaleDateString('en-US', { 
+    month: 'long', 
+    day: 'numeric', 
+    year: 'numeric' 
+  });
+  const consultationTime = new Date().toLocaleTimeString('en-US', { 
+    hour: '2-digit', 
+    minute: '2-digit' 
+  });
+
+  if (!lawyer) return null;
+
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
-      <StatusBar barStyle="light-content" backgroundColor={COLORS.success} />
+      <StatusBar barStyle="light-content" backgroundColor={COLORS.headerDark} />
       
       <View style={styles.container}>
-        <LinearGradient colors={[COLORS.success, '#059669']} style={styles.successBanner}>
-          <View style={styles.checkCircle}>
-            <Ionicons name="checkmark" size={48} color={COLORS.success} />
+        {/* Header with Dark Background */}
+        <LinearGradient 
+          colors={['#1F2937', '#374151']} 
+          style={styles.headerGradient}
+        >
+          <View style={styles.header}>
+            <View style={styles.headerSpacer} />
+            <Text style={styles.headerTitle}>Booking Confirmed</Text>
+            <View style={styles.headerSpacer} />
           </View>
-          <Text style={styles.successTitle}>Booking Confirmed!</Text>
-          <Text style={styles.successSubtitle}>Your consultation has been scheduled successfully</Text>
+          
+          {/* Curved bottom */}
+          <View style={styles.curveContainer}>
+            <View style={styles.curveBackground} />
+          </View>
         </LinearGradient>
 
-        <View style={styles.content}>
-          {lawyer && (
-            <View style={styles.lawyerCard}>
-              <Image source={{ uri: lawyer.image }} style={styles.lawyerImage} />
-              <View style={styles.lawyerInfo}>
-                <Text style={styles.lawyerName}>{lawyer.name}</Text>
-                <Text style={styles.lawyerPractice}>{lawyer.practiceArea}</Text>
-              </View>
-              <Ionicons name="checkmark-circle" size={24} color={COLORS.success} />
+        <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
+          {/* Lawyer Profile Card - Overlapping */}
+          <View style={styles.profileContainer}>
+            <View style={styles.profileImageWrapper}>
+              <Image source={{ uri: lawyer.image }} style={styles.profileImage} />
+              {lawyer.isVerified && (
+                <View style={styles.verifiedBadge}>
+                  <Ionicons name="checkmark-circle" size={24} color={COLORS.success} />
+                </View>
+              )}
             </View>
-          )}
+            
+            <Text style={styles.lawyerName}>{lawyer.name}</Text>
+            <View style={styles.practiceRow}>
+              <Text style={styles.practiceArea}>{lawyer.practiceArea}</Text>
+              <Text style={styles.separator}>|</Text>
+              <View style={styles.availabilityDot} />
+              <Text style={styles.availabilityText}>Availability</Text>
+            </View>
 
+            {/* Stats Badges */}
+            <View style={styles.statsRow}>
+              <View style={[styles.statBadge, { backgroundColor: '#FEF3C7' }]}>
+                <Ionicons name="star" size={16} color={COLORS.star} />
+                <Text style={styles.statText}>{lawyer.rating} ({lawyer.reviewCount})</Text>
+              </View>
+              <View style={[styles.statBadge, { backgroundColor: '#FFEDD5' }]}>
+                <Ionicons name="briefcase" size={16} color={COLORS.primary} />
+                <Text style={styles.statText}>{lawyer.experience}+ Years</Text>
+              </View>
+            </View>
+          </View>
+
+          {/* Success Message */}
+          <View style={styles.successCard}>
+            <View style={styles.successIconWrapper}>
+              <Ionicons name="checkmark-circle" size={64} color={COLORS.success} />
+            </View>
+            <Text style={styles.successTitle}>Payment Successful!</Text>
+            <Text style={styles.successSubtitle}>Your consultation has been booked successfully</Text>
+          </View>
+
+          {/* Booking Details */}
           <View style={styles.detailsCard}>
             <View style={styles.detailRow}>
               <Ionicons name="document-text" size={20} color={COLORS.textSecondary} />
               <Text style={styles.detailLabel}>Booking ID</Text>
-              <Text style={styles.detailValue}>{bookingId}</Text>
+              <Text style={styles.detailValue}>{consultationId}</Text>
             </View>
             <View style={styles.detailRow}>
               <Ionicons name={packageType === 'chat' ? 'chatbubble' : packageType === 'voice' ? 'call' : 'videocam'} size={20} color={COLORS.textSecondary} />
@@ -84,20 +143,23 @@ export default function BookingConfirmationScreen() {
               <Text style={styles.detailValue}>{packageType === 'chat' ? 'Chat' : packageType === 'voice' ? 'Voice Call' : 'Video Call'}</Text>
             </View>
             <View style={styles.detailRow}>
+              <Ionicons name="calendar" size={20} color={COLORS.textSecondary} />
+              <Text style={styles.detailLabel}>Date & Time</Text>
+              <Text style={styles.detailValue}>{consultationDate}, {consultationTime}</Text>
+            </View>
+            <View style={[styles.detailRow, { borderBottomWidth: 0 }]}>
               <Ionicons name="checkmark-done" size={20} color={COLORS.success} />
               <Text style={styles.detailLabel}>Payment Status</Text>
               <Text style={[styles.detailValue, { color: COLORS.success }]}>Paid</Text>
             </View>
           </View>
 
-          <View style={styles.noteCard}>
-            <Ionicons name="information-circle" size={20} color={COLORS.primary} />
-            <Text style={styles.noteText}>You can start your consultation now or access it from 'My Consultations' section anytime.</Text>
-          </View>
-        </View>
+          <View style={{ height: 120 }} />
+        </ScrollView>
 
+        {/* Bottom CTA */}
         <View style={styles.bottomContainer}>
-          <TouchableOpacity style={styles.startButton} onPress={handleStartConsultation}>
+          <TouchableOpacity style={styles.startButton} onPress={handleStartConsultation} activeOpacity={0.9}>
             <Ionicons name={packageType === 'chat' ? 'chatbubbles' : packageType === 'voice' ? 'call' : 'videocam'} size={20} color={COLORS.white} />
             <Text style={styles.startButtonText}>Start Consultation</Text>
           </TouchableOpacity>
