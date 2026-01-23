@@ -2,10 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, RefreshControl, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../../contexts/AuthContext';
-import { QuickAccessCard, Card } from '../../components/CommonComponents';
 import { Colors } from '../../constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 
 export default function HomeScreen() {
   const { user, signOut } = useAuth();
@@ -35,135 +33,161 @@ export default function HomeScreen() {
     }
   };
 
+  const quickAccessItems = [
+    { icon: 'chatbubble-ellipses', label: 'Nyay-AI\nAssistant', route: '/(tabs)/chat', color: Colors.primary },
+    { icon: 'people', label: 'Legal\nConsultat\nion', route: '/lawyers', color: Colors.error },
+    { icon: 'document-text', label: 'Notice\nDrafting', route: '/(tabs)/documents', color: Colors.warning, featured: true },
+    { icon: 'folder-open', label: 'Case\nTracker', route: '/(tabs)/cases', color: Colors.error },
+    { icon: 'book', label: 'Laws &\nSchemes', route: '/(tabs)/laws', color: Colors.info },
+  ];
+
   return (
     <View style={styles.container}>
-      <LinearGradient colors={[Colors.primary, Colors.secondary]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.header}>
-        <View style={styles.headerContent}>
-          <View style={styles.headerLeft}>
-            <Image source={require('../../assets/logo.jpg')} style={styles.logoSmall} resizeMode="contain" />
-            <View>
-              <Text style={styles.headerGreeting}>{greeting}</Text>
-              <Text style={styles.headerName}>Welcome to SunoLegal</Text>
-            </View>
-          </View>
-          <TouchableOpacity onPress={handleSignOut} style={styles.signOutButton}>
-            <Ionicons name="log-out-outline" size={24} color="#FFFFFF" />
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.menuButton}>
+          <Ionicons name="menu" size={24} color={Colors.text} />
+        </TouchableOpacity>
+        <View style={styles.headerCenter}>
+          <Text style={styles.greetingText}>{greeting}, Vaibhav 👋</Text>
+          <Text style={styles.welcomeText}>Welcome to <Text style={styles.brandText}>SunoLegal</Text></Text>
+        </View>
+        <View style={styles.headerActions}>
+          <TouchableOpacity style={styles.iconButton}>
+            <Ionicons name="notifications" size={22} color={Colors.text} />
+            <View style={styles.badge} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.iconButton} onPress={handleSignOut}>
+            <Ionicons name="person-circle-outline" size={22} color={Colors.text} />
           </TouchableOpacity>
         </View>
-      </LinearGradient>
+      </View>
 
       <ScrollView style={styles.content} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[Colors.primary]} tintColor={Colors.primary} />}>
         <View style={styles.heroBanner}>
-          <LinearGradient colors={[Colors.primary, Colors.primaryDark]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.heroGradient}>
-            <View style={styles.heroContent}>
-              <View style={styles.heroIconContainer}>
-                <Ionicons name="shield-checkmark" size={40} color="#FFFFFF" />
-              </View>
-              <Text style={styles.heroTitle}>NyayAI Made Simple{"\n"}for भारत</Text>
-              <Text style={styles.heroSubtitle}>Get instant legal guidance in plain language.{"\n"}Powered by AI, verified by lawyers.</Text>
-              <TouchableOpacity style={styles.heroButton} onPress={() => router.push('/(tabs)/chat')} activeOpacity={0.9}>
-                <Text style={styles.heroButtonText}>Start Chat with NyayAI</Text>
-                <Ionicons name="arrow-forward" size={20} color={Colors.primary} />
-              </TouchableOpacity>
-            </View>
-          </LinearGradient>
+          <View style={styles.heroContent}>
+            <Text style={styles.heroTitle}>NyayAI, Made Simple{"\n"}for भारत</Text>
+            <Text style={styles.heroSubtitle}>Your trusted AI assistant for laws, documents,{"\n"}and legal help in everyday language.</Text>
+            <TouchableOpacity style={styles.heroButton} onPress={() => router.push('/(tabs)/chat')} activeOpacity={0.8}>
+              <Text style={styles.heroButtonText}>Explore NyayAI</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         <Text style={styles.sectionTitle}>Quick Access</Text>
-        <View style={styles.quickAccessGrid}>
-          <QuickAccessCard icon="chatbubble-ellipses" title="NyayAI Chat" subtitle="Ask legal questions" color={Colors.primary} onPress={() => router.push('/(tabs)/chat')} />
-          <QuickAccessCard icon="people" title="Find Lawyer" subtitle="Expert consultation" color={Colors.secondary} onPress={() => router.push('/lawyers')} />
-          <QuickAccessCard icon="document-text" title="Documents" subtitle="Generate papers" color={Colors.info} onPress={() => router.push('/(tabs)/documents')} />
-          <QuickAccessCard icon="folder" title="My Cases" subtitle="Track progress" color={Colors.success} onPress={() => router.push('/(tabs)/cases')} />
-          <QuickAccessCard icon="book" title="Laws & Schemes" subtitle="Browse info" color={Colors.warning} onPress={() => router.push('/(tabs)/laws')} />
-          <QuickAccessCard icon="information-circle" title="Help Center" subtitle="Get support" color={Colors.gray600} onPress={() => {}} />
-        </View>
-
-        <Text style={styles.sectionTitle}>Services</Text>
-        <View style={styles.servicesGrid}>
-          <TouchableOpacity style={styles.serviceCard} activeOpacity={0.8}>
-            <LinearGradient colors={[Colors.secondary + '15', Colors.secondary + '05']} style={styles.serviceGradient}>
-              <View style={styles.serviceIcon}>
-                <Ionicons name="briefcase" size={28} color={Colors.secondary} />
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.quickAccessScroll} contentContainerStyle={styles.quickAccessContainer}>
+          {quickAccessItems.map((item, index) => (
+            <TouchableOpacity key={index} style={[styles.quickAccessCard, item.featured && styles.quickAccessCardFeatured]} onPress={() => router.push(item.route as any)} activeOpacity={0.85}>
+              <View style={[styles.quickAccessIcon, item.featured && styles.quickAccessIconFeatured]}>
+                <Ionicons name={item.icon as any} size={28} color={item.featured ? '#FFFFFF' : item.color} />
               </View>
-              <Text style={styles.serviceTitle}>Join as Lawyer</Text>
-              <Text style={styles.serviceSubtitle}>Offer legal services</Text>
-            </LinearGradient>
+              <Text style={[styles.quickAccessLabel, item.featured && styles.quickAccessLabelFeatured]}>{item.label}</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+
+        <Text style={styles.sectionTitle}>Category</Text>
+        <View style={styles.categoryContainer}>
+          <TouchableOpacity style={styles.categoryCard} onPress={() => router.push('/join-lawyer')} activeOpacity={0.9}>
+            <View style={styles.categoryIcon}>
+              <Ionicons name="briefcase" size={32} color={Colors.primary} />
+            </View>
+            <View style={styles.categoryInfo}>
+              <Text style={styles.categoryTitle}>Join as a{"\n"}Lawyer</Text>
+              <Text style={styles.categorySubtitle}>Register to offer Legal...</Text>
+            </View>
+            <TouchableOpacity style={styles.categoryAction}>
+              <Text style={styles.categoryActionText}>Go to Schemes</Text>
+              <Ionicons name="arrow-forward-circle" size={20} color={Colors.success} />
+            </TouchableOpacity>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.serviceCard} activeOpacity={0.8}>
-            <LinearGradient colors={[Colors.warning + '15', Colors.warning + '05']} style={styles.serviceGradient}>
-              <View style={styles.serviceIcon}>
-                <Ionicons name="bookmark" size={28} color={Colors.warning} />
-              </View>
-              <Text style={styles.serviceTitle}>Saved Items</Text>
-              <Text style={styles.serviceSubtitle}>Chats & documents</Text>
-            </LinearGradient>
+
+          <TouchableOpacity style={styles.categoryCard} activeOpacity={0.9}>
+            <View style={styles.categoryIcon}>
+              <Ionicons name="bookmark" size={32} color={Colors.warning} />
+            </View>
+            <View style={styles.categoryInfo}>
+              <Text style={styles.categoryTitle}>Saved Items</Text>
+              <Text style={styles.categorySubtitle}>View and manage.....</Text>
+            </View>
+            <TouchableOpacity style={styles.categoryAction}>
+              <Text style={styles.categoryActionText}>Contact Us</Text>
+              <Ionicons name="arrow-forward-circle" size={20} color={Colors.success} />
+            </TouchableOpacity>
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.sectionTitle}>Recent Activity</Text>
-        <Card>
-          <View style={styles.activityItem}>
-            <View style={styles.activityIconWrapper}>
-              <LinearGradient colors={[Colors.info + '20', Colors.info + '10']} style={styles.activityIconGradient}>
-                <Ionicons name="book-outline" size={20} color={Colors.info} />
-              </LinearGradient>
-            </View>
-            <View style={styles.activityContent}>
-              <Text style={styles.activityTitle}>Consumer Protection Act</Text>
-              <Text style={styles.activitySubtitle}>Viewed 2 hours ago</Text>
-              <Text style={styles.activityDescription} numberOfLines={2}>Learn about your rights as a consumer under Indian law...</Text>
-            </View>
-          </View>
-        </Card>
-
-        <View style={styles.footer}>
-          <View style={styles.footerBadge}>
-            <Ionicons name="flask" size={14} color={Colors.warning} />
-            <Text style={styles.footerText}>Demo Mode Active</Text>
-          </View>
-          <Text style={styles.footerSubtext}>Firebase credentials pending</Text>
+        <View style={styles.recentActivityHeader}>
+          <Text style={styles.sectionTitle}>Recently Activity</Text>
+          <TouchableOpacity>
+            <Text style={styles.seeAllText}>See all</Text>
+          </TouchableOpacity>
         </View>
+        <View style={styles.activityNotification}>
+          <Text style={styles.notificationText}>New Notification</Text>
+        </View>
+        <TouchableOpacity style={styles.activityCard} onPress={() => router.push('/law-detail/tenancy')} activeOpacity={0.9}>
+          <Image source={{ uri: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=200' }} style={styles.activityImage} />
+          <View style={styles.activityContent}>
+            <Text style={styles.activityTitle}>Tenancy Laws</Text>
+            <Text style={styles.activitySubtitle}>Rights and Responsibilities</Text>
+            <Text style={styles.activityDescription} numberOfLines={2}>Tenants in India are protected under state Rent Acts and the Model Tenancy A...</Text>
+          </View>
+        </TouchableOpacity>
+
+        <View style={{ height: 100 }} />
       </ScrollView>
+
+      <TouchableOpacity style={styles.floatingAIButton} onPress={() => router.push('/(tabs)/chat')}>
+        <Ionicons name="sparkles" size={28} color="#FFFFFF" />
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Colors.background },
-  header: { paddingTop: 50, paddingBottom: 20, paddingHorizontal: 20 },
-  headerContent: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  headerLeft: { flexDirection: 'row', alignItems: 'center', flex: 1 },
-  logoSmall: { width: 48, height: 48, marginRight: 12, borderRadius: 24, backgroundColor: '#FFFFFF' },
-  headerGreeting: { fontSize: 14, color: '#FFFFFF', opacity: 0.9, fontWeight: '500' },
-  headerName: { fontSize: 18, color: '#FFFFFF', fontWeight: '700', marginTop: 2 },
-  signOutButton: { padding: 8, borderRadius: 20, backgroundColor: 'rgba(255,255,255,0.2)' },
-  content: { flex: 1 },
-  heroBanner: { margin: 20, borderRadius: 20, overflow: 'hidden', shadowColor: '#000', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.2, shadowRadius: 12, elevation: 8 },
-  heroGradient: { padding: 28, minHeight: 200 },
-  heroContent: { alignItems: 'flex-start' },
-  heroIconContainer: { width: 72, height: 72, borderRadius: 36, backgroundColor: 'rgba(255,255,255,0.25)', justifyContent: 'center', alignItems: 'center', marginBottom: 16, borderWidth: 2, borderColor: 'rgba(255,255,255,0.3)' },
-  heroTitle: { fontSize: 26, fontWeight: '800', color: '#FFFFFF', marginBottom: 12, lineHeight: 34, letterSpacing: -0.5 },
-  heroSubtitle: { fontSize: 14, color: '#FFFFFF', opacity: 0.95, marginBottom: 24, lineHeight: 22 },
-  heroButton: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#FFFFFF', paddingVertical: 14, paddingHorizontal: 24, borderRadius: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 8, elevation: 4 },
-  heroButtonText: { fontSize: 15, fontWeight: '700', color: Colors.primary, marginRight: 8, letterSpacing: -0.3 },
-  sectionTitle: { fontSize: 20, fontWeight: '700', color: Colors.text, paddingHorizontal: 20, marginTop: 32, marginBottom: 16, letterSpacing: -0.5 },
-  quickAccessGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', paddingHorizontal: 20, gap: 12 },
-  servicesGrid: { flexDirection: 'row', paddingHorizontal: 20, gap: 12, marginBottom: 8 },
-  serviceCard: { flex: 1, borderRadius: 16, overflow: 'hidden', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.08, shadowRadius: 6, elevation: 3 },
-  serviceGradient: { padding: 20, alignItems: 'center', minHeight: 140 },
-  serviceIcon: { width: 56, height: 56, borderRadius: 28, backgroundColor: '#FFFFFF', justifyContent: 'center', alignItems: 'center', marginBottom: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 2 },
-  serviceTitle: { fontSize: 15, fontWeight: '700', color: Colors.text, marginBottom: 4, textAlign: 'center' },
-  serviceSubtitle: { fontSize: 12, color: Colors.textSecondary, textAlign: 'center' },
-  activityItem: { flexDirection: 'row', alignItems: 'flex-start' },
-  activityIconWrapper: { marginRight: 12 },
-  activityIconGradient: { width: 44, height: 44, borderRadius: 22, justifyContent: 'center', alignItems: 'center' },
+  container: { flex: 1, backgroundColor: '#2B2D42' },
+  header: { flexDirection: 'row', alignItems: 'center', paddingTop: 50, paddingBottom: 16, paddingHorizontal: 20, backgroundColor: '#2B2D42' },
+  menuButton: { padding: 8, borderWidth: 1, borderColor: '#4A4D6A', borderRadius: 12 },
+  headerCenter: { flex: 1, marginLeft: 12 },
+  greetingText: { fontSize: 14, color: '#A8A8B3', marginBottom: 2 },
+  welcomeText: { fontSize: 16, color: '#FFFFFF', fontWeight: '600' },
+  brandText: { color: Colors.primary },
+  headerActions: { flexDirection: 'row', gap: 8 },
+  iconButton: { padding: 8, borderWidth: 1, borderColor: '#4A4D6A', borderRadius: 12, position: 'relative' },
+  badge: { position: 'absolute', top: 6, right: 6, width: 8, height: 8, borderRadius: 4, backgroundColor: Colors.error },
+  content: { flex: 1, backgroundColor: Colors.background },
+  heroBanner: { margin: 20, borderRadius: 20, overflow: 'hidden', backgroundColor: Colors.primary, height: 200, justifyContent: 'center' },
+  heroContent: { padding: 24 },
+  heroTitle: { fontSize: 24, fontWeight: '800', color: '#FFFFFF', marginBottom: 8, lineHeight: 32 },
+  heroSubtitle: { fontSize: 13, color: '#FFFFFF', opacity: 0.9, marginBottom: 16, lineHeight: 18 },
+  heroButton: { backgroundColor: '#2B2D42', paddingVertical: 12, paddingHorizontal: 20, borderRadius: 12, alignSelf: 'flex-start' },
+  heroButtonText: { fontSize: 14, fontWeight: '700', color: '#FFFFFF' },
+  sectionTitle: { fontSize: 18, fontWeight: '700', color: Colors.text, paddingHorizontal: 20, marginTop: 24, marginBottom: 12 },
+  quickAccessScroll: { paddingLeft: 20 },
+  quickAccessContainer: { paddingRight: 20, gap: 12 },
+  quickAccessCard: { width: 100, alignItems: 'center', padding: 12, borderRadius: 16, backgroundColor: '#FFFFFF', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.08, shadowRadius: 4, elevation: 3 },
+  quickAccessCardFeatured: { backgroundColor: Colors.warning, transform: [{ scale: 1.08 }], shadowColor: Colors.warning, shadowOpacity: 0.3, shadowRadius: 12, elevation: 8 },
+  quickAccessIcon: { width: 56, height: 56, borderRadius: 28, backgroundColor: Colors.surface, justifyContent: 'center', alignItems: 'center', marginBottom: 8 },
+  quickAccessIconFeatured: { backgroundColor: 'rgba(255,255,255,0.25)' },
+  quickAccessLabel: { fontSize: 11, color: Colors.text, textAlign: 'center', fontWeight: '600', lineHeight: 14 },
+  quickAccessLabelFeatured: { color: '#FFFFFF' },
+  categoryContainer: { paddingHorizontal: 20, gap: 12 },
+  categoryCard: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#FFFFFF', padding: 16, borderRadius: 16, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 6, elevation: 2 },
+  categoryIcon: { width: 56, height: 56, borderRadius: 12, backgroundColor: Colors.surface, justifyContent: 'center', alignItems: 'center', marginRight: 12 },
+  categoryInfo: { flex: 1 },
+  categoryTitle: { fontSize: 15, fontWeight: '700', color: Colors.text, marginBottom: 4, lineHeight: 18 },
+  categorySubtitle: { fontSize: 12, color: Colors.textSecondary },
+  categoryAction: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  categoryActionText: { fontSize: 12, fontWeight: '600', color: Colors.success },
+  recentActivityHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, marginTop: 24 },
+  seeAllText: { fontSize: 14, color: Colors.warning, fontWeight: '600' },
+  activityNotification: { paddingHorizontal: 20, marginBottom: 12 },
+  notificationText: { fontSize: 13, color: Colors.textSecondary },
+  activityCard: { flexDirection: 'row', marginHorizontal: 20, backgroundColor: '#FFFFFF', borderRadius: 16, padding: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 6, elevation: 2 },
+  activityImage: { width: 80, height: 80, borderRadius: 12, marginRight: 12 },
   activityContent: { flex: 1 },
-  activityTitle: { fontSize: 15, fontWeight: '600', color: Colors.text, marginBottom: 4 },
+  activityTitle: { fontSize: 15, fontWeight: '700', color: Colors.text, marginBottom: 4 },
   activitySubtitle: { fontSize: 12, color: Colors.textSecondary, marginBottom: 6 },
-  activityDescription: { fontSize: 13, color: Colors.text, lineHeight: 19, opacity: 0.7 },
-  footer: { padding: 32, alignItems: 'center' },
-  footerBadge: { flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.warning + '15', paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, marginBottom: 8 },
-  footerText: { fontSize: 12, color: Colors.warning, fontWeight: '600', marginLeft: 6 },
-  footerSubtext: { fontSize: 11, color: Colors.textSecondary },
+  activityDescription: { fontSize: 12, color: Colors.text, lineHeight: 16, opacity: 0.7 },
+  floatingAIButton: { position: 'absolute', bottom: 80, right: 20, width: 64, height: 64, borderRadius: 32, backgroundColor: Colors.warning, justifyContent: 'center', alignItems: 'center', shadowColor: Colors.warning, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.4, shadowRadius: 12, elevation: 8 },
 });
