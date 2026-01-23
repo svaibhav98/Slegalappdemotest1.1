@@ -108,7 +108,14 @@ export default function NyayAILandingScreen() {
             </TouchableOpacity>
             
             <View style={styles.headerTitleContainer}>
-              <Text style={styles.headerTitle}>Nyay-AI</Text>
+              <View style={styles.headerLogoRow}>
+                <Image 
+                  source={require('../../assets/logo-transparent.png')} 
+                  style={styles.headerLogo} 
+                  resizeMode="contain"
+                />
+                <Text style={styles.headerTitle}>Nyay-AI</Text>
+              </View>
               <Text style={styles.headerSubtitle}>Legal Assistant</Text>
             </View>
             
