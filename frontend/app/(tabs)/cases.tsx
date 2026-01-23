@@ -617,15 +617,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
   },
+  summaryItemActive: {
+    backgroundColor: COLORS.primary + '15',
+    borderRadius: 12,
+    paddingVertical: 8,
+  },
   summaryCount: {
     fontSize: 32,
     fontWeight: '800',
     color: COLORS.textPrimary,
   },
+  summaryCountActive: {
+    color: COLORS.primary,
+  },
   summaryLabel: {
     fontSize: 13,
     color: COLORS.textSecondary,
     marginTop: 4,
+  },
+  summaryLabelActive: {
+    color: COLORS.primary,
+    fontWeight: '600',
   },
   summaryDivider: {
     width: 1,
