@@ -69,24 +69,21 @@ export default function HomeScreen() {
 
   const quickAccessItems = [
     { 
-      icon: 'stars', 
-      iconType: 'material',
+      icon: 'sparkles', 
       label: 'Nyay-Ai\nAssistant', 
       route: '/(tabs)/chat', 
       iconColor: '#FFD700',
       bgColor: '#FEF3C7',
     },
     { 
-      icon: 'campaign', 
-      iconType: 'material',
+      icon: 'megaphone', 
       label: 'Legal\nConsultation', 
       route: '/lawyers', 
       iconColor: '#EF4444',
       bgColor: '#FEE2E2',
     },
     { 
-      icon: 'description', 
-      iconType: 'material',
+      icon: 'document-text', 
       label: 'Notice\nDrafting', 
       route: '/(tabs)/documents', 
       featured: true,
@@ -94,8 +91,7 @@ export default function HomeScreen() {
       bgColor: COLORS.primary,
     },
     { 
-      icon: 'gavel', 
-      iconType: 'material',
+      icon: 'briefcase', 
       label: 'Case\nTracker', 
       route: '/(tabs)/cases', 
       iconColor: '#8B4513',
