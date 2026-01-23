@@ -154,7 +154,7 @@ export default function HomeScreen() {
 
   const recentActivity = [
     {
-      id: 'tenancy',
+      id: 'tenancy-laws',
       title: 'Tenancy Laws',
       subtitle: 'Tenant Rights and Responsibilities',
       description: 'Acts and the Model Tenancy Act\nwritten rental agreement, fair...\nnder state Rent\nts include a\nssession...',
