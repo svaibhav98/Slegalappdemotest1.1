@@ -13,7 +13,7 @@ export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
-  const { setMockUser } = useAuth();
+  const { setMockUser, setGuestMode } = useAuth();
 
   const handleSendOTP = async () => {
     if (phone.length !== 10) {
@@ -53,6 +53,15 @@ export default function LoginScreen() {
     } catch (err: any) {
       setError(err.message || 'Failed to verify OTP');
       setLoading(false);
+    }
+  };
+
+  const handleGuestMode = async () => {
+    try {
+      await setGuestMode();
+      router.replace('/(tabs)/home');
+    } catch (err: any) {
+      console.error('Failed to set guest mode:', err);
     }
   };
 
