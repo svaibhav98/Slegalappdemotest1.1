@@ -109,9 +109,9 @@ export default function JoinLawyerScreen() {
     }
     console.log('Form submitted:', formData, uploads);
     
-    // Navigate to verification pending screen
+    // Navigate to verification in progress screen
     router.push({
-      pathname: '/verification-pending',
+      pathname: '/verification-in-progress',
       params: {
         lawyerName: formData.fullName,
         submittedDate: new Date().toISOString(),
