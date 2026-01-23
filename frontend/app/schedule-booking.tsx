@@ -39,9 +39,7 @@ export default function ScheduleBookingScreen() {
       setLawyer(lawyerData);
       const pkg = lawyerData.packages.find(p => p.id === packageId);
       setSelectedPackage(pkg || null);
-      if (lawyerData.availableSlots.length > 0) {
-        setSelectedDate(lawyerData.availableSlots[0].date);
-      }
+      // Do not auto-select first date - user must explicitly choose
     }
   }, [lawyerId, packageId]);
 
