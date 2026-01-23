@@ -208,7 +208,7 @@ export default function LawsScreen() {
             ))
           )}
           
-          <View style={{ height: 100 }} />
+          <View style={{ height: 40 }} />
         </ScrollView>
       </LinearGradient>
     </View>
