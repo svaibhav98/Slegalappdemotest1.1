@@ -113,9 +113,8 @@ export default function HomeScreen() {
       icon: 'document-text', 
       label: 'Notice\nDrafting', 
       route: '/(tabs)/documents', 
-      featured: true,
-      iconColor: '#FFFFFF',
-      bgColor: COLORS.primary,
+      iconColor: '#FF9933',
+      bgColor: '#FFFFFF',
     },
     { 
       icon: 'briefcase', 
