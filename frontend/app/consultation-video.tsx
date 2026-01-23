@@ -6,8 +6,7 @@ import {
   TouchableOpacity,
   StatusBar,
   Image,
-  Alert,
-  SafeAreaView,
+  ImageBackground,
 } from 'react-native';
 import { Stack, useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -18,7 +17,6 @@ const COLORS = {
   white: '#FFFFFF',
   success: '#10B981',
   error: '#EF4444',
-  overlay: 'rgba(0,0,0,0.6)',
 };
 
 export default function ConsultationVideoScreen() {
@@ -48,54 +46,18 @@ export default function ConsultationVideoScreen() {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
+  // Direct navigation - no alerts
   const handleEndCall = () => {
-    Alert.alert(
-      'End Video Call',
-      'Are you sure you want to end this video call?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'End Call', style: 'destructive', onPress: () => {
-          updateBookingStatus(bookingId as string, 'completed');
-          router.replace({
-            pathname: '/post-consultation',
-            params: { bookingId, lawyerId }
-          });
-        }}
-      ]
-    );
-  };
-
-  const handleBack = () => {
-    Alert.alert(
-      'Leave Call',
-      'Are you sure you want to leave this video call?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Leave', style: 'destructive', onPress: () => {
-          updateBookingStatus(bookingId as string, 'completed');
-          router.replace('/(tabs)/home');
-        }}
-      ]
-    );
-  };
-
-  const toggleMute = () => {
-    setIsMuted(!isMuted);
-  };
-
-  const toggleVideo = () => {
-    setIsVideoOff(!isVideoOff);
-  };
-
-  const handleChat = () => {
-    router.push({
-      pathname: '/consultation-chat',
+    updateBookingStatus(bookingId as string, 'completed');
+    router.replace({
+      pathname: '/post-consultation',
       params: { bookingId, lawyerId }
     });
   };
 
-  const handleSwitchCamera = () => {
-    Alert.alert('Switch Camera', 'Camera switched successfully!');
+  const handleBack = () => {
+    updateBookingStatus(bookingId as string, 'completed');
+    router.replace('/(tabs)/home');
   };
 
   if (!lawyer) {
@@ -109,95 +71,85 @@ export default function ConsultationVideoScreen() {
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
-      <StatusBar barStyle="light-content" backgroundColor="#000" />
+      <StatusBar barStyle="light-content" />
       
-      <View style={styles.container}>
-        {/* Remote Video (Lawyer) - Full screen background */}
-        <Image source={{ uri: lawyer.image }} style={styles.remoteVideoImage} />
-        <View style={styles.remoteOverlay} />
+      <ImageBackground 
+        source={{ uri: lawyer.image }} 
+        style={styles.container}
+        resizeMode="cover"
+      >
+        {/* Dark overlay */}
+        <View style={styles.overlay} />
+        
+        {/* Back Button - Fixed at top */}
+        <TouchableOpacity 
+          style={styles.backButton} 
+          onPress={handleBack}
+        >
+          <Ionicons name="arrow-back" size={24} color={COLORS.white} />
+        </TouchableOpacity>
 
-        {/* Content Layer */}
-        <SafeAreaView style={styles.contentLayer}>
-          {/* Top Bar */}
-          <View style={styles.topBar}>
-            <TouchableOpacity 
-              style={styles.backButton} 
-              onPress={handleBack}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="arrow-back" size={24} color={COLORS.white} />
-            </TouchableOpacity>
-            
-            <View style={styles.topInfo}>
-              <View style={styles.callStatusContainer}>
-                <View style={styles.liveDot} />
-                <Text style={styles.durationText}>{formatDuration(callDuration)}</Text>
-              </View>
-              <Text style={styles.lawyerNameTop}>{lawyer.name}</Text>
-              <Text style={styles.practiceAreaTop}>{lawyer.practiceArea}</Text>
+        {/* Top Info */}
+        <View style={styles.topInfo}>
+          <View style={styles.callStatusContainer}>
+            <View style={styles.liveDot} />
+            <Text style={styles.durationText}>{formatDuration(callDuration)}</Text>
+          </View>
+          <Text style={styles.lawyerNameTop}>{lawyer.name}</Text>
+          <Text style={styles.practiceAreaTop}>{lawyer.practiceArea}</Text>
+        </View>
+
+        {/* Local Video (User) - Small PiP */}
+        <View style={styles.localVideo}>
+          {isVideoOff ? (
+            <View style={styles.videoOff}>
+              <Ionicons name="videocam-off" size={24} color={COLORS.white} />
             </View>
-          </View>
+          ) : (
+            <View style={styles.localVideoPlaceholder}>
+              <Ionicons name="person" size={32} color={COLORS.white} />
+            </View>
+          )}
+        </View>
 
-          {/* Local Video (User) - Small PiP */}
-          <View style={styles.localVideo}>
-            {isVideoOff ? (
-              <View style={styles.videoOff}>
-                <Ionicons name="videocam-off" size={24} color={COLORS.white} />
-              </View>
-            ) : (
-              <View style={styles.localVideoPlaceholder}>
-                <Ionicons name="person" size={32} color={COLORS.white} />
-              </View>
-            )}
-          </View>
-
-          {/* Spacer */}
-          <View style={styles.spacer} />
-
-          {/* Bottom Controls */}
-          <View style={styles.bottomControls}>
-            <TouchableOpacity 
-              style={[styles.controlButton, isMuted && styles.controlButtonActive]} 
-              onPress={toggleMute}
-              activeOpacity={0.7}
-            >
-              <Ionicons name={isMuted ? 'mic-off' : 'mic'} size={24} color={COLORS.white} />
-            </TouchableOpacity>
-            
-            <TouchableOpacity 
-              style={[styles.controlButton, isVideoOff && styles.controlButtonActive]} 
-              onPress={toggleVideo}
-              activeOpacity={0.7}
-            >
-              <Ionicons name={isVideoOff ? 'videocam-off' : 'videocam'} size={24} color={COLORS.white} />
-            </TouchableOpacity>
-            
-            <TouchableOpacity 
-              style={styles.endCallButton} 
-              onPress={handleEndCall}
-              activeOpacity={0.8}
-            >
-              <Ionicons name="call" size={28} color={COLORS.white} style={{ transform: [{ rotate: '135deg' }] }} />
-            </TouchableOpacity>
-            
-            <TouchableOpacity 
-              style={styles.controlButton}
-              onPress={handleChat}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="chatbubble" size={24} color={COLORS.white} />
-            </TouchableOpacity>
-            
-            <TouchableOpacity 
-              style={styles.controlButton}
-              onPress={handleSwitchCamera}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="camera-reverse" size={24} color={COLORS.white} />
-            </TouchableOpacity>
-          </View>
-        </SafeAreaView>
-      </View>
+        {/* Bottom Controls */}
+        <View style={styles.bottomControls}>
+          <TouchableOpacity 
+            style={[styles.controlButton, isMuted && styles.controlButtonActive]} 
+            onPress={() => setIsMuted(!isMuted)}
+          >
+            <Ionicons name={isMuted ? 'mic-off' : 'mic'} size={24} color={COLORS.white} />
+          </TouchableOpacity>
+          
+          <TouchableOpacity 
+            style={[styles.controlButton, isVideoOff && styles.controlButtonActive]} 
+            onPress={() => setIsVideoOff(!isVideoOff)}
+          >
+            <Ionicons name={isVideoOff ? 'videocam-off' : 'videocam'} size={24} color={COLORS.white} />
+          </TouchableOpacity>
+          
+          <TouchableOpacity 
+            style={styles.endCallButton} 
+            onPress={handleEndCall}
+          >
+            <Ionicons name="call" size={28} color={COLORS.white} style={{ transform: [{ rotate: '135deg' }] }} />
+          </TouchableOpacity>
+          
+          <TouchableOpacity 
+            style={styles.controlButton}
+            onPress={() => router.push({ pathname: '/consultation-chat', params: { bookingId, lawyerId } })}
+          >
+            <Ionicons name="chatbubble" size={24} color={COLORS.white} />
+          </TouchableOpacity>
+          
+          <TouchableOpacity 
+            style={styles.controlButton}
+            onPress={() => setIsVideoOff(!isVideoOff)}
+          >
+            <Ionicons name="camera-reverse" size={24} color={COLORS.white} />
+          </TouchableOpacity>
+        </View>
+      </ImageBackground>
     </>
   );
 }
@@ -217,45 +169,27 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 16,
   },
-  remoteVideoImage: { 
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    width: '100%', 
-    height: '100%', 
-    resizeMode: 'cover',
-  },
-  remoteOverlay: { 
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0,0,0,0.3)',
-  },
-  contentLayer: {
-    flex: 1,
-    paddingTop: 50,
-  },
-  topBar: { 
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    paddingHorizontal: 20,
-    paddingTop: 10,
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.4)',
   },
   backButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    position: 'absolute',
+    top: 60,
+    left: 20,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
     backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex: 100,
   },
   topInfo: {
-    marginLeft: 16,
-    flex: 1,
+    position: 'absolute',
+    top: 60,
+    left: 80,
+    zIndex: 50,
   },
   callStatusContainer: { 
     flexDirection: 'row', 
@@ -279,7 +213,7 @@ const styles = StyleSheet.create({
     color: COLORS.white,
   },
   lawyerNameTop: { 
-    fontSize: 18, 
+    fontSize: 20, 
     fontWeight: '700', 
     color: COLORS.white,
     marginTop: 12,
@@ -288,11 +222,11 @@ const styles = StyleSheet.create({
     fontSize: 14, 
     color: COLORS.white, 
     opacity: 0.8, 
-    marginTop: 2,
+    marginTop: 4,
   },
   localVideo: { 
     position: 'absolute', 
-    top: 140, 
+    top: 150, 
     right: 20, 
     width: 100, 
     height: 140, 
@@ -300,6 +234,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden', 
     borderWidth: 2, 
     borderColor: COLORS.white,
+    zIndex: 50,
   },
   localVideoPlaceholder: { 
     flex: 1, 
@@ -313,32 +248,32 @@ const styles = StyleSheet.create({
     justifyContent: 'center', 
     alignItems: 'center',
   },
-  spacer: {
-    flex: 1,
-  },
   bottomControls: { 
+    position: 'absolute',
+    bottom: 50,
+    left: 0,
+    right: 0,
     flexDirection: 'row', 
     justifyContent: 'center', 
-    alignItems: 'center', 
-    paddingBottom: 40,
-    paddingHorizontal: 20,
+    alignItems: 'center',
+    zIndex: 100,
   },
   controlButton: { 
-    width: 54, 
-    height: 54, 
-    borderRadius: 27, 
+    width: 56, 
+    height: 56, 
+    borderRadius: 28, 
     backgroundColor: 'rgba(255,255,255,0.25)', 
     justifyContent: 'center', 
     alignItems: 'center',
     marginHorizontal: 6,
   },
   controlButtonActive: { 
-    backgroundColor: 'rgba(255,255,255,0.45)',
+    backgroundColor: 'rgba(255,255,255,0.5)',
   },
   endCallButton: { 
-    width: 64, 
-    height: 64, 
-    borderRadius: 32, 
+    width: 70, 
+    height: 70, 
+    borderRadius: 35, 
     backgroundColor: COLORS.error, 
     justifyContent: 'center', 
     alignItems: 'center',

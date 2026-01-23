@@ -6,8 +6,6 @@ import {
   TouchableOpacity,
   StatusBar,
   Image,
-  Alert,
-  SafeAreaView,
 } from 'react-native';
 import { Stack, useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -49,147 +47,90 @@ export default function ConsultationCallScreen() {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
+  // Direct navigation - no alerts
   const handleEndCall = () => {
-    Alert.alert(
-      'End Call',
-      'Are you sure you want to end this call?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'End Call', style: 'destructive', onPress: () => {
-          updateBookingStatus(bookingId as string, 'completed');
-          router.replace({
-            pathname: '/post-consultation',
-            params: { bookingId, lawyerId }
-          });
-        }}
-      ]
-    );
-  };
-
-  const handleBack = () => {
-    Alert.alert(
-      'Leave Call',
-      'Are you sure you want to leave this call?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Leave', style: 'destructive', onPress: () => {
-          updateBookingStatus(bookingId as string, 'completed');
-          router.replace('/(tabs)/home');
-        }}
-      ]
-    );
-  };
-
-  const toggleMute = () => {
-    setIsMuted(!isMuted);
-  };
-
-  const toggleSpeaker = () => {
-    setIsSpeakerOn(!isSpeakerOn);
-  };
-
-  const handleKeypad = () => {
-    Alert.alert('Keypad', 'Keypad functionality coming soon');
-  };
-
-  const handleChat = () => {
-    router.push({
-      pathname: '/consultation-chat',
+    updateBookingStatus(bookingId as string, 'completed');
+    router.replace({
+      pathname: '/post-consultation',
       params: { bookingId, lawyerId }
     });
   };
 
+  const handleBack = () => {
+    updateBookingStatus(bookingId as string, 'completed');
+    router.replace('/(tabs)/home');
+  };
+
   if (!lawyer) {
     return (
-      <View style={styles.loadingContainer}>
+      <LinearGradient colors={['#1A1A2E', '#2D3748']} style={styles.container}>
         <Text style={styles.loadingText}>Loading...</Text>
-      </View>
+      </LinearGradient>
     );
   }
 
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
-      <StatusBar barStyle="light-content" backgroundColor="#1A1A2E" />
+      <StatusBar barStyle="light-content" />
       
       <LinearGradient colors={['#1A1A2E', '#2D3748']} style={styles.container}>
-        <SafeAreaView style={styles.safeArea}>
-          {/* Header with back button */}
-          <View style={styles.header}>
-            <TouchableOpacity 
-              style={styles.backButton} 
-              onPress={handleBack}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="arrow-back" size={24} color={COLORS.white} />
-            </TouchableOpacity>
-          </View>
+        {/* Back Button - Fixed at top */}
+        <TouchableOpacity 
+          style={styles.backButton} 
+          onPress={handleBack}
+        >
+          <Ionicons name="arrow-back" size={24} color={COLORS.white} />
+        </TouchableOpacity>
 
-          {/* Call Info */}
-          <View style={styles.callInfo}>
-            <View style={styles.profileContainer}>
-              <Image source={{ uri: lawyer.image }} style={styles.profileImage} />
-              <View style={styles.callPulse} />
-            </View>
-            <Text style={styles.lawyerName}>{lawyer.name}</Text>
-            <Text style={styles.practiceArea}>{lawyer.practiceArea}</Text>
-            <View style={styles.durationContainer}>
-              <View style={styles.liveDot} />
-              <Text style={styles.durationText}>{formatDuration(callDuration)}</Text>
-            </View>
+        {/* Call Info */}
+        <View style={styles.callInfo}>
+          <View style={styles.profileContainer}>
+            <Image source={{ uri: lawyer.image }} style={styles.profileImage} />
           </View>
-
-          {/* Controls */}
-          <View style={styles.controlsContainer}>
-            <TouchableOpacity 
-              style={[styles.controlButton, isMuted && styles.controlButtonActive]} 
-              onPress={toggleMute}
-              activeOpacity={0.7}
-            >
-              <Ionicons name={isMuted ? 'mic-off' : 'mic'} size={28} color={COLORS.white} />
-              <Text style={styles.controlLabel}>{isMuted ? 'Unmute' : 'Mute'}</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity 
-              style={[styles.controlButton, isSpeakerOn && styles.controlButtonActive]} 
-              onPress={toggleSpeaker}
-              activeOpacity={0.7}
-            >
-              <Ionicons name={isSpeakerOn ? 'volume-high' : 'volume-medium'} size={28} color={COLORS.white} />
-              <Text style={styles.controlLabel}>Speaker</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity 
-              style={styles.controlButton}
-              onPress={handleKeypad}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="keypad" size={28} color={COLORS.white} />
-              <Text style={styles.controlLabel}>Keypad</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity 
-              style={styles.controlButton}
-              onPress={handleChat}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="chatbubble" size={28} color={COLORS.white} />
-              <Text style={styles.controlLabel}>Chat</Text>
-            </TouchableOpacity>
+          <Text style={styles.lawyerName}>{lawyer.name}</Text>
+          <Text style={styles.practiceArea}>{lawyer.practiceArea}</Text>
+          <View style={styles.durationContainer}>
+            <View style={styles.liveDot} />
+            <Text style={styles.durationText}>{formatDuration(callDuration)}</Text>
           </View>
+        </View>
 
-          {/* End Call Button */}
-          <View style={styles.endCallContainer}>
-            <TouchableOpacity 
-              style={styles.endCallButton} 
-              onPress={handleEndCall}
-              activeOpacity={0.8}
-            >
-              <Ionicons name="call" size={32} color={COLORS.white} style={{ transform: [{ rotate: '135deg' }] }} />
-            </TouchableOpacity>
-            <Text style={styles.endCallLabel}>End Call</Text>
-          </View>
-        </SafeAreaView>
+        {/* Controls */}
+        <View style={styles.controlsContainer}>
+          <TouchableOpacity 
+            style={[styles.controlButton, isMuted && styles.controlButtonActive]} 
+            onPress={() => setIsMuted(!isMuted)}
+          >
+            <Ionicons name={isMuted ? 'mic-off' : 'mic'} size={28} color={COLORS.white} />
+            <Text style={styles.controlLabel}>{isMuted ? 'Unmute' : 'Mute'}</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity 
+            style={[styles.controlButton, isSpeakerOn && styles.controlButtonActive]} 
+            onPress={() => setIsSpeakerOn(!isSpeakerOn)}
+          >
+            <Ionicons name={isSpeakerOn ? 'volume-high' : 'volume-medium'} size={28} color={COLORS.white} />
+            <Text style={styles.controlLabel}>Speaker</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity 
+            style={styles.controlButton}
+            onPress={() => router.push({ pathname: '/consultation-chat', params: { bookingId, lawyerId } })}
+          >
+            <Ionicons name="chatbubble" size={28} color={COLORS.white} />
+            <Text style={styles.controlLabel}>Chat</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* End Call Button */}
+        <TouchableOpacity 
+          style={styles.endCallButton} 
+          onPress={handleEndCall}
+        >
+          <Ionicons name="call" size={32} color={COLORS.white} style={{ transform: [{ rotate: '135deg' }] }} />
+        </TouchableOpacity>
+        <Text style={styles.endCallLabel}>End Call</Text>
       </LinearGradient>
     </>
   );
@@ -198,59 +139,43 @@ export default function ConsultationCallScreen() {
 const styles = StyleSheet.create({
   container: { 
     flex: 1,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
+    paddingTop: 60,
+    paddingBottom: 40,
     alignItems: 'center',
-    backgroundColor: '#1A1A2E',
+    justifyContent: 'space-between',
   },
   loadingText: {
     color: '#FFFFFF',
     fontSize: 16,
   },
-  safeArea: {
-    flex: 1,
-    justifyContent: 'space-between',
-    paddingTop: 50,
-  },
-  header: {
-    paddingHorizontal: 20,
-    paddingTop: 10,
-  },
   backButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: 'rgba(255,255,255,0.15)',
+    position: 'absolute',
+    top: 60,
+    left: 20,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: 'rgba(255,255,255,0.2)',
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex: 100,
   },
   callInfo: { 
     alignItems: 'center',
-    paddingHorizontal: 20,
+    marginTop: 40,
   },
   profileContainer: { 
-    position: 'relative',
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    borderWidth: 4,
+    borderColor: COLORS.success,
+    overflow: 'hidden',
   },
   profileImage: { 
-    width: 140, 
-    height: 140, 
-    borderRadius: 70, 
-    borderWidth: 4, 
-    borderColor: COLORS.success,
+    width: '100%', 
+    height: '100%',
     backgroundColor: '#374151',
-  },
-  callPulse: { 
-    position: 'absolute', 
-    top: -10, 
-    left: -10, 
-    right: -10, 
-    bottom: -10, 
-    borderRadius: 80, 
-    borderWidth: 2, 
-    borderColor: COLORS.success, 
-    opacity: 0.5,
   },
   lawyerName: { 
     fontSize: 28, 
@@ -287,16 +212,14 @@ const styles = StyleSheet.create({
   },
   controlsContainer: { 
     flexDirection: 'row', 
-    justifyContent: 'center', 
-    flexWrap: 'wrap',
-    paddingHorizontal: 20,
+    justifyContent: 'center',
   },
   controlButton: { 
     alignItems: 'center', 
-    padding: 16,
+    paddingVertical: 16,
+    paddingHorizontal: 20,
     borderRadius: 16,
     marginHorizontal: 8,
-    minWidth: 70,
   },
   controlButtonActive: { 
     backgroundColor: 'rgba(255,255,255,0.25)',
@@ -307,22 +230,18 @@ const styles = StyleSheet.create({
     opacity: 0.8, 
     marginTop: 8,
   },
-  endCallContainer: {
-    alignItems: 'center',
-    paddingBottom: 40,
-  },
   endCallButton: { 
-    width: 72, 
-    height: 72, 
-    borderRadius: 36, 
+    width: 80, 
+    height: 80, 
+    borderRadius: 40, 
     backgroundColor: COLORS.error, 
     justifyContent: 'center', 
     alignItems: 'center',
   },
   endCallLabel: {
-    fontSize: 12,
+    fontSize: 14,
     color: COLORS.white,
     opacity: 0.8,
-    marginTop: 8,
+    marginTop: 10,
   },
 });
