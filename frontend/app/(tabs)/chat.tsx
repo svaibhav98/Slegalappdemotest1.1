@@ -114,6 +114,10 @@ export default function ChatScreen() {
       </ScrollView>
 
       <View style={styles.inputContainer}>
+        <View style={styles.bottomDisclaimer}>
+          <Ionicons name="shield-checkmark-outline" size={16} color={Colors.textSecondary} />
+          <Text style={styles.bottomDisclaimerText}>NyayAI provides general legal information. For specific legal advice, please consult a qualified lawyer.</Text>
+        </View>
         <View style={styles.inputWrapper}>
           <TouchableOpacity style={styles.voiceButton}>
             <Ionicons name="mic-outline" size={24} color={Colors.textSecondary} />
@@ -157,6 +161,8 @@ const styles = StyleSheet.create({
   suggestedButton: { backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border, borderRadius: 12, padding: 12, marginBottom: 8 },
   suggestedText: { fontSize: 14, color: Colors.text },
   inputContainer: { paddingHorizontal: 20, paddingVertical: 12, backgroundColor: Colors.surface, borderTopWidth: 1, borderTopColor: Colors.border },
+  bottomDisclaimer: { flexDirection: 'row', alignItems: 'flex-start', backgroundColor: Colors.warning + '15', padding: 10, borderRadius: 8, marginBottom: 12 },
+  bottomDisclaimerText: { fontSize: 11, color: Colors.text, marginLeft: 6, flex: 1, lineHeight: 16 },
   inputWrapper: { flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.background, borderRadius: 24, paddingHorizontal: 12, borderWidth: 1, borderColor: Colors.border },
   voiceButton: { padding: 8 },
   input: { flex: 1, paddingVertical: 12, paddingHorizontal: 8, fontSize: 14, color: Colors.text, maxHeight: 100 },

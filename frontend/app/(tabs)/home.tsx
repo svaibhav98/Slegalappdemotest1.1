@@ -52,17 +52,26 @@ export default function HomeScreen() {
         style={styles.content}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[Colors.primary]} />}
       >
-        <Card style={styles.heroCard}>
-          <View style={styles.heroIcon}>
-            <Ionicons name="sparkles" size={32} color={Colors.primary} />
+        <View style={styles.heroBanner}>
+          <View style={styles.heroGradient}>
+            <View style={styles.heroContent}>
+              <View style={styles.heroIconLarge}>
+                <Ionicons name="shield-checkmark" size={48} color={Colors.primary} />
+              </View>
+              <Text style={styles.heroTitle}>NyayAI Made Simple{'\n'}for भारत</Text>
+              <Text style={styles.heroSubtitle}>Your trusted AI assistant for laws, documents,{'\n'}and legal help in everyday language</Text>
+              <TouchableOpacity style={styles.heroButton} onPress={() => router.push('/(tabs)/chat')}>
+                <Text style={styles.heroButtonText}>Explore NyayAI</Text>
+                <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.heroIllustration}>
+              <Ionicons name="document-text-outline" size={80} color={Colors.primary + '40'} style={styles.floatingIcon1} />
+              <Ionicons name="chatbubbles-outline" size={60} color={Colors.secondary + '40'} style={styles.floatingIcon2} />
+              <Ionicons name="people-outline" size={70} color={Colors.warning + '40'} style={styles.floatingIcon3} />
+            </View>
           </View>
-          <Text style={styles.heroTitle}>NyayAI Made Simple for Bharat</Text>
-          <Text style={styles.heroSubtitle}>Your trusted AI assistant for laws, documents, and legal help in everyday language</Text>
-          <TouchableOpacity style={styles.heroButton} onPress={() => router.push('/(tabs)/chat')}>
-            <Text style={styles.heroButtonText}>Explore NyayAI</Text>
-            <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
-          </TouchableOpacity>
-        </Card>
+        </View>
 
         <Text style={styles.sectionTitle}>Quick Access</Text>
         <View style={styles.quickAccessGrid}>
@@ -164,12 +173,18 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background },
   content: { flex: 1 },
   signOutButton: { padding: 8 },
-  heroCard: { margin: 20, padding: 24, backgroundColor: Colors.primaryLight + '20', borderColor: Colors.primary + '30' },
-  heroIcon: { width: 64, height: 64, borderRadius: 32, backgroundColor: '#FFFFFF', justifyContent: 'center', alignItems: 'center', marginBottom: 16 },
-  heroTitle: { fontSize: 20, fontWeight: 'bold', color: Colors.text, marginBottom: 8 },
-  heroSubtitle: { fontSize: 14, color: Colors.textSecondary, marginBottom: 20, lineHeight: 20 },
-  heroButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.primary, paddingVertical: 12, paddingHorizontal: 24, borderRadius: 8 },
-  heroButtonText: { fontSize: 16, fontWeight: '600', color: '#FFFFFF', marginRight: 8 },
+  heroBanner: { margin: 20, marginTop: 0, borderRadius: 24, overflow: 'hidden', backgroundColor: Colors.primary },
+  heroGradient: { padding: 32, paddingBottom: 160, position: 'relative' },
+  heroContent: { zIndex: 2 },
+  heroIconLarge: { width: 80, height: 80, borderRadius: 40, backgroundColor: '#FFFFFF', justifyContent: 'center', alignItems: 'center', marginBottom: 20 },
+  heroTitle: { fontSize: 26, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 12, lineHeight: 34 },
+  heroSubtitle: { fontSize: 14, color: '#FFFFFF', opacity: 0.95, marginBottom: 24, lineHeight: 22 },
+  heroButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: '#FFFFFF', paddingVertical: 14, paddingHorizontal: 28, borderRadius: 12, alignSelf: 'flex-start' },
+  heroButtonText: { fontSize: 16, fontWeight: '600', color: Colors.primary, marginRight: 8 },
+  heroIllustration: { position: 'absolute', right: -20, bottom: 20, opacity: 0.15 },
+  floatingIcon1: { position: 'absolute', right: 40, top: 20 },
+  floatingIcon2: { position: 'absolute', right: 100, bottom: 80 },
+  floatingIcon3: { position: 'absolute', right: 10, bottom: 30 },
   sectionTitle: { fontSize: 18, fontWeight: 'bold', color: Colors.text, paddingHorizontal: 20, marginTop: 24, marginBottom: 12 },
   quickAccessGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', paddingHorizontal: 20 },
   categoryList: { paddingHorizontal: 20 },
