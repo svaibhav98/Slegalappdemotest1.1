@@ -98,8 +98,7 @@ export default function HomeScreen() {
       bgColor: '#FED7AA',
     },
     { 
-      icon: 'menu-book', 
-      iconType: 'material',
+      icon: 'book', 
       label: 'Laws &\nSchemes', 
       route: '/(tabs)/laws', 
       iconColor: '#3B82F6',
