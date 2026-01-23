@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, RefreshControl, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../../contexts/AuthContext';
-import { Header, QuickAccessCard, Card } from '../../components/CommonComponents';
+import { QuickAccessCard, Card } from '../../components/CommonComponents';
 import { Colors } from '../../constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
-import api from '../../utils/api';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function HomeScreen() {
   const { user, signOut } = useAuth();
@@ -23,7 +23,6 @@ export default function HomeScreen() {
 
   const onRefresh = async () => {
     setRefreshing(true);
-    // Simulate refresh
     setTimeout(() => setRefreshing(false), 1000);
   };
 
@@ -38,131 +37,92 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Header
-        title={`${greeting}, User`}
-        subtitle="Welcome to SunoLegal"
-        rightAction={
-          <TouchableOpacity onPress={handleSignOut} style={styles.signOutButton}>
-            <Ionicons name="log-out-outline" size={24} color={Colors.error} />
-          </TouchableOpacity>
-        }
-      />
-
-      <ScrollView
-        style={styles.content}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[Colors.primary]} />}
-      >
-        <View style={styles.heroBanner}>
-          <View style={styles.heroGradient}>
-            <View style={styles.heroContent}>
-              <View style={styles.heroIconLarge}>
-                <Ionicons name="shield-checkmark" size={48} color={Colors.primary} />
-              </View>
-              <Text style={styles.heroTitle}>NyayAI Made Simple{'\n'}for भारत</Text>
-              <Text style={styles.heroSubtitle}>Your trusted AI assistant for laws, documents,{'\n'}and legal help in everyday language</Text>
-              <TouchableOpacity style={styles.heroButton} onPress={() => router.push('/(tabs)/chat')}>
-                <Text style={styles.heroButtonText}>Explore NyayAI</Text>
-                <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.heroIllustration}>
-              <Ionicons name="document-text-outline" size={80} color={Colors.primary + '40'} style={styles.floatingIcon1} />
-              <Ionicons name="chatbubbles-outline" size={60} color={Colors.secondary + '40'} style={styles.floatingIcon2} />
-              <Ionicons name="people-outline" size={70} color={Colors.warning + '40'} style={styles.floatingIcon3} />
+      <LinearGradient colors={[Colors.primary, Colors.secondary]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.header}>
+        <View style={styles.headerContent}>
+          <View style={styles.headerLeft}>
+            <Image source={require('../../assets/logo.jpg')} style={styles.logoSmall} resizeMode="contain" />
+            <View>
+              <Text style={styles.headerGreeting}>{greeting}</Text>
+              <Text style={styles.headerName}>Welcome to SunoLegal</Text>
             </View>
           </View>
+          <TouchableOpacity onPress={handleSignOut} style={styles.signOutButton}>
+            <Ionicons name="log-out-outline" size={24} color="#FFFFFF" />
+          </TouchableOpacity>
+        </View>
+      </LinearGradient>
+
+      <ScrollView style={styles.content} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[Colors.primary]} tintColor={Colors.primary} />}>
+        <View style={styles.heroBanner}>
+          <LinearGradient colors={[Colors.primary, Colors.primaryDark]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.heroGradient}>
+            <View style={styles.heroContent}>
+              <View style={styles.heroIconContainer}>
+                <Ionicons name="shield-checkmark" size={40} color="#FFFFFF" />
+              </View>
+              <Text style={styles.heroTitle}>NyayAI Made Simple{"\n"}for भारत</Text>
+              <Text style={styles.heroSubtitle}>Get instant legal guidance in plain language.{"\n"}Powered by AI, verified by lawyers.</Text>
+              <TouchableOpacity style={styles.heroButton} onPress={() => router.push('/(tabs)/chat')} activeOpacity={0.9}>
+                <Text style={styles.heroButtonText}>Start Chat with NyayAI</Text>
+                <Ionicons name="arrow-forward" size={20} color={Colors.primary} />
+              </TouchableOpacity>
+            </View>
+          </LinearGradient>
         </View>
 
         <Text style={styles.sectionTitle}>Quick Access</Text>
         <View style={styles.quickAccessGrid}>
-          <QuickAccessCard
-            icon="chatbubble-ellipses"
-            title="NyayAI Assistant"
-            subtitle="Ask legal questions"
-            color={Colors.primary}
-            onPress={() => router.push('/(tabs)/chat')}
-          />
-          <QuickAccessCard
-            icon="people"
-            title="Legal Consultation"
-            subtitle="Talk to lawyers"
-            color={Colors.secondary}
-            onPress={() => router.push('/lawyers')}
-          />
-          <QuickAccessCard
-            icon="document-text"
-            title="Notice Drafting"
-            subtitle="Create documents"
-            color={Colors.info}
-            onPress={() => router.push('/(tabs)/documents')}
-          />
-          <QuickAccessCard
-            icon="folder"
-            title="Case Tracker"
-            subtitle="Manage your cases"
-            color={Colors.success}
-            onPress={() => router.push('/(tabs)/cases')}
-          />
-          <QuickAccessCard
-            icon="book"
-            title="Laws & Schemes"
-            subtitle="Browse information"
-            color={Colors.warning}
-            onPress={() => router.push('/(tabs)/laws')}
-          />
-          <QuickAccessCard
-            icon="shield-checkmark"
-            title="Contact Us"
-            subtitle="Get help & support"
-            color={Colors.gray600}
-            onPress={() => {}}
-          />
+          <QuickAccessCard icon="chatbubble-ellipses" title="NyayAI Chat" subtitle="Ask legal questions" color={Colors.primary} onPress={() => router.push('/(tabs)/chat')} />
+          <QuickAccessCard icon="people" title="Find Lawyer" subtitle="Expert consultation" color={Colors.secondary} onPress={() => router.push('/lawyers')} />
+          <QuickAccessCard icon="document-text" title="Documents" subtitle="Generate papers" color={Colors.info} onPress={() => router.push('/(tabs)/documents')} />
+          <QuickAccessCard icon="folder" title="My Cases" subtitle="Track progress" color={Colors.success} onPress={() => router.push('/(tabs)/cases')} />
+          <QuickAccessCard icon="book" title="Laws & Schemes" subtitle="Browse info" color={Colors.warning} onPress={() => router.push('/(tabs)/laws')} />
+          <QuickAccessCard icon="information-circle" title="Help Center" subtitle="Get support" color={Colors.gray600} onPress={() => {}} />
         </View>
 
-        <Text style={styles.sectionTitle}>Category</Text>
-        <View style={styles.categoryList}>
-          <TouchableOpacity style={styles.categoryCard}>
-            <Ionicons name="hammer" size={32} color={Colors.primary} />
-            <View style={styles.categoryInfo}>
-              <Text style={styles.categoryTitle}>Join as a Lawyer</Text>
-              <Text style={styles.categorySubtitle}>Register to offer Legal Services</Text>
-            </View>
-            <TouchableOpacity style={styles.categoryAction}>
-              <Text style={styles.categoryActionText}>Go to Schemes</Text>
-              <Ionicons name="chevron-forward" size={20} color={Colors.success} />
-            </TouchableOpacity>
+        <Text style={styles.sectionTitle}>Services</Text>
+        <View style={styles.servicesGrid}>
+          <TouchableOpacity style={styles.serviceCard} activeOpacity={0.8}>
+            <LinearGradient colors={[Colors.secondary + '15', Colors.secondary + '05']} style={styles.serviceGradient}>
+              <View style={styles.serviceIcon}>
+                <Ionicons name="briefcase" size={28} color={Colors.secondary} />
+              </View>
+              <Text style={styles.serviceTitle}>Join as Lawyer</Text>
+              <Text style={styles.serviceSubtitle}>Offer legal services</Text>
+            </LinearGradient>
           </TouchableOpacity>
-
-          <TouchableOpacity style={styles.categoryCard}>
-            <Ionicons name="bookmark" size={32} color={Colors.warning} />
-            <View style={styles.categoryInfo}>
-              <Text style={styles.categoryTitle}>Saved Items</Text>
-              <Text style={styles.categorySubtitle}>View and manage saved chats, docs</Text>
-            </View>
-            <TouchableOpacity style={styles.categoryAction}>
-              <Text style={styles.categoryActionText}>Contact Us</Text>
-              <Ionicons name="chevron-forward" size={20} color={Colors.success} />
-            </TouchableOpacity>
+          <TouchableOpacity style={styles.serviceCard} activeOpacity={0.8}>
+            <LinearGradient colors={[Colors.warning + '15', Colors.warning + '05']} style={styles.serviceGradient}>
+              <View style={styles.serviceIcon}>
+                <Ionicons name="bookmark" size={28} color={Colors.warning} />
+              </View>
+              <Text style={styles.serviceTitle}>Saved Items</Text>
+              <Text style={styles.serviceSubtitle}>Chats & documents</Text>
+            </LinearGradient>
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.sectionTitle}>Recently Activity</Text>
+        <Text style={styles.sectionTitle}>Recent Activity</Text>
         <Card>
           <View style={styles.activityItem}>
-            <View style={styles.activityIcon}>
-              <Ionicons name="book-outline" size={20} color={Colors.info} />
+            <View style={styles.activityIconWrapper}>
+              <LinearGradient colors={[Colors.info + '20', Colors.info + '10']} style={styles.activityIconGradient}>
+                <Ionicons name="book-outline" size={20} color={Colors.info} />
+              </LinearGradient>
             </View>
             <View style={styles.activityContent}>
-              <Text style={styles.activityTitle}>Tenancy Laws</Text>
-              <Text style={styles.activitySubtitle}>Rights and Responsibilities</Text>
-              <Text style={styles.activityTime}>Tenants in India are protected under state Rent Control Acts...</Text>
+              <Text style={styles.activityTitle}>Consumer Protection Act</Text>
+              <Text style={styles.activitySubtitle}>Viewed 2 hours ago</Text>
+              <Text style={styles.activityDescription} numberOfLines={2}>Learn about your rights as a consumer under Indian law...</Text>
             </View>
           </View>
         </Card>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>🧪 Running in Mock Mode</Text>
-          <Text style={styles.footerSubtext}>Firebase credentials not configured</Text>
+          <View style={styles.footerBadge}>
+            <Ionicons name="flask" size={14} color={Colors.warning} />
+            <Text style={styles.footerText}>Demo Mode Active</Text>
+          </View>
+          <Text style={styles.footerSubtext}>Firebase credentials pending</Text>
         </View>
       </ScrollView>
     </View>
@@ -171,36 +131,39 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background },
+  header: { paddingTop: 50, paddingBottom: 20, paddingHorizontal: 20 },
+  headerContent: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  headerLeft: { flexDirection: 'row', alignItems: 'center', flex: 1 },
+  logoSmall: { width: 48, height: 48, marginRight: 12, borderRadius: 24, backgroundColor: '#FFFFFF' },
+  headerGreeting: { fontSize: 14, color: '#FFFFFF', opacity: 0.9, fontWeight: '500' },
+  headerName: { fontSize: 18, color: '#FFFFFF', fontWeight: '700', marginTop: 2 },
+  signOutButton: { padding: 8, borderRadius: 20, backgroundColor: 'rgba(255,255,255,0.2)' },
   content: { flex: 1 },
-  signOutButton: { padding: 8 },
-  heroBanner: { margin: 20, marginTop: 0, borderRadius: 24, overflow: 'hidden', backgroundColor: Colors.primary },
-  heroGradient: { padding: 32, paddingBottom: 160, position: 'relative' },
-  heroContent: { zIndex: 2 },
-  heroIconLarge: { width: 80, height: 80, borderRadius: 40, backgroundColor: '#FFFFFF', justifyContent: 'center', alignItems: 'center', marginBottom: 20 },
-  heroTitle: { fontSize: 26, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 12, lineHeight: 34 },
+  heroBanner: { margin: 20, borderRadius: 20, overflow: 'hidden', shadowColor: '#000', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.2, shadowRadius: 12, elevation: 8 },
+  heroGradient: { padding: 28, minHeight: 200 },
+  heroContent: { alignItems: 'flex-start' },
+  heroIconContainer: { width: 72, height: 72, borderRadius: 36, backgroundColor: 'rgba(255,255,255,0.25)', justifyContent: 'center', alignItems: 'center', marginBottom: 16, borderWidth: 2, borderColor: 'rgba(255,255,255,0.3)' },
+  heroTitle: { fontSize: 26, fontWeight: '800', color: '#FFFFFF', marginBottom: 12, lineHeight: 34, letterSpacing: -0.5 },
   heroSubtitle: { fontSize: 14, color: '#FFFFFF', opacity: 0.95, marginBottom: 24, lineHeight: 22 },
-  heroButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: '#FFFFFF', paddingVertical: 14, paddingHorizontal: 28, borderRadius: 12, alignSelf: 'flex-start' },
-  heroButtonText: { fontSize: 16, fontWeight: '600', color: Colors.primary, marginRight: 8 },
-  heroIllustration: { position: 'absolute', right: -20, bottom: 20, opacity: 0.15 },
-  floatingIcon1: { position: 'absolute', right: 40, top: 20 },
-  floatingIcon2: { position: 'absolute', right: 100, bottom: 80 },
-  floatingIcon3: { position: 'absolute', right: 10, bottom: 30 },
-  sectionTitle: { fontSize: 18, fontWeight: 'bold', color: Colors.text, paddingHorizontal: 20, marginTop: 24, marginBottom: 12 },
-  quickAccessGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', paddingHorizontal: 20 },
-  categoryList: { paddingHorizontal: 20 },
-  categoryCard: { flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.surface, borderRadius: 12, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: Colors.border },
-  categoryInfo: { flex: 1, marginLeft: 12 },
-  categoryTitle: { fontSize: 16, fontWeight: '600', color: Colors.text },
-  categorySubtitle: { fontSize: 12, color: Colors.textSecondary, marginTop: 4 },
-  categoryAction: { flexDirection: 'row', alignItems: 'center' },
-  categoryActionText: { fontSize: 12, fontWeight: '600', color: Colors.success, marginRight: 4 },
-  activityItem: { flexDirection: 'row' },
-  activityIcon: { width: 40, height: 40, borderRadius: 20, backgroundColor: Colors.info + '20', justifyContent: 'center', alignItems: 'center', marginRight: 12 },
+  heroButton: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#FFFFFF', paddingVertical: 14, paddingHorizontal: 24, borderRadius: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 8, elevation: 4 },
+  heroButtonText: { fontSize: 15, fontWeight: '700', color: Colors.primary, marginRight: 8, letterSpacing: -0.3 },
+  sectionTitle: { fontSize: 20, fontWeight: '700', color: Colors.text, paddingHorizontal: 20, marginTop: 32, marginBottom: 16, letterSpacing: -0.5 },
+  quickAccessGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', paddingHorizontal: 20, gap: 12 },
+  servicesGrid: { flexDirection: 'row', paddingHorizontal: 20, gap: 12, marginBottom: 8 },
+  serviceCard: { flex: 1, borderRadius: 16, overflow: 'hidden', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.08, shadowRadius: 6, elevation: 3 },
+  serviceGradient: { padding: 20, alignItems: 'center', minHeight: 140 },
+  serviceIcon: { width: 56, height: 56, borderRadius: 28, backgroundColor: '#FFFFFF', justifyContent: 'center', alignItems: 'center', marginBottom: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 2 },
+  serviceTitle: { fontSize: 15, fontWeight: '700', color: Colors.text, marginBottom: 4, textAlign: 'center' },
+  serviceSubtitle: { fontSize: 12, color: Colors.textSecondary, textAlign: 'center' },
+  activityItem: { flexDirection: 'row', alignItems: 'flex-start' },
+  activityIconWrapper: { marginRight: 12 },
+  activityIconGradient: { width: 44, height: 44, borderRadius: 22, justifyContent: 'center', alignItems: 'center' },
   activityContent: { flex: 1 },
-  activityTitle: { fontSize: 14, fontWeight: '600', color: Colors.text },
-  activitySubtitle: { fontSize: 12, color: Colors.textSecondary, marginTop: 2 },
-  activityTime: { fontSize: 12, color: Colors.textSecondary, marginTop: 4 },
+  activityTitle: { fontSize: 15, fontWeight: '600', color: Colors.text, marginBottom: 4 },
+  activitySubtitle: { fontSize: 12, color: Colors.textSecondary, marginBottom: 6 },
+  activityDescription: { fontSize: 13, color: Colors.text, lineHeight: 19, opacity: 0.7 },
   footer: { padding: 32, alignItems: 'center' },
-  footerText: { fontSize: 12, color: Colors.warning, fontWeight: '600' },
-  footerSubtext: { fontSize: 11, color: Colors.textSecondary, marginTop: 4 },
+  footerBadge: { flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.warning + '15', paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, marginBottom: 8 },
+  footerText: { fontSize: 12, color: Colors.warning, fontWeight: '600', marginLeft: 6 },
+  footerSubtext: { fontSize: 11, color: Colors.textSecondary },
 });
