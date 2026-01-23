@@ -109,7 +109,7 @@ export default function NyayAILandingScreen() {
             
             <View style={styles.logoContainer}>
               <Image 
-                source={require('../../assets/logo.png')} 
+                source={require('../../assets/logo.jpg')} 
                 style={styles.logo}
                 resizeMode="contain"
               />
