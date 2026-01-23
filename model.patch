@@ -1,13 +1,43 @@
-diff --git a/frontend/app/(tabs)/documents.tsx b/frontend/app/(tabs)/documents.tsx
-index 8e9ee78..0d54935 100644
---- a/frontend/app/(tabs)/documents.tsx
-+++ b/frontend/app/(tabs)/documents.tsx
-@@ -257,7 +257,7 @@ export default function DocumentsScreen() {
-           </TouchableOpacity>
-         ))}
-       </View>
--      <View style={{ height: 100 }} />
-+      <View style={{ height: 40 }} />
-     </ScrollView>
-   );
- 
+diff --git a/frontend/app/(tabs)/chat.tsx b/frontend/app/(tabs)/chat.tsx
+index b9c9c3e..9e6cdcf 100644
+--- a/frontend/app/(tabs)/chat.tsx
++++ b/frontend/app/(tabs)/chat.tsx
+@@ -269,6 +269,20 @@ const styles = StyleSheet.create({
+     color: COLORS.textSecondary,
+     marginTop: 1,
+   },
++  headerTitleContainer: {
++    flex: 1,
++    alignItems: 'center',
++    justifyContent: 'center',
++  },
++  headerTitle: {
++    fontSize: 18,
++    fontWeight: '700',
++    color: COLORS.textPrimary,
++  },
++  headerSubtitle: {
++    fontSize: 11,
++    color: COLORS.textMuted,
++  },
+   infoButton: {
+     width: 44,
+     height: 44,
+diff --git a/model.patch b/model.patch
+index 0663db1..e69de29 100644
+--- a/model.patch
++++ b/model.patch
+@@ -1,13 +0,0 @@
+-diff --git a/frontend/app/(tabs)/documents.tsx b/frontend/app/(tabs)/documents.tsx
+-index 8e9ee78..0d54935 100644
+---- a/frontend/app/(tabs)/documents.tsx
+-+++ b/frontend/app/(tabs)/documents.tsx
+-@@ -257,7 +257,7 @@ export default function DocumentsScreen() {
+-           </TouchableOpacity>
+-         ))}
+-       </View>
+--      <View style={{ height: 100 }} />
+-+      <View style={{ height: 40 }} />
+-     </ScrollView>
+-   );
+- 
