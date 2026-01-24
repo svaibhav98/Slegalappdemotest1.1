@@ -887,11 +887,36 @@ async def get_chat_history(session_id: str, user = Depends(verify_token)):
         return {"success": False, "message": "Chat not found"}
 
 @app.get("/api/chat/user-chats")
-async def get_user_chats(user = Depends(require_auth)):
-    """Get all chats for logged-in user"""
+async def get_user_chats(
+    limit: int = 30,
+    cursor: Optional[str] = None,
+    user = Depends(require_auth)
+):
+    """
+    Get chats for logged-in user with pagination.
+    
+    - Default limit: 30
+    - Max limit: 100
+    - Ordered by updated_at descending (most recent first)
+    - Cursor-based pagination using updated_at value
+    """
     user_id = user["uid"]
     
-    chats = db.collection("chats").where("user_id", "==", user_id).stream()
+    # Enforce limits
+    limit = min(max(1, limit), 100)  # Clamp between 1 and 100
+    
+    # Build query with ordering and limit
+    query = db.collection("chats").where("user_id", "==", user_id)
+    query = query.order_by("updated_at", direction="DESCENDING")
+    
+    # Apply cursor if provided
+    if cursor:
+        query = query.start_after(cursor)
+    
+    # Apply limit + 1 to check if there are more results
+    query = query.limit(limit + 1)
+    
+    chats = query.stream()
     
     chat_list = []
     for chat in chats:
@@ -906,7 +931,17 @@ async def get_user_chats(user = Depends(require_auth)):
             "message_count": len(messages)
         })
     
-    return {"success": True, "chats": chat_list}
+    # Determine next_cursor
+    next_cursor = None
+    if len(chat_list) > limit:
+        chat_list = chat_list[:limit]  # Trim to requested limit
+        next_cursor = chat_list[-1]["updated_at"] if chat_list else None
+    
+    return {
+        "success": True,
+        "items": chat_list,
+        "next_cursor": next_cursor
+    }
 
 # ============= DOCUMENT GENERATOR ENDPOINTS =============
 
