@@ -139,7 +139,6 @@ export default function HomeScreen() {
       subtitle: 'Register to offer Legal...',
       icon: 'briefcase',
       iconColor: COLORS.purple,
-      actionText: 'Go to Schemes',
       route: '/join-lawyer',
     },
     {
@@ -147,7 +146,6 @@ export default function HomeScreen() {
       subtitle: 'View and manage.....',
       icon: 'bookmark',
       iconColor: COLORS.amber,
-      actionText: 'Contact Us',
       route: '/(tabs)/documents?tab=saved' as any,
     },
   ];
