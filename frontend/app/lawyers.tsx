@@ -234,8 +234,11 @@ export default function LawyersScreen() {
             ))}
           </View>
           
-          <View style={{ height: 100 }} />
+          <View style={{ height: 16 }} />
         </ScrollView>
+
+        {/* Bottom Navigation Bar */}
+        <BottomNavBar activeTab="home" />
 
         {/* Lawyer Profile Modal */}
         <Modal
