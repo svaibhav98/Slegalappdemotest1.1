@@ -32,8 +32,30 @@ from emergentintegrations.llm.chat import LlmChat, UserMessage
 # Load environment variables
 load_dotenv()
 
-# ============= RATE LIMITER SETUP =============
-limiter = Limiter(key_func=get_remote_address)
+# ============= UID-BASED RATE LIMITER SETUP =============
+# Custom key function: Use UID for authenticated users, IP for guests
+
+def get_rate_limit_key(request: Request) -> str:
+    """
+    Get rate limiting key:
+    - For authenticated users: use their UID
+    - For guests: fall back to IP address
+    """
+    auth_header = request.headers.get("authorization", "")
+    
+    if auth_header and "Bearer" in auth_header:
+        token = auth_header.split("Bearer ")[-1].strip()
+        if token:
+            # In mock mode, extract user ID from token
+            if token.startswith("mock_"):
+                return f"uid:{token}"
+            # For any other token, create a consistent key
+            return f"uid:user_{token[:16]}"
+    
+    # Fall back to IP for guests
+    return f"ip:{get_remote_address(request)}"
+
+limiter = Limiter(key_func=get_rate_limit_key)
 
 # ============= MOCK DATABASE (Firestore Simulation) =============
 # This simulates Firestore behavior for MVP
