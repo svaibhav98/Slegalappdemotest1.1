@@ -1055,6 +1055,7 @@ async def generate_document(
         "rent_agreement": generate_rent_agreement_pdf,
         "legal_notice": generate_legal_notice_pdf,
         "affidavit": generate_affidavit_pdf,
+        "consumer_complaint": generate_consumer_complaint_pdf,
     }
     
     generator = generators.get(doc_type)
