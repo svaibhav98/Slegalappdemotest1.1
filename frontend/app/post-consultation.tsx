@@ -202,6 +202,9 @@ export default function PostConsultationScreen() {
             <Text style={styles.bookAnotherText}>Book another Session</Text>
           </TouchableOpacity>
         </View>
+
+        {/* Bottom Navigation Bar */}
+        <BottomNavBar activeTab="home" />
       </View>
     </>
   );
