@@ -272,7 +272,10 @@ export default function JoinLawyerScreen() {
           </View>
 
           {/* Council Number */}
-          <Text style={styles.label}>Council Number</Text>
+          <View style={styles.labelRow}>
+            <Text style={styles.label}>Council Number</Text>
+            <Text style={styles.required}>*</Text>
+          </View>
           <TextInput
             style={styles.input}
             placeholder="Registration Number"
