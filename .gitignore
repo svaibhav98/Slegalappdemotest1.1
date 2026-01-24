@@ -30,23 +30,18 @@ next-env.d.ts
 dist/
 dist
 
-# Environment files (CRITICAL - Never commit secrets)
-.env
+# Environment files 
+# NOTE: For Emergent deployment, .env files with template values are allowed
+# Emergent auto-replaces them with production values during deployment
+# Only block local-specific and secret files
 .env.local
 .env.*.local
-*.env
-/app/backend/.env
-/app/frontend/.env
-backend/.env
-frontend/.env
+*credentials.json*
+*token.json*
 
 # Keep example files
 !.env.example
 !*.env.example
-
-# Credentials and tokens
-*token.json*
-*credentials.json*
 
 # Logs and debug files
 npm-debug.log*
