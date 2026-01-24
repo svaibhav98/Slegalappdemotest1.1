@@ -1006,8 +1006,8 @@ def generate_consumer_complaint_pdf(data: Dict[str, Any]) -> io.BytesIO:
         'Photographs (if any)',
         'ID Proof of Complainant'
     ])
-    for i, doc in enumerate(documents, 1):
-        elements.append(Paragraph(f"{i}. {doc}", body_style))
+    for i, doc_item in enumerate(documents, 1):
+        elements.append(Paragraph(f"{i}. {doc_item}", body_style))
     
     elements.append(Spacer(1, 30))
     
