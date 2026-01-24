@@ -609,22 +609,24 @@ const styles = StyleSheet.create({
   searchContainer: {
     paddingHorizontal: 20,
     paddingBottom: 16,
-    backgroundColor: COLORS.headerBg,
+    backgroundColor: '#FFFFFF',
   },
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.searchBg,
+    backgroundColor: COLORS.white,
     borderRadius: 14,
     paddingHorizontal: 16,
     paddingVertical: 12,
+    borderWidth: 1,
+    borderColor: COLORS.border,
   },
   searchInput: {
     flex: 1,
     marginLeft: 12,
     marginRight: 8,
     fontSize: 14,
-    color: COLORS.white,
+    color: COLORS.textPrimary,
   },
 
   // Content
