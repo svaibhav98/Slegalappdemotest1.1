@@ -265,7 +265,7 @@ class MockCollection:
 
 
 class MockQuery:
-    """Mock Firestore Query"""
+    """Mock Firestore Query with pagination support"""
     def __init__(self, data: dict, collection: str, filters: list):
         self._data = data
         self._collection = collection
@@ -273,6 +273,7 @@ class MockQuery:
         self._order_by_field = None
         self._order_direction = "ASCENDING"
         self._limit_count = None
+        self._start_after_value = None
     
     def where(self, field: str, op: str, value: Any):
         """Add filter"""
@@ -289,6 +290,11 @@ class MockQuery:
     def limit(self, count: int):
         """Limit results"""
         self._limit_count = count
+        return self
+    
+    def start_after(self, cursor_value: Any):
+        """Start after a cursor value for pagination"""
+        self._start_after_value = cursor_value
         return self
     
     def stream(self):
@@ -311,6 +317,18 @@ class MockQuery:
         if self._order_by_field:
             reverse = self._order_direction == "DESCENDING"
             results.sort(key=lambda x: x.to_dict().get(self._order_by_field, ""), reverse=reverse)
+        
+        # Apply cursor pagination (start_after)
+        if self._start_after_value and self._order_by_field:
+            filtered_results = []
+            found_cursor = False
+            for doc in results:
+                doc_value = doc.to_dict().get(self._order_by_field, "")
+                if found_cursor:
+                    filtered_results.append(doc)
+                elif doc_value == self._start_after_value:
+                    found_cursor = True
+            results = filtered_results
         
         # Apply limit
         if self._limit_count:
