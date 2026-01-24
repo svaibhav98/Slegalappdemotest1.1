@@ -557,10 +557,11 @@ export default function CasesScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.headerBg,
+    backgroundColor: COLORS.background,
   },
-  
-  // Header
+  gradientHeader: {
+    paddingBottom: 0,
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -568,16 +569,16 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     paddingHorizontal: 20,
     paddingBottom: 14,
-    backgroundColor: COLORS.headerBg,
   },
   backButton: {
     width: 44,
     height: 44,
     borderRadius: 22,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.3)',
+    borderColor: COLORS.border,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: COLORS.white,
   },
   headerTitle: {
     fontSize: 24,
@@ -595,13 +596,13 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.3)',
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderColor: COLORS.border,
+    backgroundColor: COLORS.white,
   },
   headerActionText: {
     fontSize: 13,
     fontWeight: '600',
-    color: COLORS.white,
+    color: COLORS.textPrimary,
   },
 
   // Search
