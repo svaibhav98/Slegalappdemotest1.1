@@ -258,6 +258,11 @@ class MockCollection:
         """Query documents"""
         return MockQuery(self._data, self._name, [(field, op, value)])
     
+    def order_by(self, field: str, direction=None):
+        """Order documents (returns a query)"""
+        query = MockQuery(self._data, self._name, [])
+        return query.order_by(field, direction)
+    
     def stream(self):
         """Get all documents in collection"""
         return [MockDocumentSnapshot(doc_id, data) 
