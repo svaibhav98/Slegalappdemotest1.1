@@ -129,23 +129,31 @@ export default function NyayAILandingScreen() {
             contentContainerStyle={styles.scrollContent}
             showsVerticalScrollIndicator={false}
           >
-            {/* Robot Mascot */}
+            {/* Professional AI Legal Assistant Icon */}
             <View style={styles.mascotContainer}>
-              <View style={styles.mascotWrapper}>
-                <View style={styles.mascotBody}>
-                  <View style={styles.mascotFace}>
-                    <View style={styles.mascotEye}>
-                      <View style={styles.mascotPupil} />
-                    </View>
-                    <View style={styles.mascotEye}>
-                      <View style={styles.mascotPupil} />
+              <View style={styles.professionalIconWrapper}>
+                {/* Outer Glow Circle */}
+                <View style={styles.outerGlow}>
+                  {/* Middle Circle */}
+                  <View style={styles.middleCircle}>
+                    {/* AI Shield Icon */}
+                    <View style={styles.shieldContainer}>
+                      <Ionicons name="shield-checkmark" size={60} color="#FF9933" />
                     </View>
                   </View>
-                  <View style={styles.mascotSmile} />
                 </View>
-                <View style={styles.mascotAntenna}>
-                  <View style={styles.antennaBase} />
-                  <View style={styles.antennaBall} />
+                {/* Decorative Elements */}
+                <View style={[styles.decorativeCircle, { top: 10, left: 10 }]}>
+                  <Ionicons name="book" size={16} color="#059669" />
+                </View>
+                <View style={[styles.decorativeCircle, { top: 15, right: 15 }]}>
+                  <Ionicons name="scale" size={16} color="#FF9933" />
+                </View>
+                <View style={[styles.decorativeCircle, { bottom: 20, left: 20 }]}>
+                  <Ionicons name="document-text" size={16} color="#059669" />
+                </View>
+                <View style={[styles.decorativeCircle, { bottom: 15, right: 10 }]}>
+                  <Ionicons name="sparkles" size={16} color="#FF9933" />
                 </View>
               </View>
             </View>
