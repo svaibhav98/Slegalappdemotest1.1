@@ -424,10 +424,6 @@ const styles = StyleSheet.create({
 
   // Bottom
   bottomContainer: { 
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
     padding: 20, 
     backgroundColor: COLORS.white, 
     borderTopWidth: 1, 
