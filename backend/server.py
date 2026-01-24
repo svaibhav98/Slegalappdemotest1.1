@@ -1260,9 +1260,13 @@ def generate_consumer_complaint_pdf(data: Dict[str, Any]) -> io.BytesIO:
 async def generate_document(
     request: Request,
     doc_data: DocumentData,
-    user = Depends(verify_token)
+    user = Depends(require_auth)  # SECURITY: Require authentication
 ):
-    """Generate legal document PDF"""
+    """
+    Generate legal document PDF.
+    SECURITY: PDFs are stored privately at documents/{userId}/{docId}.pdf
+    Access only via authenticated signed URLs.
+    """
     user_id = user["uid"]
     doc_type = doc_data.document_type
     data = doc_data.data
@@ -1281,13 +1285,29 @@ async def generate_document(
     
     try:
         pdf_buffer = generator(data)
+        pdf_bytes = pdf_buffer.read()
         
-        # Store document metadata in database
+        # Generate document ID
         doc_id = str(uuid.uuid4())[:8]
+        
+        # SECURITY: Store PDF in PRIVATE storage at documents/{userId}/{docId}.pdf
+        storage_path = f"documents/{user_id}/{doc_id}.pdf"
+        storage.upload_file(
+            path=storage_path,
+            data=pdf_bytes,
+            owner_uid=user_id,
+            metadata={
+                "type": doc_type,
+                "content_type": "application/pdf"
+            }
+        )
+        
+        # Store document metadata in Firestore (NOT the PDF itself)
         document_record = {
             "id": doc_id,
             "user_id": user_id,
             "type": doc_type,
+            "storage_path": storage_path,  # Reference to private storage
             "data": data,
             "created_at": datetime.now().isoformat(),
             "status": "generated"
@@ -1295,17 +1315,95 @@ async def generate_document(
         
         db.collection("documents").document(doc_id).set(document_record)
         
-        # Return PDF as download
+        # Generate signed URL for authenticated download (expires in 15 minutes)
+        signed_url = storage.generate_signed_url(
+            path=storage_path,
+            requester_uid=user_id,
+            expires_in_minutes=15
+        )
+        
+        return {
+            "success": True,
+            "document_id": doc_id,
+            "type": doc_type,
+            "download_url": signed_url,  # Time-limited authenticated URL
+            "expires_in": "15 minutes",
+            "message": "Document generated. Download URL is private and time-limited."
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"PDF generation failed: {str(e)}")
+
+
+@app.get("/api/documents/{doc_id}/download")
+async def download_document(
+    doc_id: str,
+    user = Depends(require_auth)
+):
+    """
+    Get a fresh signed URL for document download.
+    SECURITY: Only document owner can download.
+    """
+    user_id = user["uid"]
+    
+    # Get document metadata
+    doc_ref = db.collection("documents").document(doc_id).get()
+    if not doc_ref.exists:
+        raise HTTPException(status_code=404, detail="Document not found")
+    
+    doc_data = doc_ref.to_dict()
+    
+    # SECURITY: Verify ownership
+    if doc_data.get("user_id") != user_id:
+        raise HTTPException(status_code=403, detail="Access denied: You can only download your own documents")
+    
+    storage_path = doc_data.get("storage_path")
+    if not storage_path:
+        raise HTTPException(status_code=404, detail="Document file not found")
+    
+    # Generate fresh signed URL
+    signed_url = storage.generate_signed_url(
+        path=storage_path,
+        requester_uid=user_id,
+        expires_in_minutes=15
+    )
+    
+    return {
+        "success": True,
+        "download_url": signed_url,
+        "expires_in": "15 minutes"
+    }
+
+
+@app.get("/api/storage/download")
+async def storage_download(token: str):
+    """
+    Download file using signed URL token.
+    SECURITY: Token-based access with expiration.
+    """
+    # Validate token
+    file_path = storage.validate_signed_url(token)
+    if not file_path:
+        raise HTTPException(status_code=403, detail="Invalid or expired download link")
+    
+    # Get file data
+    try:
+        # For signed URL downloads, we bypass the ownership check since token was already validated
+        file_info = storage._files.get(file_path)
+        if not file_info:
+            raise HTTPException(status_code=404, detail="File not found")
+        
+        pdf_buffer = io.BytesIO(file_info["data"])
+        filename = file_path.split("/")[-1]
+        
         return StreamingResponse(
             pdf_buffer,
             media_type="application/pdf",
             headers={
-                "Content-Disposition": f"attachment; filename={doc_type}_{doc_id}.pdf",
-                "X-Document-ID": doc_id
+                "Content-Disposition": f"attachment; filename={filename}",
             }
         )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"PDF generation failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Download failed: {str(e)}")
 
 
 @app.get("/api/documents/list")
