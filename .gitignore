@@ -30,8 +30,21 @@ next-env.d.ts
 dist/
 dist
 
-# Environment files (comprehensive coverage)
+# Environment files (CRITICAL - Never commit secrets)
+.env
+.env.local
+.env.*.local
+*.env
+/app/backend/.env
+/app/frontend/.env
+backend/.env
+frontend/.env
 
+# Keep example files
+!.env.example
+!*.env.example
+
+# Credentials and tokens
 *token.json*
 *credentials.json*
 
@@ -77,35 +90,4 @@ agenthub/agents/youtube/db
 .cache/
 
 # Mobile development
-android-sdk/ -e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
+android-sdk/
