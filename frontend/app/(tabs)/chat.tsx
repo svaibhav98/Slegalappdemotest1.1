@@ -443,11 +443,10 @@ const styles = StyleSheet.create({
   },
   disclaimer: {
     fontSize: 12,
-    color: COLORS.white,
+    color: '#4B5563',
     textAlign: 'center',
     lineHeight: 18,
     marginBottom: 16,
-    opacity: 0.9,
   },
   disclaimerBold: {
     fontWeight: '700',
