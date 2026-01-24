@@ -10,6 +10,7 @@ import {
 import { Stack, useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { getLawyerById, Lawyer, LawyerPackage } from '../services/lawyersData';
+import BottomNavBar from '../components/BottomNavBar';
 
 const COLORS = {
   primary: '#FF9933',
