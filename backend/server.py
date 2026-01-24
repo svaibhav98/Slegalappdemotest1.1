@@ -1486,16 +1486,41 @@ async def list_lawyers(
     specialization: Optional[str] = None,
     language: Optional[str] = None,
     min_price: Optional[int] = None,
-    max_price: Optional[int] = None
+    max_price: Optional[int] = None,
+    limit: int = 20,
+    cursor: Optional[str] = None
 ):
-    """List lawyers with optional filters"""
-    lawyers = db.collection("lawyers").stream()
+    """
+    List lawyers with optional filters and pagination.
+    
+    - Default limit: 20
+    - Max limit: 50
+    - Ordered by created_at descending
+    - Cursor-based pagination using created_at value
+    
+    Example: GET /api/lawyers/list?limit=20&cursor=2025-01-20T10:30:00
+    """
+    # Enforce limits
+    limit = min(max(1, limit), 50)  # Clamp between 1 and 50
+    
+    # Build query with ordering
+    query = db.collection("lawyers").where("verified", "==", True)
+    query = query.order_by("created_at", direction="DESCENDING")
+    
+    # Apply cursor if provided
+    if cursor:
+        query = query.start_after(cursor)
+    
+    # Apply limit + 1 to check if there are more results
+    query = query.limit(limit + 1)
+    
+    lawyers = query.stream()
     
     lawyer_list = []
     for lawyer in lawyers:
         lawyer_data = lawyer.to_dict()
         
-        # Apply filters
+        # Apply additional filters (done in-memory for mock DB)
         if city and lawyer_data.get("city") != city:
             continue
         if specialization and specialization not in lawyer_data.get("specialization", []):
@@ -1509,9 +1534,16 @@ async def list_lawyers(
         
         lawyer_list.append(lawyer_data)
     
+    # Determine next_cursor
+    next_cursor = None
+    if len(lawyer_list) > limit:
+        lawyer_list = lawyer_list[:limit]  # Trim to requested limit
+        next_cursor = lawyer_list[-1].get("created_at") if lawyer_list else None
+    
     return {
         "success": True,
-        "lawyers": lawyer_list,
+        "items": lawyer_list,
+        "next_cursor": next_cursor,
         "count": len(lawyer_list)
     }
 
