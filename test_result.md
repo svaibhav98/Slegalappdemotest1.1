@@ -376,3 +376,27 @@ agent_communication:
       READY FOR:
       - User to specify what changes/improvements they want
       - Testing can be done once user confirms requirements
+  - agent: "main"
+    message: |
+      Production Readiness Update - Firestore-Only Migration:
+      
+      USER REQUIREMENTS:
+      - Firestore only (remove MongoDB)
+      - No API keys available
+      - Proceed with mock/test credentials
+      - No UI fixes needed
+      
+      CHANGES MADE:
+      1. Removed MongoDB references from backend/.env
+      2. Added Consumer Complaint PDF generator (4th document type)
+      3. Backend already has production-ready architecture:
+         - MockFirestoreDB simulating Firestore API
+         - Rate limiting (20/min chat, 10/min documents)
+         - Razorpay webhooks with idempotency
+         - PDF generation for 4 document types
+      
+      TESTING NEEDED:
+      - Test all backend API endpoints
+      - Test document generation (all 4 types)
+      - Test lawyer marketplace
+      - Test chat endpoint
