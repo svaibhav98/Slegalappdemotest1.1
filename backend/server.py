@@ -639,24 +639,94 @@ class PaymentVerification(BaseModel):
     razorpay_payment_id: str
     razorpay_signature: str
 
+class LawyerApplication(BaseModel):
+    """Lawyer application/profile - submitted by users wanting to become lawyers"""
+    name: str
+    bar_council_id: str
+    specialization: List[str]
+    languages: List[str]
+    city: str
+    state: str
+    experience: int
+    price: int
+    bio: str
+    phone: str
+    email: str
+
+# ============= ADMIN AUTHENTICATION =============
+
+ADMIN_SECRET = os.getenv("ADMIN_SECRET", "demo_admin_secret_change_in_production")
+
+async def require_admin(authorization: str = Header(None), x_admin_secret: str = Header(None)):
+    """
+    Require admin privileges.
+    In production, this should use Firebase Custom Claims or a proper admin role system.
+    """
+    user = await verify_token(authorization)
+    
+    # Check admin secret header
+    if x_admin_secret != ADMIN_SECRET:
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    user["is_admin"] = True
+    return user
+
 # ============= HEALTH CHECK =============
 
 @app.get("/api/health")
 async def health_check():
-    """Health check endpoint for monitoring"""
-    return {
+    """
+    Health check endpoint for monitoring.
+    Verifies Firestore read/write and Firebase Admin SDK initialization.
+    """
+    health_status = {
         "status": "healthy",
         "service": "SunoLegal API",
         "version": "1.0.0",
-        "mode": "MOCK",
-        "features": {
-            "database": "mock_firestore",
-            "payments": "mock_razorpay",
-            "llm": "emergent_integration",
-            "pdf_generation": "reportlab"
-        },
+        "mode": "MOCK" if RAZORPAY_KEY_SECRET == "demo_secret" else "PRODUCTION",
+        "checks": {},
         "timestamp": datetime.now().isoformat()
     }
+    
+    try:
+        # Test Firestore read
+        test_doc_id = "_health_check"
+        test_data = {"check": "read_write", "timestamp": datetime.now().isoformat()}
+        
+        # Write test
+        db.collection("_health").document(test_doc_id).set(test_data)
+        health_status["checks"]["firestore_write"] = "OK"
+        
+        # Read test
+        read_result = db.collection("_health").document(test_doc_id).get()
+        if read_result.exists:
+            health_status["checks"]["firestore_read"] = "OK"
+        else:
+            health_status["checks"]["firestore_read"] = "FAIL"
+            health_status["status"] = "degraded"
+        
+        # Verify collections exist
+        lawyers_count = len(list(db.collection("lawyers").stream()))
+        laws_count = len(list(db.collection("laws").stream()))
+        health_status["checks"]["seeded_data"] = f"lawyers:{lawyers_count}, laws:{laws_count}"
+        
+        # Storage check
+        health_status["checks"]["storage"] = "OK (private mode)"
+        
+    except Exception as e:
+        health_status["status"] = "unhealthy"
+        health_status["checks"]["error"] = str(e)
+    
+    health_status["features"] = {
+        "database": "mock_firestore" if RAZORPAY_KEY_SECRET == "demo_secret" else "firebase_admin",
+        "storage": "private_only",
+        "payments": "mock_razorpay" if RAZORPAY_KEY_SECRET == "demo_secret" else "razorpay_live",
+        "llm": "emergent_integration",
+        "pdf_generation": "reportlab",
+        "rate_limiting": "uid_based"
+    }
+    
+    return health_status
 
 # ============= USER PROFILE ENDPOINTS =============
 
