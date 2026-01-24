@@ -537,8 +537,8 @@ const styles = StyleSheet.create({
   headerContent: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   headerLogo: { width: 32, height: 32 },
   headerText: { flex: 1 },
-  headerTitle: { fontSize: 22, fontWeight: '700', color: COLORS.white },
-  headerSubtitle: { fontSize: 14, color: COLORS.white, opacity: 0.9, marginTop: 2 },
+  headerTitle: { fontSize: 22, fontWeight: '700', color: COLORS.textPrimary },
+  headerSubtitle: { fontSize: 14, color: COLORS.textSecondary, marginTop: 2 },
   addButton: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, paddingVertical: 10, borderRadius: 20, backgroundColor: 'rgba(255,255,255,0.2)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)' },
   addButtonText: { fontSize: 13, fontWeight: '600', color: COLORS.white },
   
