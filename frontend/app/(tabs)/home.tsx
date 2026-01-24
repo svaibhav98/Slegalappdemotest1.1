@@ -86,8 +86,8 @@ export default function HomeScreen() {
     { icon: 'book', label: 'Laws & Schemes', route: '/(tabs)/laws' },
     { icon: 'briefcase', label: 'Join as Lawyer', route: '/join-lawyer' },
     { icon: 'bookmark', label: 'Saved Items', route: '/(tabs)/laws' },
-    { icon: 'settings', label: 'Settings', route: '/(tabs)/home' },
-    { icon: 'help-circle', label: 'Help & Support', route: '/(tabs)/home' },
+    { icon: 'settings', label: 'Settings', route: '/(settings)' },
+    { icon: 'help-circle', label: 'Help & Support', route: '/(settings)/help-center' },
   ];
 
   const handleMenuItemPress = (route: string) => {
