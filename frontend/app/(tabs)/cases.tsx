@@ -158,29 +158,34 @@ export default function CasesScreen() {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={COLORS.headerBg} />
+      <StatusBar barStyle="dark-content" backgroundColor="#FFF5F0" />
       
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.backButton} 
-          onPress={handleBack}
-          activeOpacity={0.8}
-        >
-          <Ionicons name="arrow-back" size={22} color={COLORS.white} />
-        </TouchableOpacity>
-        
-        <Text style={styles.headerTitle}>Cases</Text>
-        
-        <TouchableOpacity 
-          style={styles.headerAction} 
-          onPress={() => router.push('/lawyers')}
-          activeOpacity={0.8}
-        >
-          <Ionicons name="chatbubble-ellipses" size={20} color={COLORS.white} />
-          <Text style={styles.headerActionText}>Consult</Text>
-        </TouchableOpacity>
-      </View>
+      <LinearGradient
+        colors={['#FFF5F0', '#FFFFFF']}
+        style={styles.gradientHeader}
+      >
+        {/* Header */}
+        <View style={styles.header}>
+          <TouchableOpacity 
+            style={styles.backButton} 
+            onPress={handleBack}
+            activeOpacity={0.8}
+          >
+            <Ionicons name="arrow-back" size={22} color={COLORS.textPrimary} />
+          </TouchableOpacity>
+          
+          <Text style={styles.headerTitle}>Cases</Text>
+          
+          <TouchableOpacity 
+            style={styles.headerAction} 
+            onPress={() => router.push('/lawyers')}
+            activeOpacity={0.8}
+          >
+            <Ionicons name="chatbubble-ellipses" size={20} color={COLORS.textPrimary} />
+            <Text style={styles.headerActionText}>Consult</Text>
+          </TouchableOpacity>
+        </View>
+      </LinearGradient>
 
       {/* Search Bar */}
       <View style={styles.searchContainer}>
