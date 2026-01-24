@@ -198,7 +198,10 @@ export default function JoinLawyerScreen() {
           <Text style={styles.formSubtitle}>Sign up your account to continue</Text>
 
           {/* Full Name */}
-          <Text style={styles.label}>Full Name</Text>
+          <View style={styles.labelRow}>
+            <Text style={styles.label}>Full Name</Text>
+            <Text style={styles.required}>*</Text>
+          </View>
           <TextInput
             style={styles.input}
             placeholder="Enter your name"
@@ -208,7 +211,10 @@ export default function JoinLawyerScreen() {
           />
 
           {/* Specialization */}
-          <Text style={styles.label}>Specialization</Text>
+          <View style={styles.labelRow}>
+            <Text style={styles.label}>Specialization</Text>
+            <Text style={styles.required}>*</Text>
+          </View>
           <TouchableOpacity
             style={styles.dropdown}
             onPress={() => setShowSpecializationModal(true)}
