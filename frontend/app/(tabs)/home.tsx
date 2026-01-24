@@ -369,13 +369,6 @@ export default function HomeScreen() {
                 <Text style={styles.categoryTitle}>{item.title}</Text>
                 <Text style={styles.categorySubtitle}>{item.subtitle}</Text>
               </View>
-              <TouchableOpacity 
-                style={styles.categoryAction}
-                onPress={() => router.push(item.route as any)}
-              >
-                <Text style={styles.categoryActionText}>{item.actionText}</Text>
-                <Ionicons name="arrow-forward-circle" size={20} color={COLORS.success} />
-              </TouchableOpacity>
             </TouchableOpacity>
           ))}
           {/* Explore More Card - partially visible */}
