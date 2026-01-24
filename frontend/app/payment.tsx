@@ -224,7 +224,7 @@ export default function PaymentScreen() {
             <Text style={styles.addCardText}>Add New Card</Text>
           </TouchableOpacity>
 
-          <View style={{ height: 100 }} />
+          <View style={{ height: 16 }} />
         </ScrollView>
 
         {/* Bottom CTA */}
@@ -237,6 +237,9 @@ export default function PaymentScreen() {
             <Text style={styles.continueButtonText}>Continue</Text>
           </TouchableOpacity>
         </View>
+
+        {/* Bottom Navigation Bar */}
+        <BottomNavBar activeTab="home" />
       </View>
     </>
   );
