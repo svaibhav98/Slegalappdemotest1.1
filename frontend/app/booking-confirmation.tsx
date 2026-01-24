@@ -167,6 +167,9 @@ export default function BookingConfirmationScreen() {
             <Text style={styles.homeButtonText}>Go to Home</Text>
           </TouchableOpacity>
         </View>
+
+        {/* Bottom Navigation Bar */}
+        <BottomNavBar activeTab="home" />
       </View>
     </>
   );
