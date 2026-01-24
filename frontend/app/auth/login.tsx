@@ -70,7 +70,10 @@ export default function LoginScreen() {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
           <Image source={require('../../assets/logo-transparent.png')} style={styles.logo} resizeMode="contain" />
-          <Text style={styles.title}>SunoLegal</Text>
+          <View style={styles.brandRow}>
+            <Text style={styles.brandOrange}>Suno</Text>
+            <Text style={styles.brandGreen}>Legal</Text>
+          </View>
           <Text style={styles.subtitle}>Nyay (Justice) for All</Text>
           <Text style={styles.tagline}>Your trusted AI legal assistant for India</Text>
         </View>
