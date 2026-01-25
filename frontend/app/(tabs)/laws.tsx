@@ -105,12 +105,12 @@ export default function LawsScreen() {
           </View>
           
           <TouchableOpacity 
-            style={styles.lawyerButton} 
-            onPress={() => router.push('/lawyers')}
+            style={styles.savedButton} 
+            onPress={handleSavedItems}
             activeOpacity={0.8}
           >
-            <Ionicons name="chatbubble-ellipses" size={20} color={COLORS.primary} />
-            <Text style={styles.lawyerButtonText}>Lawyer</Text>
+            <Ionicons name="bookmark" size={20} color={COLORS.primary} />
+            <Text style={styles.savedButtonText}>Saved</Text>
           </TouchableOpacity>
         </View>
 
