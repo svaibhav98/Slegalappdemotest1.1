@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
     color: COLORS.textSecondary,
     lineHeight: 20,
   },
-  lawyerButton: {
+  savedButton: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
@@ -306,7 +306,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.primary + '40',
   },
-  lawyerButtonText: {
+  savedButtonText: {
     fontSize: 12,
     fontWeight: '600',
     color: COLORS.primary,
