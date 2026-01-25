@@ -260,11 +260,11 @@ export default function ConsultationChatScreen() {
                   <View style={styles.actionLinksContainer}>
                     <Text style={styles.nyayaiLabel}>NyayAI responded </Text>
                     <TouchableOpacity onPress={handleConsultLawyer}>
-                      <Text style={styles.actionLink}>Consult a Lawyer</Text>
+                      <Text style={styles.actionLink}>Consult Lawyer</Text>
                     </TouchableOpacity>
                     <Text style={styles.orText}> or </Text>
-                    <TouchableOpacity onPress={handleBookCall}>
-                      <Text style={styles.actionLink}>Book a Call</Text>
+                    <TouchableOpacity onPress={() => router.push('/(tabs)/documents')}>
+                      <Text style={styles.actionLink}>Draft Document</Text>
                     </TouchableOpacity>
                   </View>
                 )}

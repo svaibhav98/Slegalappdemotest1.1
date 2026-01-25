@@ -210,14 +210,14 @@ export default function NyayAIChatScreen() {
                       onPress={() => router.push('/lawyers')} 
                       activeOpacity={0.8}
                     >
-                      <Text style={styles.ctaLink}>Consult a Lawyer</Text>
+                      <Text style={styles.ctaLink}>Consult Lawyer</Text>
                     </TouchableOpacity>
                     <Text style={styles.ctaSeparator}> or </Text>
                     <TouchableOpacity 
                       onPress={() => router.push('/(tabs)/documents')} 
                       activeOpacity={0.8}
                     >
-                      <Text style={styles.ctaLink}>Draft a Document</Text>
+                      <Text style={styles.ctaLink}>Draft Document</Text>
                     </TouchableOpacity>
                   </View>
                 )}
