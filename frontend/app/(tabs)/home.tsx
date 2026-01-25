@@ -63,6 +63,7 @@ export default function HomeScreen() {
   const [greeting, setGreeting] = useState('Good Morning');
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [showDisclaimer, setShowDisclaimer] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   useEffect(() => {
     const hour = new Date().getHours();
@@ -196,6 +197,108 @@ export default function HomeScreen() {
   // Get top 3-4 lawyers for home screen
   const topLawyers = LAWYERS_DATA.filter(l => l.isAvailable).slice(0, 4);
 
+  // Dummy notifications data for MVP
+  const notifications = [
+    {
+      id: '1',
+      title: 'Document Ready',
+      message: 'Your Rent Agreement draft is ready for review',
+      time: '2 hours ago',
+      icon: 'document-text',
+      unread: true,
+    },
+    {
+      id: '2',
+      title: 'Lawyer Response',
+      message: 'Adv. Priya Sharma has responded to your query',
+      time: '5 hours ago',
+      icon: 'chatbubbles',
+      unread: true,
+    },
+    {
+      id: '3',
+      title: 'Case Update',
+      message: 'New hearing date scheduled for your case',
+      time: 'Yesterday',
+      icon: 'briefcase',
+      unread: false,
+    },
+    {
+      id: '4',
+      title: 'New Law Alert',
+      message: 'Updates to tenant protection laws in your state',
+      time: '2 days ago',
+      icon: 'book',
+      unread: false,
+    },
+  ];
+
+  // Notifications Modal Component
+  const renderNotifications = () => (
+    <Modal
+      visible={showNotifications}
+      animationType="fade"
+      transparent={true}
+      onRequestClose={() => setShowNotifications(false)}
+    >
+      <View style={styles.notificationsOverlay}>
+        <TouchableOpacity 
+          style={styles.notificationsBackdrop} 
+          activeOpacity={1} 
+          onPress={() => setShowNotifications(false)}
+        />
+        <View style={styles.notificationsContainer}>
+          <View style={styles.notificationsHeader}>
+            <Text style={styles.notificationsTitle}>Notifications</Text>
+            <TouchableOpacity 
+              style={styles.notificationsCloseBtn} 
+              onPress={() => setShowNotifications(false)}
+            >
+              <Ionicons name="close" size={20} color={COLORS.textPrimary} />
+            </TouchableOpacity>
+          </View>
+          <ScrollView style={styles.notificationsList} showsVerticalScrollIndicator={false}>
+            {notifications.map((notification) => (
+              <TouchableOpacity 
+                key={notification.id} 
+                style={[
+                  styles.notificationItem,
+                  notification.unread && styles.notificationItemUnread
+                ]}
+                activeOpacity={0.8}
+              >
+                <View style={[
+                  styles.notificationIconContainer,
+                  notification.unread && styles.notificationIconUnread
+                ]}>
+                  <Ionicons 
+                    name={notification.icon as any} 
+                    size={18} 
+                    color={notification.unread ? COLORS.primary : COLORS.textMuted} 
+                  />
+                </View>
+                <View style={styles.notificationContent}>
+                  <Text style={[
+                    styles.notificationItemTitle,
+                    notification.unread && styles.notificationItemTitleUnread
+                  ]}>{notification.title}</Text>
+                  <Text style={styles.notificationMessage} numberOfLines={1}>
+                    {notification.message}
+                  </Text>
+                  <Text style={styles.notificationTime}>{notification.time}</Text>
+                </View>
+                {notification.unread && <View style={styles.unreadDot} />}
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+          <TouchableOpacity style={styles.markAllReadBtn}>
+            <Text style={styles.markAllReadText}>Mark all as read</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Modal>
+  );
+
   // Drawer Component
   const renderDrawer = () => (
     <Modal
@@ -294,6 +397,9 @@ export default function HomeScreen() {
         </View>
       </Modal>
 
+      {/* Notifications Modal */}
+      {renderNotifications()}
+
       {/* Drawer */}
       {renderDrawer()}
       
@@ -321,7 +427,11 @@ export default function HomeScreen() {
           <TouchableOpacity style={styles.iconButton}>
             <Ionicons name="mic-outline" size={22} color={COLORS.white} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.iconButton}>
+          <TouchableOpacity 
+            style={styles.iconButton}
+            onPress={() => setShowNotifications(true)}
+            data-testid="notification-bell-btn"
+          >
             <Ionicons name="notifications-outline" size={22} color={COLORS.white} />
             <View style={styles.badge} />
           </TouchableOpacity>
