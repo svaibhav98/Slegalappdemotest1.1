@@ -137,24 +137,22 @@ export default function NyayAILandingScreen() {
                 <View style={styles.outerGlow}>
                   {/* Middle Circle */}
                   <View style={styles.middleCircle}>
-                    {/* AI Shield Icon */}
-                    <View style={styles.shieldContainer}>
-                      <Ionicons name="shield-checkmark" size={60} color="#FF9933" />
-                    </View>
+                    {/* NyayAI Shield Icon */}
+                    <NyayAIIcon size={72} color="#FF9933" secondaryColor="#059669" />
                   </View>
                 </View>
                 {/* Decorative Elements */}
                 <View style={[styles.decorativeCircle, { top: 10, left: 10 }]}>
-                  <Ionicons name="book" size={16} color="#059669" />
+                  <LawBookIcon size={18} color="#059669" />
                 </View>
                 <View style={[styles.decorativeCircle, { top: 15, right: 15 }]}>
-                  <Ionicons name="scale" size={16} color="#FF9933" />
+                  <ShieldVerifyIcon size={18} color="#FF9933" />
                 </View>
                 <View style={[styles.decorativeCircle, { bottom: 20, left: 20 }]}>
-                  <Ionicons name="document-text" size={16} color="#059669" />
+                  <LegalDocumentIcon size={18} color="#059669" />
                 </View>
                 <View style={[styles.decorativeCircle, { bottom: 15, right: 10 }]}>
-                  <Ionicons name="sparkles" size={16} color="#FF9933" />
+                  <NyayAIIcon size={18} color="#FF9933" secondaryColor="#059669" />
                 </View>
               </View>
             </View>
