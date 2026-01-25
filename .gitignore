@@ -87,6 +87,5 @@ agenthub/agents/youtube/db
 # Mobile development
 android-sdk/
 -e 
-# Environment files
-*.env
-*.env.*
+# Environment files (local overrides only)
+# Note: .env files needed for deployment are tracked
