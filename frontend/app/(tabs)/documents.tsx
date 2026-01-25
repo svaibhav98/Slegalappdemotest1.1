@@ -533,7 +533,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   
   // Header
-  header: { paddingTop: 44, paddingBottom: 14, paddingHorizontal: 20 },
+  header: { paddingTop: 12, paddingBottom: 14, paddingHorizontal: 20 },
   headerContent: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   headerLogo: { width: 32, height: 32 },
   headerText: { flex: 1 },

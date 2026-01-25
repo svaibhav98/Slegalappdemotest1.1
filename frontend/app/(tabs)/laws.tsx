@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    paddingTop: 44,
+    paddingTop: 12,
     paddingHorizontal: 20,
     paddingBottom: 12,
   },

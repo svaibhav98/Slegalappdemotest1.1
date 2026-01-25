@@ -375,7 +375,7 @@ export default function CasesScreen() {
           ))
         )}
 
-        <View style={{ height: 40 }} />
+        <View style={{ height: 80 }} />
       </ScrollView>
 
       {/* Floating Action Button */}
@@ -566,7 +566,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingTop: 40,
+    paddingTop: 12,
     paddingHorizontal: 20,
     paddingBottom: 14,
   },
