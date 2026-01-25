@@ -57,11 +57,12 @@ interface DrawerMenuItem {
 }
 
 export default function HomeScreen() {
-  const { user, signOut } = useAuth();
+  const { user, signOut, isGuest } = useAuth();
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(false);
   const [greeting, setGreeting] = useState('Good Morning');
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
 
   useEffect(() => {
     const hour = new Date().getHours();
@@ -70,6 +71,28 @@ export default function HomeScreen() {
     else if (hour < 21) setGreeting('Evening');
     else setGreeting('Night');
   }, []);
+
+  // Check and show guest disclaimer popup
+  useEffect(() => {
+    const checkGuestDisclaimer = async () => {
+      if (isGuest) {
+        const disclaimerShown = await AsyncStorage.getItem('guest_disclaimer_shown');
+        if (disclaimerShown !== 'true') {
+          setShowDisclaimer(true);
+          await AsyncStorage.setItem('guest_disclaimer_shown', 'true');
+          // Auto-dismiss after 3 seconds
+          setTimeout(() => {
+            setShowDisclaimer(false);
+          }, 3000);
+        }
+      }
+    };
+    checkGuestDisclaimer();
+  }, [isGuest]);
+
+  const handleCloseDisclaimer = () => {
+    setShowDisclaimer(false);
+  };
 
   const onRefresh = async () => {
     setRefreshing(true);
