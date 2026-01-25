@@ -883,13 +883,25 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     marginTop: -4,
+    paddingTop: 12,
+  },
+  
+  // Unified Section Spacing System
+  sectionWrapper: {
+    marginBottom: 16,
+  },
+  sectionHeaderRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingRight: 20,
   },
   
   // Hero Banner
   heroBannerContainer: {
-    padding: 20,
-    paddingTop: 16,
-    paddingBottom: 8,
+    paddingHorizontal: 20,
+    paddingTop: 4,
+    paddingBottom: 4,
   },
   heroBanner: { 
     borderRadius: 24, 
