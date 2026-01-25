@@ -103,4 +103,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: Platform.OS === 'ios' ? 6 : 8,
   },
+  centerTab: {
+    // Slightly emphasize the center NyayAI tab
+  },
 });
