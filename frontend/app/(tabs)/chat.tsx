@@ -148,8 +148,8 @@ export default function NyayAILandingScreen() {
                 <View style={styles.outerGlow}>
                   {/* Middle Circle */}
                   <View style={styles.middleCircle}>
-                    {/* NyayAI Icon - Reduced size */}
-                    <NyayAIIcon size={44} color="#FF9933" secondaryColor="#059669" />
+                    {/* NyayAI Icon - Using larger size for hero display */}
+                    <NyayAIIcon size={48} color="#FF9933" secondaryColor="#059669" />
                   </View>
                 </View>
                 {/* Decorative Elements - smaller */}
@@ -163,7 +163,7 @@ export default function NyayAILandingScreen() {
                   <LegalDocumentIcon size={14} color="#059669" />
                 </View>
                 <View style={[styles.decorativeCircle, { bottom: 8, right: 6 }]}>
-                  <NyayAIIcon size={14} color="#FF9933" secondaryColor="#059669" />
+                  <NyayAIIcon size={16} color="#FF9933" secondaryColor="#059669" />
                 </View>
               </View>
             </View>
