@@ -481,166 +481,174 @@ export default function HomeScreen() {
         </View>
 
         {/* Quick Access Section */}
-        <Text style={styles.sectionTitle}>Quick Access</Text>
-        <ScrollView 
-          horizontal 
-          showsHorizontalScrollIndicator={false} 
-          style={styles.quickAccessScroll}
-          contentContainerStyle={styles.quickAccessContainer}
-        >
-          {quickAccessItems.map((item, index) => (
-            <TouchableOpacity 
-              key={item.id} 
-              style={styles.quickAccessCard} 
-              onPress={() => router.push(item.route as any)} 
-              activeOpacity={0.85}
-            >
-              <View style={[
-                styles.quickAccessIconContainer,
-                { backgroundColor: item.bgColor }
-              ]}>
-                {item.id === 'nyayai' && <NyayAIIcon size={30} color={item.iconColor} secondaryColor={item.secondaryColor} />}
-                {item.id === 'consultation' && <ConsultationIcon size={28} color={item.iconColor} />}
-                {item.id === 'document' && <LegalDocumentIcon size={28} color={item.iconColor} />}
-                {item.id === 'cases' && <BriefcaseIcon size={28} color={item.iconColor} />}
-                {item.id === 'laws' && <LawBookIcon size={28} color={item.iconColor} />}
-              </View>
-              <Text style={styles.quickAccessLabel}>
-                {item.label}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
+        <View style={styles.sectionWrapper}>
+          <Text style={styles.sectionTitle}>Quick Access</Text>
+          <ScrollView 
+            horizontal 
+            showsHorizontalScrollIndicator={false} 
+            style={styles.quickAccessScroll}
+            contentContainerStyle={styles.quickAccessContainer}
+          >
+            {quickAccessItems.map((item, index) => (
+              <TouchableOpacity 
+                key={item.id} 
+                style={styles.quickAccessCard} 
+                onPress={() => router.push(item.route as any)} 
+                activeOpacity={0.85}
+              >
+                <View style={[
+                  styles.quickAccessIconContainer,
+                  { backgroundColor: item.bgColor }
+                ]}>
+                  {item.id === 'nyayai' && <NyayAIIcon size={30} color={item.iconColor} secondaryColor={item.secondaryColor} />}
+                  {item.id === 'consultation' && <ConsultationIcon size={28} color={item.iconColor} />}
+                  {item.id === 'document' && <LegalDocumentIcon size={28} color={item.iconColor} />}
+                  {item.id === 'cases' && <BriefcaseIcon size={28} color={item.iconColor} />}
+                  {item.id === 'laws' && <LawBookIcon size={28} color={item.iconColor} />}
+                </View>
+                <Text style={styles.quickAccessLabel}>
+                  {item.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
 
         {/* Category Section */}
-        <Text style={styles.sectionTitle}>Category</Text>
-        <ScrollView 
-          horizontal 
-          showsHorizontalScrollIndicator={false} 
-          style={styles.categoryScroll}
-          contentContainerStyle={styles.categoryContainer}
-        >
-          {categoryItems.map((item, index) => (
-            <TouchableOpacity 
-              key={item.id} 
-              style={styles.categoryCard} 
-              onPress={() => router.push(item.route as any)} 
-              activeOpacity={0.9}
-            >
+        <View style={styles.sectionWrapper}>
+          <Text style={styles.sectionTitle}>Category</Text>
+          <ScrollView 
+            horizontal 
+            showsHorizontalScrollIndicator={false} 
+            style={styles.categoryScroll}
+            contentContainerStyle={styles.categoryContainer}
+          >
+            {categoryItems.map((item, index) => (
+              <TouchableOpacity 
+                key={item.id} 
+                style={styles.categoryCard} 
+                onPress={() => router.push(item.route as any)} 
+                activeOpacity={0.9}
+              >
+                <View style={styles.categoryCardHeader}>
+                  <View style={[styles.categoryIcon, { backgroundColor: item.iconColor + '15' }]}>
+                    {item.id === 'join-lawyer' && <BriefcaseIcon size={28} color={item.iconColor} />}
+                    {item.id === 'saved' && <BookmarkIcon size={28} color={item.iconColor} />}
+                  </View>
+                </View>
+                <View style={styles.categoryInfo}>
+                  <Text style={styles.categoryTitle}>{item.title}</Text>
+                  <Text style={styles.categorySubtitle}>{item.subtitle}</Text>
+                </View>
+              </TouchableOpacity>
+            ))}
+            {/* Explore More Card - partially visible */}
+            <View style={styles.categoryCardPartial}>
               <View style={styles.categoryCardHeader}>
-                <View style={[styles.categoryIcon, { backgroundColor: item.iconColor + '15' }]}>
-                  {item.id === 'join-lawyer' && <BriefcaseIcon size={28} color={item.iconColor} />}
-                  {item.id === 'saved' && <BookmarkIcon size={28} color={item.iconColor} />}
+                <View style={[styles.categoryIcon, { backgroundColor: COLORS.blue + '15' }]}>
+                  <Ionicons name="compass" size={28} color={COLORS.blue} />
                 </View>
               </View>
               <View style={styles.categoryInfo}>
-                <Text style={styles.categoryTitle}>{item.title}</Text>
-                <Text style={styles.categorySubtitle}>{item.subtitle}</Text>
+                <Text style={styles.categoryTitle}>Explore More</Text>
+                <Text style={styles.categorySubtitle}>Discover...</Text>
+              </View>
+            </View>
+          </ScrollView>
+        </View>
+
+        {/* Recently Activity Section */}
+        <View style={styles.sectionWrapper}>
+          <View style={styles.sectionHeaderRow}>
+            <Text style={styles.sectionTitle}>Recently Activity</Text>
+            <TouchableOpacity>
+              <Text style={styles.seeAllText}>See all</Text>
+            </TouchableOpacity>
+          </View>
+          
+          <View style={styles.notificationBadge}>
+            <Text style={styles.notificationText}>New Notification</Text>
+          </View>
+
+          {recentActivity.map((activity, index) => (
+            <TouchableOpacity 
+              key={activity.id} 
+              style={styles.activityCard} 
+              onPress={() => router.push(`/law-detail/${activity.id}` as any)} 
+              activeOpacity={0.9}
+            >
+              <Image 
+                source={{ uri: activity.image }} 
+                style={styles.activityImage} 
+              />
+              <View style={styles.activityContent}>
+                <Text style={styles.activityTitle}>{activity.title}</Text>
+                <Text style={styles.activitySubtitle}>{activity.subtitle}</Text>
+                <Text style={styles.activityDescription} numberOfLines={4}>
+                  {activity.description}
+                </Text>
               </View>
             </TouchableOpacity>
           ))}
-          {/* Explore More Card - partially visible */}
-          <View style={styles.categoryCardPartial}>
-            <View style={styles.categoryCardHeader}>
-              <View style={[styles.categoryIcon, { backgroundColor: COLORS.blue + '15' }]}>
-                <Ionicons name="compass" size={28} color={COLORS.blue} />
-              </View>
-            </View>
-            <View style={styles.categoryInfo}>
-              <Text style={styles.categoryTitle}>Explore More</Text>
-              <Text style={styles.categorySubtitle}>Discover...</Text>
-            </View>
-          </View>
-        </ScrollView>
-
-        {/* Recently Activity Section */}
-        <View style={styles.recentActivityHeader}>
-          <Text style={styles.sectionTitle}>Recently Activity</Text>
-          <TouchableOpacity>
-            <Text style={styles.seeAllText}>See all</Text>
-          </TouchableOpacity>
         </View>
-        
-        <View style={styles.notificationBadge}>
-          <Text style={styles.notificationText}>New Notification</Text>
-        </View>
-
-        {recentActivity.map((activity, index) => (
-          <TouchableOpacity 
-            key={activity.id} 
-            style={styles.activityCard} 
-            onPress={() => router.push(`/law-detail/${activity.id}` as any)} 
-            activeOpacity={0.9}
-          >
-            <Image 
-              source={{ uri: activity.image }} 
-              style={styles.activityImage} 
-            />
-            <View style={styles.activityContent}>
-              <Text style={styles.activityTitle}>{activity.title}</Text>
-              <Text style={styles.activitySubtitle}>{activity.subtitle}</Text>
-              <Text style={styles.activityDescription} numberOfLines={4}>
-                {activity.description}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        ))}
 
         {/* Top / Available Lawyers Section */}
-        <View style={styles.topLawyersHeader}>
-          <Text style={styles.sectionTitle}>Top Lawyers</Text>
-          <TouchableOpacity onPress={() => router.push('/lawyers')}>
-            <Text style={styles.seeAllText}>See all</Text>
-          </TouchableOpacity>
-        </View>
+        <View style={styles.sectionWrapper}>
+          <View style={styles.sectionHeaderRow}>
+            <Text style={styles.sectionTitle}>Top Lawyers</Text>
+            <TouchableOpacity onPress={() => router.push('/lawyers')}>
+              <Text style={styles.seeAllText}>See all</Text>
+            </TouchableOpacity>
+          </View>
 
-        {topLawyers.map((lawyer) => (
-          <TouchableOpacity 
-            key={lawyer.id} 
-            style={styles.lawyerCard} 
-            onPress={() => router.push({ pathname: '/lawyers', params: { lawyerId: lawyer.id } } as any)} 
-            activeOpacity={0.9}
-          >
-            <Image 
-              source={{ uri: lawyer.image }} 
-              style={styles.lawyerImage} 
-            />
-            <View style={styles.lawyerContent}>
-              <View style={styles.lawyerHeader}>
-                <View style={styles.lawyerInfo}>
-                  <Text style={styles.lawyerName}>{lawyer.name}</Text>
-                  {lawyer.isVerified && (
-                    <Ionicons name="checkmark-circle" size={16} color={COLORS.success} style={{ marginLeft: 4 }} />
+          {topLawyers.map((lawyer) => (
+            <TouchableOpacity 
+              key={lawyer.id} 
+              style={styles.lawyerCard} 
+              onPress={() => router.push({ pathname: '/lawyers', params: { lawyerId: lawyer.id } } as any)} 
+              activeOpacity={0.9}
+            >
+              <Image 
+                source={{ uri: lawyer.image }} 
+                style={styles.lawyerImage} 
+              />
+              <View style={styles.lawyerContent}>
+                <View style={styles.lawyerHeader}>
+                  <View style={styles.lawyerInfo}>
+                    <Text style={styles.lawyerName}>{lawyer.name}</Text>
+                    {lawyer.isVerified && (
+                      <Ionicons name="checkmark-circle" size={16} color={COLORS.success} style={{ marginLeft: 4 }} />
+                    )}
+                  </View>
+                  {lawyer.isAvailable && (
+                    <View style={styles.availableBadge}>
+                      <View style={styles.availableDot} />
+                      <Text style={styles.availableText}>Available</Text>
+                    </View>
                   )}
                 </View>
-                {lawyer.isAvailable && (
-                  <View style={styles.availableBadge}>
-                    <View style={styles.availableDot} />
-                    <Text style={styles.availableText}>Available</Text>
+                <Text style={styles.lawyerSpecialization}>{lawyer.title}</Text>
+                <View style={styles.lawyerMeta}>
+                  <View style={styles.lawyerMetaItem}>
+                    <Ionicons name="star" size={14} color={COLORS.amber} />
+                    <Text style={styles.lawyerMetaText}>{lawyer.rating} ({lawyer.reviewCount})</Text>
                   </View>
-                )}
+                  <View style={styles.lawyerMetaItem}>
+                    <Ionicons name="briefcase" size={14} color={COLORS.textMuted} />
+                    <Text style={styles.lawyerMetaText}>{lawyer.experience} yrs</Text>
+                  </View>
+                  <View style={styles.lawyerMetaItem}>
+                    <Ionicons name="language" size={14} color={COLORS.textMuted} />
+                    <Text style={styles.lawyerMetaText}>{lawyer.languages.join(', ')}</Text>
+                  </View>
+                </View>
+                <Text style={styles.lawyerPrice}>Starting from ₹{lawyer.packages[0].price}</Text>
               </View>
-              <Text style={styles.lawyerSpecialization}>{lawyer.title}</Text>
-              <View style={styles.lawyerMeta}>
-                <View style={styles.lawyerMetaItem}>
-                  <Ionicons name="star" size={14} color={COLORS.amber} />
-                  <Text style={styles.lawyerMetaText}>{lawyer.rating} ({lawyer.reviewCount})</Text>
-                </View>
-                <View style={styles.lawyerMetaItem}>
-                  <Ionicons name="briefcase" size={14} color={COLORS.textMuted} />
-                  <Text style={styles.lawyerMetaText}>{lawyer.experience} yrs</Text>
-                </View>
-                <View style={styles.lawyerMetaItem}>
-                  <Ionicons name="language" size={14} color={COLORS.textMuted} />
-                  <Text style={styles.lawyerMetaText}>{lawyer.languages.join(', ')}</Text>
-                </View>
-              </View>
-              <Text style={styles.lawyerPrice}>Starting from ₹{lawyer.packages[0].price}</Text>
-            </View>
-          </TouchableOpacity>
-        ))}
+            </TouchableOpacity>
+          ))}
+        </View>
 
-        <View style={{ height: 40 }} />
+        <View style={{ height: 24 }} />
       </ScrollView>
 
       {/* Floating AI Button */}
