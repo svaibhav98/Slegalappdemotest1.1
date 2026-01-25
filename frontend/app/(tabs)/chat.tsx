@@ -37,19 +37,7 @@ const COLORS = {
 export default function NyayAILandingScreen() {
   const router = useRouter();
   const [inputText, setInputText] = useState('');
-  const [showDisclaimer, setShowDisclaimer] = useState(false);
-
-  // Show disclaimer only on first landing
-  useEffect(() => {
-    const checkDisclaimerShown = async () => {
-      const disclaimerShown = await AsyncStorage.getItem('nyayai_disclaimer_shown_session');
-      if (disclaimerShown !== 'true') {
-        setShowDisclaimer(true);
-        await AsyncStorage.setItem('nyayai_disclaimer_shown_session', 'true');
-      }
-    };
-    checkDisclaimerShown();
-  }, []);
+  const [showDisclaimer, setShowDisclaimer] = useState(true); // Always show on first render
 
   const suggestedPrompts = [
     {

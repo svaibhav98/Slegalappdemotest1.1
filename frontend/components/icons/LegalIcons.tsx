@@ -19,65 +19,54 @@ interface IconProps {
 }
 
 // NyayAI Icon - Clean Professional Legal-AI Icon (Scales + AI Brain)
-export const NyayAIIcon = ({ size = 32, color = COLORS.primary, secondaryColor = COLORS.secondary }: IconProps) => (
-  <Svg width={size} height={size} viewBox="0 0 48 48" fill="none">
-    <Defs>
-      <SvgLinearGradient id="nyayGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <Stop offset="0%" stopColor={color} />
-        <Stop offset="100%" stopColor={COLORS.primaryDark} />
-      </SvgLinearGradient>
-    </Defs>
-    {/* Outer circle - professional boundary */}
-    <Circle cx="24" cy="24" r="21" stroke="url(#nyayGrad)" strokeWidth="2" fill="none" />
-    {/* Inner subtle fill */}
-    <Circle cx="24" cy="24" r="19" fill={color} opacity="0.08" />
-    {/* Scales of Justice - simplified */}
+// Using 24x24 viewBox to match other icons for consistent sizing
+export const NyayAIIcon = ({ size = 24, color = COLORS.primary, secondaryColor = COLORS.secondary }: IconProps) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    {/* Outer circle */}
+    <Circle cx="12" cy="12" r="10.5" stroke={color} strokeWidth="1.2" fill="none" />
+    {/* Inner fill */}
+    <Circle cx="12" cy="12" r="9.5" fill={color} opacity="0.08" />
+    {/* Scales pillar */}
     <Path
-      d="M24 10v24"
+      d="M12 5v14"
       stroke={color}
-      strokeWidth="2.5"
+      strokeWidth="1.5"
       strokeLinecap="round"
     />
     {/* Balance beam */}
     <Path
-      d="M12 18h24"
+      d="M6 9h12"
       stroke={color}
-      strokeWidth="2"
+      strokeWidth="1.2"
       strokeLinecap="round"
     />
     {/* Left scale */}
     <Path
-      d="M12 18l-2 8h8l-2-8"
+      d="M6 9l-1 4h4l-1-4"
       stroke={secondaryColor}
-      strokeWidth="1.5"
+      strokeWidth="1"
       strokeLinejoin="round"
       fill="none"
     />
     {/* Right scale */}
     <Path
-      d="M36 18l-2 8h8l-2-8"
+      d="M18 9l-1 4h4l-1-4"
       stroke={secondaryColor}
-      strokeWidth="1.5"
+      strokeWidth="1"
       strokeLinejoin="round"
       fill="none"
     />
-    {/* AI Brain nodes */}
-    <Circle cx="24" cy="14" r="2.5" fill={color} />
-    <Circle cx="20" cy="28" r="1.5" fill={secondaryColor} />
-    <Circle cx="28" cy="28" r="1.5" fill={secondaryColor} />
-    <Circle cx="24" cy="32" r="1.5" fill={secondaryColor} />
-    {/* Neural connections */}
-    <Path
-      d="M20 28l4 4M28 28l-4 4"
-      stroke={secondaryColor}
-      strokeWidth="1"
-      strokeLinecap="round"
-      opacity="0.7"
-    />
+    {/* Center node */}
+    <Circle cx="12" cy="7" r="1.5" fill={color} />
     {/* Base */}
     <Path
-      d="M20 34h8"
+      d="M10 17h4"
       stroke={color}
+      strokeWidth="1.2"
+      strokeLinecap="round"
+    />
+  </Svg>
+);
       strokeWidth="2"
       strokeLinecap="round"
     />
