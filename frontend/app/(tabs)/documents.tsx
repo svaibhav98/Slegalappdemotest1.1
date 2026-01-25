@@ -613,7 +613,7 @@ export default function DocumentsScreen() {
       {/* Content based on active tab */}
       {activeTab === 'create' && renderTemplateList()}
       {activeTab === 'documents' && renderDocumentsList(documents, false)}
-      {activeTab === 'saved' && renderDocumentsList(savedItems, true)}
+      {activeTab === 'saved' && renderSavedItems()}
     </View>
   );
 }
