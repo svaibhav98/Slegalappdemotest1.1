@@ -483,6 +483,80 @@ export default function DocumentsScreen() {
     </ScrollView>
   );
 
+  // Render Saved Items with two sections (Documents + Laws)
+  const renderSavedItems = () => (
+    <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      {/* Section 1: Saved Documents */}
+      <Text style={styles.savedSectionTitle}>Saved Documents</Text>
+      {savedItems.length === 0 ? (
+        <View style={styles.sectionEmptyState}>
+          <Ionicons name="document-text-outline" size={48} color={COLORS.textMuted} />
+          <Text style={styles.sectionEmptyText}>No saved documents yet</Text>
+        </View>
+      ) : (
+        savedItems.map((doc) => (
+          <View key={doc.id} style={styles.documentCard}>
+            <View style={styles.docIconContainer}>
+              <Ionicons name="document-text" size={28} color={COLORS.primary} />
+            </View>
+            <View style={styles.docInfo}>
+              <Text style={styles.docName} numberOfLines={1}>{doc.name}</Text>
+              <Text style={styles.docMeta}>{doc.type} • {doc.createdAt} • {doc.size}</Text>
+            </View>
+            <View style={styles.docActions}>
+              <TouchableOpacity style={styles.docActionBtn} onPress={() => handleRemoveFromSaved(doc.id)}>
+                <Ionicons name="bookmark" size={22} color={COLORS.amber} />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.docActionBtn}>
+                <Ionicons name="share-outline" size={22} color={COLORS.textMuted} />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.docActionBtn}>
+                <Ionicons name="download-outline" size={22} color={COLORS.textMuted} />
+              </TouchableOpacity>
+            </View>
+          </View>
+        ))
+      )}
+
+      {/* Section 2: Saved Laws & Schemes */}
+      <Text style={[styles.savedSectionTitle, { marginTop: 28 }]}>Saved Laws & Schemes</Text>
+      {savedLaws.length === 0 ? (
+        <View style={styles.sectionEmptyState}>
+          <Ionicons name="book-outline" size={48} color={COLORS.textMuted} />
+          <Text style={styles.sectionEmptyText}>No saved laws yet</Text>
+          <Text style={styles.sectionEmptyHint}>Save laws from Laws & Schemes tab</Text>
+        </View>
+      ) : (
+        savedLaws.map((law) => (
+          <TouchableOpacity 
+            key={law.lawId} 
+            style={styles.savedLawCard}
+            onPress={() => handleLawPress(law.lawId)}
+            activeOpacity={0.9}
+          >
+            <View style={[styles.lawIconContainer, { backgroundColor: law.tagColor + '20' }]}>
+              <Ionicons name="book" size={24} color={law.tagColor} />
+            </View>
+            <View style={styles.lawInfo}>
+              <Text style={styles.lawTitle} numberOfLines={2}>{law.title}</Text>
+              <View style={[styles.lawCategoryTag, { backgroundColor: law.tagColor }]}>
+                <Text style={styles.lawCategoryText}>{law.tagLabel}</Text>
+              </View>
+            </View>
+            <TouchableOpacity 
+              style={styles.lawSaveBtn} 
+              onPress={() => handleUnsaveLaw(law.lawId)}
+            >
+              <Ionicons name="bookmark" size={22} color={COLORS.amber} />
+            </TouchableOpacity>
+          </TouchableOpacity>
+        ))
+      )}
+
+      <View style={{ height: 100 }} />
+    </ScrollView>
+  );
+
   // Main render based on current screen
   if (currentScreen === 'form') return renderForm();
   if (currentScreen === 'preview') return renderPreview();
