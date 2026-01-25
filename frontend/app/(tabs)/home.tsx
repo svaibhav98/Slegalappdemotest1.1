@@ -880,7 +880,8 @@ const styles = StyleSheet.create({
   // Hero Banner
   heroBannerContainer: {
     padding: 20,
-    paddingTop: 24,
+    paddingTop: 16,
+    paddingBottom: 8,
   },
   heroBanner: { 
     borderRadius: 24, 
@@ -949,13 +950,14 @@ const styles = StyleSheet.create({
     fontWeight: '700', 
     color: COLORS.textPrimary, 
     paddingHorizontal: 20, 
-    marginTop: 8,
-    marginBottom: 16,
+    marginTop: 20,
+    marginBottom: 12,
   },
   
   // Quick Access
   quickAccessScroll: { 
     paddingLeft: 20,
+    marginBottom: 8,
   },
   quickAccessContainer: { 
     paddingRight: 20, 
@@ -1008,6 +1010,7 @@ const styles = StyleSheet.create({
   // Category
   categoryScroll: {
     paddingLeft: 20,
+    marginBottom: 8,
   },
   categoryContainer: { 
     paddingRight: 20, 
