@@ -218,6 +218,19 @@ export default function DocumentsScreen() {
 
   const savedItems = documents.filter(d => d.isSaved);
 
+  // Handle law card press
+  const handleLawPress = (lawId: string) => {
+    router.push({
+      pathname: '/law-detail/[id]',
+      params: { id: lawId }
+    });
+  };
+
+  // Handle unsave law
+  const handleUnsaveLaw = (lawId: string) => {
+    unsaveLaw(lawId);
+  };
+
   const generatePreviewContent = () => {
     if (!selectedTemplate) return '';
     
