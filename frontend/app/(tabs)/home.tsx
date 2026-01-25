@@ -144,16 +144,16 @@ export default function HomeScreen() {
 
   const categoryItems = [
     {
+      id: 'join-lawyer',
       title: 'Join as a\nLawyer',
       subtitle: 'Register to offer Legal...',
-      icon: 'briefcase',
       iconColor: COLORS.purple,
       route: '/join-lawyer',
     },
     {
+      id: 'saved',
       title: 'Saved Items',
       subtitle: 'View and manage.....',
-      icon: 'bookmark',
       iconColor: COLORS.amber,
       route: '/(tabs)/documents?tab=saved' as any,
     },
