@@ -51,7 +51,7 @@ export default function BottomNavBar({ activeTab }: BottomNavBarProps) {
   const renderIcon = (tabName: string, isActive: boolean) => {
     const color = isActive ? COLORS.primary : COLORS.gray400;
     const secondaryColor = isActive ? COLORS.secondary : COLORS.gray400;
-    const iconSize = 24; // Uniform size for all icons
+    const iconSize = 24; // Uniform size for standard icons
     
     switch (tabName) {
       case 'home':
@@ -59,7 +59,8 @@ export default function BottomNavBar({ activeTab }: BottomNavBarProps) {
       case 'laws':
         return <LawBookIcon size={iconSize} color={color} />;
       case 'chat':
-        return <NyayAIIcon size={iconSize} color={color} secondaryColor={secondaryColor} />;
+        // NyayAI uses same icon as Quick Access, scaled for nav bar
+        return <NyayAIIcon size={26} color={color} secondaryColor={secondaryColor} />;
       case 'cases':
         return <FolderIcon size={iconSize} color={color} />;
       case 'documents':
