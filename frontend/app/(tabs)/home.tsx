@@ -1259,4 +1259,109 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: COLORS.primary,
   },
+
+  // Notifications Modal Styles
+  notificationsOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'flex-start',
+    paddingTop: 80,
+  },
+  notificationsBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  notificationsContainer: {
+    backgroundColor: COLORS.white,
+    marginHorizontal: 16,
+    borderRadius: 20,
+    maxHeight: '70%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.15,
+    shadowRadius: 24,
+    elevation: 12,
+  },
+  notificationsHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.surface,
+  },
+  notificationsTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: COLORS.textPrimary,
+  },
+  notificationsCloseBtn: {
+    padding: 4,
+  },
+  notificationsList: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
+  notificationItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+    borderRadius: 12,
+    marginBottom: 4,
+  },
+  notificationItemUnread: {
+    backgroundColor: COLORS.primary + '08',
+  },
+  notificationIconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: COLORS.surface,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  notificationIconUnread: {
+    backgroundColor: COLORS.primary + '15',
+  },
+  notificationContent: {
+    flex: 1,
+  },
+  notificationItemTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: COLORS.textPrimary,
+    marginBottom: 2,
+  },
+  notificationItemTitleUnread: {
+    fontWeight: '700',
+  },
+  notificationMessage: {
+    fontSize: 13,
+    color: COLORS.textSecondary,
+    marginBottom: 2,
+  },
+  notificationTime: {
+    fontSize: 11,
+    color: COLORS.textMuted,
+  },
+  unreadDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: COLORS.primary,
+    marginLeft: 8,
+  },
+  markAllReadBtn: {
+    paddingVertical: 14,
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: COLORS.surface,
+  },
+  markAllReadText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: COLORS.primary,
+  },
 });
