@@ -1175,8 +1175,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingRight: 20,
-    marginTop: 24,
-    marginBottom: 16,
+    marginTop: 12,
+    marginBottom: 12,
   },
   lawyerCard: {
     flexDirection: 'row',
