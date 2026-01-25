@@ -3,6 +3,7 @@ import { Platform } from 'react-native';
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/Colors';
+import { NyayAIIcon } from '../../components/icons/LegalIcons';
 
 export default function TabLayout() {
   return (
@@ -45,7 +46,13 @@ export default function TabLayout() {
       <Tabs.Screen 
         name="chat" 
         options={{ 
-          tabBarIcon: ({ color, size }) => <Ionicons name="sparkles" size={size} color={color} /> 
+          tabBarIcon: ({ color }) => (
+            <NyayAIIcon 
+              size={26} 
+              color={color} 
+              secondaryColor={color === Colors.primary ? '#059669' : color} 
+            />
+          )
         }} 
       />
       <Tabs.Screen 
