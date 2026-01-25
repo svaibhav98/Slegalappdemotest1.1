@@ -119,6 +119,15 @@ export default function LawyersScreen() {
               <Text style={styles.logoSubtitle}>Nyay-AI Powered Legal Assistant</Text>
             </View>
           </View>
+
+          <TouchableOpacity 
+            style={styles.joinLawyerButton} 
+            onPress={() => router.push('/join-lawyer')}
+            activeOpacity={0.8}
+          >
+            <Ionicons name="briefcase-outline" size={18} color={COLORS.primary} />
+            <Text style={styles.joinLawyerText}>Join</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Title */}
