@@ -1,21 +1,29 @@
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { useRouter, usePathname } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
+import { 
+  NyayAIIcon, 
+  HomeIcon, 
+  LawBookIcon, 
+  FolderIcon, 
+  LegalDocumentIcon 
+} from './icons/LegalIcons';
 
 const COLORS = {
   primary: '#FF9933',
+  secondary: '#059669',
   background: '#F8F9FA',
   border: '#E5E7EB',
   gray400: '#9CA3AF',
+  charcoal: '#2B2D42',
 };
 
 const TAB_ITEMS = [
-  { name: 'home', icon: 'home', route: '/(tabs)/home' },
-  { name: 'laws', icon: 'book', route: '/(tabs)/laws' },
-  { name: 'chat', icon: 'sparkles', route: '/(tabs)/chat' },
-  { name: 'cases', icon: 'folder', route: '/(tabs)/cases' },
-  { name: 'documents', icon: 'document-text', route: '/(tabs)/documents' },
+  { name: 'home', route: '/(tabs)/home' },
+  { name: 'laws', route: '/(tabs)/laws' },
+  { name: 'chat', route: '/(tabs)/chat' },
+  { name: 'cases', route: '/(tabs)/cases' },
+  { name: 'documents', route: '/(tabs)/documents' },
 ];
 
 interface BottomNavBarProps {
@@ -40,6 +48,26 @@ export default function BottomNavBar({ activeTab }: BottomNavBarProps) {
     router.push(route as any);
   };
 
+  const renderIcon = (tabName: string, isActive: boolean) => {
+    const color = isActive ? COLORS.primary : COLORS.gray400;
+    const secondaryColor = isActive ? COLORS.secondary : COLORS.gray400;
+    
+    switch (tabName) {
+      case 'home':
+        return <HomeIcon size={24} color={color} />;
+      case 'laws':
+        return <LawBookIcon size={24} color={color} />;
+      case 'chat':
+        return <NyayAIIcon size={26} color={color} secondaryColor={secondaryColor} />;
+      case 'cases':
+        return <FolderIcon size={24} color={color} />;
+      case 'documents':
+        return <LegalDocumentIcon size={24} color={color} />;
+      default:
+        return <HomeIcon size={24} color={color} />;
+    }
+  };
+
   return (
     <View style={styles.container}>
       {TAB_ITEMS.map((tab) => {
@@ -47,15 +75,11 @@ export default function BottomNavBar({ activeTab }: BottomNavBarProps) {
         return (
           <TouchableOpacity
             key={tab.name}
-            style={styles.tabButton}
+            style={[styles.tabButton, tab.name === 'chat' && styles.centerTab]}
             onPress={() => handleTabPress(tab.route)}
             activeOpacity={0.7}
           >
-            <Ionicons
-              name={tab.icon as any}
-              size={24}
-              color={isActive ? COLORS.primary : COLORS.gray400}
-            />
+            {renderIcon(tab.name, isActive)}
           </TouchableOpacity>
         );
       })}
