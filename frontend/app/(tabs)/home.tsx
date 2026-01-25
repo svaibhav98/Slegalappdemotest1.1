@@ -332,7 +332,7 @@ export default function HomeScreen() {
         >
           {quickAccessItems.map((item, index) => (
             <TouchableOpacity 
-              key={index} 
+              key={item.id} 
               style={styles.quickAccessCard} 
               onPress={() => router.push(item.route as any)} 
               activeOpacity={0.85}
@@ -341,11 +341,11 @@ export default function HomeScreen() {
                 styles.quickAccessIconContainer,
                 { backgroundColor: item.bgColor }
               ]}>
-                <Ionicons 
-                  name={item.icon as any} 
-                  size={28} 
-                  color={item.iconColor} 
-                />
+                {item.id === 'nyayai' && <NyayAIIcon size={30} color={item.iconColor} secondaryColor={item.secondaryColor} />}
+                {item.id === 'consultation' && <ConsultationIcon size={28} color={item.iconColor} />}
+                {item.id === 'document' && <LegalDocumentIcon size={28} color={item.iconColor} />}
+                {item.id === 'cases' && <BriefcaseIcon size={28} color={item.iconColor} />}
+                {item.id === 'laws' && <LawBookIcon size={28} color={item.iconColor} />}
               </View>
               <Text style={styles.quickAccessLabel}>
                 {item.label}
@@ -364,14 +364,15 @@ export default function HomeScreen() {
         >
           {categoryItems.map((item, index) => (
             <TouchableOpacity 
-              key={index} 
+              key={item.id} 
               style={styles.categoryCard} 
               onPress={() => router.push(item.route as any)} 
               activeOpacity={0.9}
             >
               <View style={styles.categoryCardHeader}>
                 <View style={[styles.categoryIcon, { backgroundColor: item.iconColor + '15' }]}>
-                  <Ionicons name={item.icon as any} size={28} color={item.iconColor} />
+                  {item.id === 'join-lawyer' && <BriefcaseIcon size={28} color={item.iconColor} />}
+                  {item.id === 'saved' && <BookmarkIcon size={28} color={item.iconColor} />}
                 </View>
               </View>
               <View style={styles.categoryInfo}>
