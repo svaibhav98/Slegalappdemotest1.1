@@ -495,7 +495,7 @@ export default function HomeScreen() {
           colors={[COLORS.primary, COLORS.primaryDark]}
           style={styles.floatingAIGradient}
         >
-          <Ionicons name="sparkles" size={28} color={COLORS.white} />
+          <NyayAIIcon size={32} color="#FFFFFF" secondaryColor="#FFFFFF" />
         </LinearGradient>
       </TouchableOpacity>
     </View>
