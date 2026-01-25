@@ -966,18 +966,16 @@ const styles = StyleSheet.create({
   
   // Section Title
   sectionTitle: { 
-    fontSize: 20, 
+    fontSize: 18, 
     fontWeight: '700', 
     color: COLORS.textPrimary, 
     paddingHorizontal: 20, 
-    marginTop: 20,
-    marginBottom: 12,
+    marginBottom: 10,
   },
   
   // Quick Access
   quickAccessScroll: { 
     paddingLeft: 20,
-    marginBottom: 8,
   },
   quickAccessContainer: { 
     paddingRight: 20, 
