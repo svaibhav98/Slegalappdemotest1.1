@@ -1179,19 +1179,10 @@ const styles = StyleSheet.create({
   },
 
   // Top Lawyers Section
-  topLawyersHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingRight: 20,
-    marginTop: 12,
-    marginBottom: 12,
-  },
   lawyerCard: {
     flexDirection: 'row',
     marginHorizontal: 20,
-    marginBottom: 14,
+    marginBottom: 10,
     backgroundColor: COLORS.cardBg,
     borderRadius: 16,
     padding: 14,
