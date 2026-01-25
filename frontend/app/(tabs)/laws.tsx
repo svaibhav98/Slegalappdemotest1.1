@@ -189,12 +189,14 @@ export default function LawsScreen() {
                 style={styles.card}
                 onPress={() => handleCardPress(item)}
                 activeOpacity={0.9}
+                data-testid={`law-card-${item.id}`}
               >
                 {/* Save Button - Top Right */}
                 <TouchableOpacity 
                   style={styles.saveButton}
                   onPress={(e) => handleSaveToggle(item, e)}
                   activeOpacity={0.7}
+                  data-testid={`save-law-btn-${item.id}`}
                 >
                   <Ionicons 
                     name={isLawSaved(item.id) ? 'bookmark' : 'bookmark-outline'} 
