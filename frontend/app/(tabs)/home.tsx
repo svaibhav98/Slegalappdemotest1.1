@@ -16,6 +16,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { LAWYERS_DATA } from '../../services/lawyersData';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { 
   NyayAIIcon, 
   LegalDocumentIcon, 
