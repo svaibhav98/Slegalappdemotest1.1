@@ -1028,7 +1028,6 @@ const styles = StyleSheet.create({
   // Category
   categoryScroll: {
     paddingLeft: 20,
-    marginBottom: 8,
   },
   categoryContainer: { 
     paddingRight: 20, 
