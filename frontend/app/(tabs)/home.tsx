@@ -1093,13 +1093,6 @@ const styles = StyleSheet.create({
   },
   
   // Recent Activity
-  recentActivityHeader: { 
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
-    alignItems: 'center', 
-    paddingRight: 20,
-    marginTop: 12,
-  },
   seeAllText: { 
     fontSize: 14, 
     color: COLORS.primary, 
@@ -1107,7 +1100,7 @@ const styles = StyleSheet.create({
   },
   notificationBadge: {
     paddingHorizontal: 20,
-    marginBottom: 12,
+    marginBottom: 8,
   },
   notificationText: { 
     fontSize: 13, 
