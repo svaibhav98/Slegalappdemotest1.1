@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -15,6 +15,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { NyayAIIcon, LegalDocumentIcon, LawBookIcon, ShieldVerifyIcon } from '../../components/icons/LegalIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Design System Colors matching the Figma design
 const COLORS = {
@@ -36,6 +37,19 @@ const COLORS = {
 export default function NyayAILandingScreen() {
   const router = useRouter();
   const [inputText, setInputText] = useState('');
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
+
+  // Show disclaimer only on first landing
+  useEffect(() => {
+    const checkDisclaimerShown = async () => {
+      const disclaimerShown = await AsyncStorage.getItem('nyayai_disclaimer_shown_session');
+      if (disclaimerShown !== 'true') {
+        setShowDisclaimer(true);
+        await AsyncStorage.setItem('nyayai_disclaimer_shown_session', 'true');
+      }
+    };
+    checkDisclaimerShown();
+  }, []);
 
   const suggestedPrompts = [
     {
@@ -75,11 +89,20 @@ export default function NyayAILandingScreen() {
   const handleSendMessage = () => {
     if (!inputText.trim()) return;
     
+    // Hide disclaimer permanently when user sends first message
+    setShowDisclaimer(false);
+    
     // Navigate to chat screen with the typed message
     router.push({
       pathname: '/nyayai-chat',
       params: { initialMessage: inputText.trim() }
     });
+  };
+
+  const handlePromptPressWithDisclaimer = (prompt: typeof suggestedPrompts[0]) => {
+    // Hide disclaimer when user taps a prompt
+    setShowDisclaimer(false);
+    handlePromptPress(prompt);
   };
 
   const handleBack = () => {
@@ -130,54 +153,54 @@ export default function NyayAILandingScreen() {
             contentContainerStyle={styles.scrollContent}
             showsVerticalScrollIndicator={false}
           >
-            {/* Professional AI Legal Assistant Icon */}
+            {/* Compact AI Legal Assistant Icon */}
             <View style={styles.mascotContainer}>
               <View style={styles.professionalIconWrapper}>
                 {/* Outer Glow Circle */}
                 <View style={styles.outerGlow}>
                   {/* Middle Circle */}
                   <View style={styles.middleCircle}>
-                    {/* NyayAI Shield Icon */}
-                    <NyayAIIcon size={72} color="#FF9933" secondaryColor="#059669" />
+                    {/* NyayAI Icon - Reduced size */}
+                    <NyayAIIcon size={44} color="#FF9933" secondaryColor="#059669" />
                   </View>
                 </View>
-                {/* Decorative Elements */}
-                <View style={[styles.decorativeCircle, { top: 10, left: 10 }]}>
-                  <LawBookIcon size={18} color="#059669" />
+                {/* Decorative Elements - smaller */}
+                <View style={[styles.decorativeCircle, { top: 4, left: 8 }]}>
+                  <LawBookIcon size={14} color="#059669" />
                 </View>
-                <View style={[styles.decorativeCircle, { top: 15, right: 15 }]}>
-                  <ShieldVerifyIcon size={18} color="#FF9933" />
+                <View style={[styles.decorativeCircle, { top: 8, right: 10 }]}>
+                  <ShieldVerifyIcon size={14} color="#FF9933" />
                 </View>
-                <View style={[styles.decorativeCircle, { bottom: 20, left: 20 }]}>
-                  <LegalDocumentIcon size={18} color="#059669" />
+                <View style={[styles.decorativeCircle, { bottom: 12, left: 12 }]}>
+                  <LegalDocumentIcon size={14} color="#059669" />
                 </View>
-                <View style={[styles.decorativeCircle, { bottom: 15, right: 10 }]}>
-                  <NyayAIIcon size={18} color="#FF9933" secondaryColor="#059669" />
+                <View style={[styles.decorativeCircle, { bottom: 8, right: 6 }]}>
+                  <NyayAIIcon size={14} color="#FF9933" secondaryColor="#059669" />
                 </View>
               </View>
             </View>
 
-            {/* Greeting Text */}
+            {/* Greeting Text - Compact */}
             <View style={styles.greetingContainer}>
               <Text style={styles.greetingTitle}>Hello, I'm NyayAI</Text>
-              <Text style={styles.greetingSubtitle}>Your Legal Assistant..</Text>
+              <Text style={styles.greetingSubtitle}>Your Legal Assistant</Text>
               <Text style={styles.greetingDescription}>
                 Ask me anything about laws, rights, or government schemes
               </Text>
             </View>
 
-            {/* Suggested Prompts */}
+            {/* Suggested Prompts - Compact cards */}
             <View style={styles.promptsContainer}>
               {suggestedPrompts.map((prompt) => (
                 <TouchableOpacity
                   key={prompt.id}
                   style={styles.promptButton}
-                  onPress={() => handlePromptPress(prompt)}
+                  onPress={() => handlePromptPressWithDisclaimer(prompt)}
                   activeOpacity={0.8}
                 >
                   <View style={[styles.promptDot, { backgroundColor: prompt.color }]} />
-                  <Text style={styles.promptText}>{prompt.text}</Text>
-                  <Ionicons name="arrow-forward" size={18} color={COLORS.textMuted} />
+                  <Text style={styles.promptText} numberOfLines={2} ellipsizeMode="tail">{prompt.text}</Text>
+                  <Ionicons name="arrow-forward" size={16} color={COLORS.textMuted} />
                 </TouchableOpacity>
               ))}
             </View>
@@ -185,10 +208,12 @@ export default function NyayAILandingScreen() {
 
           {/* Bottom Section */}
           <View style={styles.bottomSection}>
-            {/* Disclaimer */}
-            <Text style={styles.disclaimer}>
-              <Text style={styles.disclaimerBold}>Disclaimer:</Text> NyayAI provides general legal information. For specific legal advice, please consult a qualified lawyer.
-            </Text>
+            {/* Disclaimer - Only shown on first landing */}
+            {showDisclaimer && (
+              <Text style={styles.disclaimer}>
+                <Text style={styles.disclaimerBold}>Disclaimer:</Text> NyayAI provides general legal information. For specific legal advice, please consult a qualified lawyer.
+              </Text>
+            )}
 
             {/* Input Area */}
             <View style={styles.inputContainer}>
@@ -324,39 +349,39 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  // Mascot
+  // Mascot - Compact
   mascotContainer: {
     alignItems: 'center',
-    marginTop: 20,
-    marginBottom: 24,
+    marginTop: 8,
+    marginBottom: 12,
   },
   professionalIconWrapper: {
-    width: 200,
-    height: 200,
+    width: 120,
+    height: 120,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
   },
   outerGlow: {
-    width: 160,
-    height: 160,
-    borderRadius: 80,
+    width: 96,
+    height: 96,
+    borderRadius: 48,
     backgroundColor: '#FFF5F0',
     justifyContent: 'center',
     alignItems: 'center',
   },
   middleCircle: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+    width: 72,
+    height: 72,
+    borderRadius: 36,
     backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 8,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 4,
     borderWidth: 2,
     borderColor: '#FF9933',
   },
@@ -366,86 +391,91 @@ const styles = StyleSheet.create({
   },
   decorativeCircle: {
     position: 'absolute',
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
     backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.06,
+    shadowRadius: 3,
+    elevation: 2,
   },
 
-  // Greeting
+  // Greeting - Compact
   greetingContainer: {
     alignItems: 'center',
-    marginBottom: 32,
+    marginBottom: 16,
   },
   greetingTitle: {
-    fontSize: 28,
+    fontSize: 22,
     fontWeight: '800',
     color: COLORS.textPrimary,
-    marginBottom: 4,
+    marginBottom: 2,
+    lineHeight: 26,
   },
   greetingSubtitle: {
-    fontSize: 28,
-    fontWeight: '800',
+    fontSize: 20,
+    fontWeight: '700',
     color: COLORS.textPrimary,
-    marginBottom: 12,
+    marginBottom: 6,
+    lineHeight: 24,
   },
   greetingDescription: {
-    fontSize: 15,
+    fontSize: 13,
     color: '#4B5563',
     textAlign: 'center',
-    lineHeight: 22,
-    paddingHorizontal: 20,
+    lineHeight: 18,
+    paddingHorizontal: 16,
   },
 
-  // Prompts
+  // Prompts - Compact cards
   promptsContainer: {
     width: '100%',
-    gap: 12,
-    marginBottom: 20,
+    gap: 8,
+    marginBottom: 12,
   },
   promptButton: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: COLORS.white,
-    borderRadius: 16,
-    padding: 16,
+    borderRadius: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 4,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.06,
+    shadowRadius: 4,
+    elevation: 2,
   },
   promptDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    marginRight: 14,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginRight: 10,
   },
   promptText: {
     flex: 1,
-    fontSize: 15,
+    fontSize: 13,
     fontWeight: '600',
     color: COLORS.textPrimary,
+    lineHeight: 18,
   },
 
   // Bottom Section
   bottomSection: {
-    paddingHorizontal: 20,
-    paddingBottom: 30,
+    paddingHorizontal: 16,
+    paddingBottom: 24,
   },
   disclaimer: {
-    fontSize: 12,
-    color: '#4B5563',
+    fontSize: 11,
+    color: '#6B7280',
     textAlign: 'center',
-    lineHeight: 18,
-    marginBottom: 16,
+    lineHeight: 16,
+    marginBottom: 10,
+    paddingHorizontal: 8,
   },
   disclaimerBold: {
     fontWeight: '700',
