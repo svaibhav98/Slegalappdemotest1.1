@@ -89,3 +89,7 @@ android-sdk/
 -e 
 # Environment files (local overrides only)
 # Note: .env files needed for deployment are tracked
+-e 
+# Environment files
+*.env
+*.env.*
