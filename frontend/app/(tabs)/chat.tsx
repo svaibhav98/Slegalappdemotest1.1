@@ -12,8 +12,9 @@ import {
   ScrollView,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { NyayAIIcon, LegalDocumentIcon, LawBookIcon, ShieldVerifyIcon } from '../../components/icons/LegalIcons';
 
 // Design System Colors matching the Figma design
 const COLORS = {
