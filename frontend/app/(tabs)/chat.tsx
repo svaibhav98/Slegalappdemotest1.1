@@ -266,19 +266,19 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   
-  // Header
+  // Header - Compact to match other screens
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingTop: 50,
-    paddingHorizontal: 20,
-    paddingBottom: 16,
+    paddingTop: 12,
+    paddingHorizontal: 16,
+    paddingBottom: 10,
   },
   backButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     backgroundColor: 'rgba(255,255,255,0.5)',
     justifyContent: 'center',
     alignItems: 'center',
@@ -316,15 +316,15 @@ const styles = StyleSheet.create({
   headerLogoRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    marginBottom: 2,
+    gap: 6,
+    marginBottom: 0,
   },
   headerLogo: {
-    width: 24,
-    height: 24,
+    width: 20,
+    height: 20,
   },
   headerTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '700',
     color: COLORS.textPrimary,
   },

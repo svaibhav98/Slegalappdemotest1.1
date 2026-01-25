@@ -51,20 +51,21 @@ export default function BottomNavBar({ activeTab }: BottomNavBarProps) {
   const renderIcon = (tabName: string, isActive: boolean) => {
     const color = isActive ? COLORS.primary : COLORS.gray400;
     const secondaryColor = isActive ? COLORS.secondary : COLORS.gray400;
+    const iconSize = 24; // Uniform size for all icons
     
     switch (tabName) {
       case 'home':
-        return <HomeIcon size={24} color={color} />;
+        return <HomeIcon size={iconSize} color={color} />;
       case 'laws':
-        return <LawBookIcon size={24} color={color} />;
+        return <LawBookIcon size={iconSize} color={color} />;
       case 'chat':
-        return <NyayAIIcon size={26} color={color} secondaryColor={secondaryColor} />;
+        return <NyayAIIcon size={iconSize} color={color} secondaryColor={secondaryColor} />;
       case 'cases':
-        return <FolderIcon size={24} color={color} />;
+        return <FolderIcon size={iconSize} color={color} />;
       case 'documents':
-        return <LegalDocumentIcon size={24} color={color} />;
+        return <LegalDocumentIcon size={iconSize} color={color} />;
       default:
-        return <HomeIcon size={24} color={color} />;
+        return <HomeIcon size={iconSize} color={color} />;
     }
   };
 
@@ -93,17 +94,19 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
     borderTopWidth: 1,
     borderTopColor: COLORS.border,
-    height: Platform.OS === 'ios' ? 50 : 56,
+    height: Platform.OS === 'ios' ? 52 : 56,
     paddingBottom: 0,
     paddingTop: 0,
+    alignItems: 'center',
   },
   tabButton: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: Platform.OS === 'ios' ? 6 : 8,
+    height: '100%',
+    paddingVertical: 0,
   },
   centerTab: {
-    // Slightly emphasize the center NyayAI tab
+    // All tabs now uniform - no special styling needed
   },
 });
