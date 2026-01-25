@@ -409,7 +409,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 44,
+    marginRight: 0,
   },
   logo: {
     width: 40,
@@ -427,6 +427,22 @@ const styles = StyleSheet.create({
   logoSubtitle: {
     fontSize: 9,
     color: COLORS.textSecondary,
+  },
+  joinLawyerButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 20,
+    backgroundColor: COLORS.white,
+    borderWidth: 1,
+    borderColor: COLORS.primary + '40',
+  },
+  joinLawyerText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: COLORS.primary,
   },
 
   // Title
