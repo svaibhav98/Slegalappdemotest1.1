@@ -1110,7 +1110,7 @@ const styles = StyleSheet.create({
   activityCard: { 
     flexDirection: 'row', 
     marginHorizontal: 20, 
-    marginBottom: 12,
+    marginBottom: 10,
     backgroundColor: COLORS.cardBg, 
     borderRadius: 16, 
     padding: 14, 
