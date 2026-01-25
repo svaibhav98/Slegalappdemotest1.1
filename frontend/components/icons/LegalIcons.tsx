@@ -67,11 +67,6 @@ export const NyayAIIcon = ({ size = 24, color = COLORS.primary, secondaryColor =
     />
   </Svg>
 );
-      strokeWidth="2"
-      strokeLinecap="round"
-    />
-  </Svg>
-);
 
 // Scales of Justice Icon - Professional legal icon
 export const ScalesIcon = ({ size = 28, color = COLORS.charcoal }: IconProps) => (
