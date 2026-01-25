@@ -329,13 +329,13 @@ const styles = StyleSheet.create({
     color: COLORS.textPrimary,
   },
   headerSubtitle: {
-    fontSize: 11,
+    fontSize: 10,
     color: COLORS.textMuted,
   },
   infoButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -345,8 +345,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     alignItems: 'center',
+    paddingTop: 4,
   },
 
   // Mascot - Compact
