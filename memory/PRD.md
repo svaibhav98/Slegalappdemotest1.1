@@ -96,9 +96,11 @@ SunoLegal is an Indian legal-tech mobile application (React Native/Expo) designe
 - Settings icon on Documents screen
 - Deployment readiness fixes
 
-## Mocked Integrations
-- **Firebase**: Authentication and Firestore (in-memory mock)
+## Architecture Notes
+- **Database**: Firestore-only (MongoDB NOT required)
+- **Firebase**: Authentication and Firestore (in-memory mock for development)
 - **Razorpay**: Payment processing (mock)
+- **Runtime**: Backend runs independently without MongoDB dependency
 
 ## Key Files Modified This Session
 - `/app/frontend/app/(tabs)/chat.tsx` - NyayAI landing with compact UI
