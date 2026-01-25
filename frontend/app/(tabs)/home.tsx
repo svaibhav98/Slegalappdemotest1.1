@@ -270,6 +270,30 @@ export default function HomeScreen() {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={COLORS.headerBg} />
       
+      {/* Guest Disclaimer Popup */}
+      <Modal
+        visible={showDisclaimer}
+        animationType="fade"
+        transparent={true}
+        onRequestClose={handleCloseDisclaimer}
+      >
+        <View style={styles.disclaimerOverlay}>
+          <View style={styles.disclaimerCard}>
+            <TouchableOpacity 
+              style={styles.disclaimerCloseBtn} 
+              onPress={handleCloseDisclaimer}
+              activeOpacity={0.8}
+            >
+              <Ionicons name="close" size={16} color={COLORS.white} />
+            </TouchableOpacity>
+            <Text style={styles.disclaimerTitle}>Disclaimer</Text>
+            <Text style={styles.disclaimerBody}>
+              SunoLegal / NyayAI is an informational platform and not a law firm. We do not provide legal advice. Any guidance is general and for awareness only. For legal advice, consult a qualified advocate.
+            </Text>
+          </View>
+        </View>
+      </Modal>
+
       {/* Drawer */}
       {renderDrawer()}
       
