@@ -16,6 +16,14 @@ import { useAuth } from '../../contexts/AuthContext';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { LAWYERS_DATA } from '../../services/lawyersData';
+import { 
+  NyayAIIcon, 
+  LegalDocumentIcon, 
+  BriefcaseIcon, 
+  LawBookIcon, 
+  ConsultationIcon,
+  BookmarkIcon 
+} from '../../components/icons/LegalIcons';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 60) / 2;
