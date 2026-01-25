@@ -152,6 +152,7 @@ export default function DocumentsScreen() {
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [documents, setDocuments] = useState<SavedDocument[]>(INITIAL_DOCUMENTS);
   const [generatedDocId, setGeneratedDocId] = useState<string | null>(null);
+  const { savedLaws, unsaveLaw } = useSavedLaws();
 
   // Handle tab parameter from navigation
   useEffect(() => {
