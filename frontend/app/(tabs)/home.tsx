@@ -516,7 +516,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
   },
   drawerHeader: {
-    paddingTop: 60,
+    paddingTop: 20,
     paddingBottom: 24,
     paddingHorizontal: 20,
     flexDirection: 'row',

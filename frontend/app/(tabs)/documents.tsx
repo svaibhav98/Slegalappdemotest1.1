@@ -576,7 +576,7 @@ const styles = StyleSheet.create({
   
   // Form Screen
   formContainer: { flex: 1, backgroundColor: COLORS.background },
-  formHeader: { flexDirection: 'row', alignItems: 'center', paddingTop: 50, paddingBottom: 20, paddingHorizontal: 20, backgroundColor: COLORS.white, borderBottomWidth: 1, borderBottomColor: COLORS.border },
+  formHeader: { flexDirection: 'row', alignItems: 'center', paddingTop: 12, paddingBottom: 20, paddingHorizontal: 20, backgroundColor: COLORS.white, borderBottomWidth: 1, borderBottomColor: COLORS.border },
   formBackButton: { width: 44, height: 44, borderRadius: 22, backgroundColor: COLORS.background, justifyContent: 'center', alignItems: 'center', marginRight: 14 },
   formHeaderInfo: { flex: 1 },
   formHeaderTitle: { fontSize: 20, fontWeight: '700', color: COLORS.textPrimary },
@@ -592,7 +592,7 @@ const styles = StyleSheet.create({
   
   // Preview Screen
   previewContainer: { flex: 1, backgroundColor: COLORS.background },
-  previewHeader: { flexDirection: 'row', alignItems: 'center', paddingTop: 50, paddingBottom: 20, paddingHorizontal: 20, backgroundColor: COLORS.white, borderBottomWidth: 1, borderBottomColor: COLORS.border },
+  previewHeader: { flexDirection: 'row', alignItems: 'center', paddingTop: 12, paddingBottom: 20, paddingHorizontal: 20, backgroundColor: COLORS.white, borderBottomWidth: 1, borderBottomColor: COLORS.border },
   previewContent: { flex: 1, padding: 20 },
   previewCard: { backgroundColor: COLORS.white, borderRadius: 16, padding: 20, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 8, elevation: 3 },
   previewDocHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 16, paddingBottom: 16, borderBottomWidth: 1, borderBottomColor: COLORS.border },
