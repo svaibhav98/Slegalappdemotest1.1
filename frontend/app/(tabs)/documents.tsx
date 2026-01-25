@@ -627,8 +627,7 @@ const styles = StyleSheet.create({
   headerText: { flex: 1 },
   headerTitle: { fontSize: 22, fontWeight: '700', color: COLORS.textPrimary },
   headerSubtitle: { fontSize: 14, color: COLORS.textSecondary, marginTop: 2 },
-  addButton: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, paddingVertical: 10, borderRadius: 20, backgroundColor: COLORS.white, borderWidth: 1, borderColor: COLORS.border },
-  addButtonText: { fontSize: 13, fontWeight: '600', color: COLORS.textPrimary },
+  settingsButton: { width: 44, height: 44, borderRadius: 22, backgroundColor: COLORS.white, justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: COLORS.border },
   
   // Tab Bar
   tabBar: { flexDirection: 'row', backgroundColor: COLORS.white, paddingHorizontal: 20, paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: COLORS.border },
