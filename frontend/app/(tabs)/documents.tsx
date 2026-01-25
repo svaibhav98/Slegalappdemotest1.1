@@ -663,6 +663,21 @@ const styles = StyleSheet.create({
   emptyTitle: { fontSize: 18, fontWeight: '700', color: COLORS.textPrimary, marginTop: 16 },
   emptySubtitle: { fontSize: 14, color: COLORS.textSecondary, marginTop: 8 },
   
+  // Saved Items Sections
+  savedSectionTitle: { fontSize: 18, fontWeight: '700', color: COLORS.textPrimary, marginBottom: 16 },
+  sectionEmptyState: { alignItems: 'center', paddingVertical: 32, backgroundColor: COLORS.white, borderRadius: 16, marginBottom: 12 },
+  sectionEmptyText: { fontSize: 15, fontWeight: '600', color: COLORS.textMuted, marginTop: 12 },
+  sectionEmptyHint: { fontSize: 13, color: COLORS.textMuted, marginTop: 4 },
+  
+  // Saved Law Card
+  savedLawCard: { flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.white, borderRadius: 16, padding: 16, marginBottom: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 8, elevation: 3 },
+  lawIconContainer: { width: 52, height: 52, borderRadius: 14, justifyContent: 'center', alignItems: 'center', marginRight: 14 },
+  lawInfo: { flex: 1 },
+  lawTitle: { fontSize: 15, fontWeight: '600', color: COLORS.textPrimary, marginBottom: 6, lineHeight: 20 },
+  lawCategoryTag: { alignSelf: 'flex-start', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },
+  lawCategoryText: { fontSize: 11, fontWeight: '600', color: COLORS.white },
+  lawSaveBtn: { padding: 8 },
+
   // Form Screen
   formContainer: { flex: 1, backgroundColor: COLORS.background },
   formHeader: { flexDirection: 'row', alignItems: 'center', paddingTop: 12, paddingBottom: 20, paddingHorizontal: 20, backgroundColor: COLORS.white, borderBottomWidth: 1, borderBottomColor: COLORS.border },
