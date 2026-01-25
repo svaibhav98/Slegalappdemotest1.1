@@ -38,6 +38,7 @@ export default function LawsScreen() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const { isLawSaved, toggleSaveLaw } = useSavedLaws();
 
   const filteredLaws = useMemo(() => {
     return getLawsSchemes(selectedCategory, searchQuery);
@@ -50,8 +51,23 @@ export default function LawsScreen() {
     });
   };
 
+  const handleSaveToggle = (item: LawScheme, e: any) => {
+    e.stopPropagation();
+    toggleSaveLaw({
+      lawId: item.id,
+      title: item.title,
+      category: item.category,
+      tagLabel: item.tagLabel,
+      tagColor: item.tagColor,
+    });
+  };
+
   const handleBack = () => {
     router.back();
+  };
+
+  const handleSavedItems = () => {
+    router.push('/(tabs)/documents?tab=saved');
   };
 
   const clearSearch = () => {
