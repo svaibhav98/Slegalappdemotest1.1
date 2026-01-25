@@ -14,6 +14,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { getLawsSchemes, CATEGORIES, LawScheme } from '../../services/lawsData';
+import { useSavedLaws } from '../../contexts/SavedLawsContext';
 
 const { width } = Dimensions.get('window');
 
