@@ -137,9 +137,29 @@ export default function NyayAILandingScreen() {
               <Text style={styles.headerSubtitle}>Legal Assistant</Text>
             </View>
             
-            <TouchableOpacity style={styles.infoButton} activeOpacity={0.8}>
-              <Ionicons name="information-circle-outline" size={24} color={COLORS.headerBg} />
-            </TouchableOpacity>
+            <View style={styles.headerActions}>
+              {/* Eye Icon - Focus Mode Toggle */}
+              <TouchableOpacity 
+                style={styles.headerIconButton} 
+                onPress={() => setFocusMode(!focusMode)}
+                activeOpacity={0.8}
+              >
+                <Ionicons 
+                  name={focusMode ? "eye-off" : "eye"} 
+                  size={22} 
+                  color={focusMode ? COLORS.orange : COLORS.headerBg} 
+                />
+              </TouchableOpacity>
+              
+              {/* Three-dot Menu */}
+              <TouchableOpacity 
+                style={styles.headerIconButton} 
+                onPress={() => setShowMenu(true)}
+                activeOpacity={0.8}
+              >
+                <Ionicons name="ellipsis-vertical" size={22} color={COLORS.headerBg} />
+              </TouchableOpacity>
+            </View>
           </View>
 
           <ScrollView 
