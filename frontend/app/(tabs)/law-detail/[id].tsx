@@ -243,7 +243,7 @@ export default function LawDetailScreen() {
             </TouchableOpacity>
           </View>
 
-          <View style={{ height: 100 }} />
+          <View style={{ height: 30 }} />
         </ScrollView>
       </View>
     </>
