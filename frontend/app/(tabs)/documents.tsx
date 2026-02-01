@@ -40,8 +40,6 @@ interface DocumentTemplate {
   title: string;
   subtitle: string;
   icon: string;
-  color: string;
-  bgColor: string;
   fields: { key: string; label: string; placeholder: string; multiline?: boolean }[];
 }
 
