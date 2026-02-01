@@ -135,6 +135,37 @@ export default function NyayAIChatScreen() {
     const now = new Date();
     return `Last Update: ${now.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit' })}`;
   };
+  
+  const handleExportChat = async () => {
+    setShowMenu(false);
+    const chatText = messages.map(m => 
+      `${m.role === 'user' ? 'You' : 'NyayAI'}: ${m.content}`
+    ).join('\n\n');
+    
+    try {
+      await Share.share({
+        message: `NyayAI Chat Export\n\n${chatText}`,
+        title: 'NyayAI Chat',
+      });
+    } catch (error) {
+      console.log('Error sharing:', error);
+    }
+  };
+  
+  const handleClearChat = () => {
+    setShowMenu(false);
+    setMessages([]);
+    setChatTitle('NyayAI Chat');
+  };
+  
+  const generateSummary = () => {
+    if (messages.length === 0) return 'No messages to summarize.';
+    
+    const userQuestions = messages.filter(m => m.role === 'user').length;
+    const aiResponses = messages.filter(m => m.role === 'assistant').length;
+    
+    return `**Chat Summary**\n\nTotal Messages: ${messages.length}\n• Your Questions: ${userQuestions}\n• AI Responses: ${aiResponses}\n\n**Topic:** ${chatTitle}\n\n**Key Discussion Points:**\nThis conversation covered legal guidance related to ${chatTitle.toLowerCase()}. The AI provided general information and recommended consulting a qualified lawyer for specific advice.`;
+  };
 
   return (
     <>
