@@ -699,6 +699,47 @@ const styles = StyleSheet.create({
   templateTitle: { fontSize: 16, fontWeight: '600', color: COLORS.textPrimary, marginBottom: 2 },
   templateSubtitle: { fontSize: 13, color: COLORS.textSecondary },
   
+  // Create New Document CTA
+  createNewCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFF7ED',
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 24,
+    borderWidth: 2,
+    borderColor: '#FF9933',
+    borderStyle: 'dashed',
+  },
+  createNewIconWrapper: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+  },
+  createNewTextContainer: {
+    flex: 1,
+  },
+  createNewTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#FF9933',
+    marginBottom: 4,
+  },
+  createNewSubtitle: {
+    fontSize: 14,
+    color: COLORS.textSecondary,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: COLORS.textPrimary,
+    marginBottom: 16,
+  },
+  
   // Document Card
   documentCard: { flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.white, borderRadius: 16, padding: 16, marginBottom: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 8, elevation: 3 },
   docIconContainer: { width: 56, height: 56, borderRadius: 14, backgroundColor: COLORS.primary + '15', justifyContent: 'center', alignItems: 'center', marginRight: 14 },
