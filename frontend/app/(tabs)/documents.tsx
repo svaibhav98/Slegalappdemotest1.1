@@ -681,15 +681,14 @@ const styles = StyleSheet.create({
   // Content
   content: { flex: 1, padding: 20 },
   
-  // Scroll Content Container - with bottom padding for floating banner
+  // Scroll Content Container - with bottom padding for bottom nav
   scrollContentContainer: {
-    paddingBottom: 90, // Banner height (50) + spacing (20) + extra safe space (20)
+    paddingBottom: 76, // Bottom nav height (56) + spacing (20)
   },
   
   // Template Grid - Modern 2-Column Grid Design
   templateListContainer: {
     flex: 1,
-    position: 'relative',
   },
   templateGrid: { 
     flexDirection: 'row',
