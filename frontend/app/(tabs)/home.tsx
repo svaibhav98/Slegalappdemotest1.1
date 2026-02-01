@@ -648,7 +648,7 @@ export default function HomeScreen() {
           ))}
         </View>
 
-        <View style={{ height: 24 }} />
+        <View style={{ height: 20 }} />
       </ScrollView>
 
       {/* Floating AI Button */}
