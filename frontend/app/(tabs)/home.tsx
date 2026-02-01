@@ -223,7 +223,7 @@ const quickAccessItems = [
               style={styles.notificationsCloseBtn} 
               onPress={() => setShowNotifications(false)}
             >
-              <Ionicons name="close" size={20} color={COLORS.textPrimary} />
+              <Ionicons name="close" size={20} color={Colors.textPrimary} />
             </TouchableOpacity>
           </View>
           <ScrollView style={styles.notificationsList} showsVerticalScrollIndicator={false}>
@@ -243,7 +243,7 @@ const quickAccessItems = [
                   <Ionicons 
                     name={notification.icon as any} 
                     size={18} 
-                    color={notification.unread ? COLORS.primary : COLORS.textMuted} 
+                    color={notification.unread ? Colors.primary : Colors.textMuted} 
                   />
                 </View>
                 <View style={styles.notificationContent}>
@@ -309,10 +309,10 @@ const quickAccessItems = [
                 activeOpacity={0.7}
               >
                 <View style={styles.drawerMenuIcon}>
-                  <Ionicons name={item.icon as any} size={22} color={COLORS.textPrimary} />
+                  <Ionicons name={item.icon as any} size={22} color={Colors.textPrimary} />
                 </View>
                 <Text style={styles.drawerMenuLabel}>{item.label}</Text>
-                <Ionicons name="chevron-forward" size={18} color={COLORS.textMuted} />
+                <Ionicons name="chevron-forward" size={18} color={Colors.textMuted} />
               </TouchableOpacity>
             ))}
 
@@ -414,8 +414,8 @@ const quickAccessItems = [
           <RefreshControl 
             refreshing={refreshing} 
             onRefresh={onRefresh} 
-            colors={[COLORS.primary]} 
-            tintColor={COLORS.primary} 
+            colors={[Colors.primary]} 
+            tintColor={Colors.primary} 
           />
         }
       >
@@ -602,11 +602,11 @@ const quickAccessItems = [
                     <Text style={styles.lawyerMetaText}>{lawyer.rating} ({lawyer.reviewCount})</Text>
                   </View>
                   <View style={styles.lawyerMetaItem}>
-                    <Ionicons name="briefcase" size={14} color={COLORS.textMuted} />
+                    <Ionicons name="briefcase" size={14} color={Colors.textMuted} />
                     <Text style={styles.lawyerMetaText}>{lawyer.experience} yrs</Text>
                   </View>
                   <View style={styles.lawyerMetaItem}>
-                    <Ionicons name="language" size={14} color={COLORS.textMuted} />
+                    <Ionicons name="language" size={14} color={Colors.textMuted} />
                     <Text style={styles.lawyerMetaText}>{lawyer.languages.join(', ')}</Text>
                   </View>
                 </View>
@@ -626,7 +626,7 @@ const quickAccessItems = [
         activeOpacity={0.9}
       >
         <LinearGradient
-          colors={[COLORS.primary, COLORS.primaryDark]}
+          colors={[Colors.primary, Colors.primaryDark]}
           style={styles.floatingAIGradient}
         >
           <NyayAIIcon size={32} color="#FFFFFF" secondaryColor="#FFFFFF" />
@@ -678,12 +678,12 @@ const styles = StyleSheet.create({
   disclaimerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: COLORS.textPrimary,
+    color: Colors.textPrimary,
     marginBottom: 12,
   },
   disclaimerBody: {
     fontSize: 14,
-    color: COLORS.textSecondary,
+    color: Colors.textSecondary,
     lineHeight: 22,
   },
   
@@ -762,7 +762,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     fontWeight: '500',
-    color: COLORS.textPrimary,
+    color: Colors.textPrimary,
   },
   drawerLogout: {
     marginTop: 20,
@@ -778,7 +778,7 @@ const styles = StyleSheet.create({
   },
   drawerFooterText: {
     fontSize: 12,
-    color: COLORS.textMuted,
+    color: Colors.textMuted,
   },
   
   // Header Styles
@@ -1010,13 +1010,13 @@ const styles = StyleSheet.create({
   categoryTitle: { 
     fontSize: 16, 
     fontWeight: '700', 
-    color: COLORS.textPrimary, 
+    color: Colors.textPrimary, 
     marginBottom: 4, 
     lineHeight: 22,
   },
   categorySubtitle: { 
     fontSize: 13, 
-    color: COLORS.textSecondary,
+    color: Colors.textSecondary,
     lineHeight: 18,
   },
   categoryAction: { 
@@ -1033,7 +1033,7 @@ const styles = StyleSheet.create({
   // Recent Activity
   seeAllText: { 
     fontSize: 14, 
-    color: COLORS.primary, 
+    color: Colors.primary, 
     fontWeight: '600',
   },
   notificationBadge: {
@@ -1042,7 +1042,7 @@ const styles = StyleSheet.create({
   },
   notificationText: { 
     fontSize: 13, 
-    color: COLORS.textMuted,
+    color: Colors.textMuted,
     fontWeight: '500',
   },
   activityCard: { 
@@ -1080,7 +1080,7 @@ const styles = StyleSheet.create({
   activityTitle: { 
     fontSize: 16, 
     fontWeight: '700', 
-    color: COLORS.textPrimary, 
+    color: Colors.textPrimary, 
     marginBottom: 4,
   },
   activitySubtitle: { 
@@ -1091,7 +1091,7 @@ const styles = StyleSheet.create({
   },
   activityDescription: { 
     fontSize: 12, 
-    color: COLORS.textSecondary, 
+    color: Colors.textSecondary, 
     lineHeight: 16,
   },
   
@@ -1100,7 +1100,7 @@ const styles = StyleSheet.create({
     position: 'absolute', 
     bottom: 90, 
     right: 20, 
-    shadowColor: COLORS.primary, 
+    shadowColor: Colors.primary, 
     shadowOffset: { width: 0, height: 6 }, 
     shadowOpacity: 0.4, 
     shadowRadius: 12, 
@@ -1189,12 +1189,12 @@ const styles = StyleSheet.create({
   },
   lawyerMetaText: {
     fontSize: 12,
-    color: COLORS.textSecondary,
+    color: Colors.textSecondary,
   },
   lawyerPrice: {
     fontSize: 14,
     fontWeight: '700',
-    color: COLORS.primary,
+    color: Colors.primary,
   },
 
   // Notifications Modal Styles
@@ -1230,7 +1230,7 @@ const styles = StyleSheet.create({
   notificationsTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: COLORS.textPrimary,
+    color: Colors.textPrimary,
   },
   notificationsCloseBtn: {
     padding: 4,
@@ -1248,7 +1248,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   notificationItemUnread: {
-    backgroundColor: COLORS.primary + '08',
+    backgroundColor: Colors.primary + '08',
   },
   notificationIconContainer: {
     width: 40,
@@ -1260,7 +1260,7 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   notificationIconUnread: {
-    backgroundColor: COLORS.primary + '15',
+    backgroundColor: Colors.primary + '15',
   },
   notificationContent: {
     flex: 1,
@@ -1268,7 +1268,7 @@ const styles = StyleSheet.create({
   notificationItemTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: COLORS.textPrimary,
+    color: Colors.textPrimary,
     marginBottom: 2,
   },
   notificationItemTitleUnread: {
@@ -1276,18 +1276,18 @@ const styles = StyleSheet.create({
   },
   notificationMessage: {
     fontSize: 13,
-    color: COLORS.textSecondary,
+    color: Colors.textSecondary,
     marginBottom: 2,
   },
   notificationTime: {
     fontSize: 11,
-    color: COLORS.textMuted,
+    color: Colors.textMuted,
   },
   unreadDot: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: COLORS.primary,
+    backgroundColor: Colors.primary,
     marginLeft: 8,
   },
   markAllReadBtn: {
@@ -1299,6 +1299,6 @@ const styles = StyleSheet.create({
   markAllReadText: {
     fontSize: 14,
     fontWeight: '600',
-    color: COLORS.primary,
+    color: Colors.primary,
   },
 });
