@@ -51,8 +51,8 @@ export default function OnboardingScreen() {
   const handleNext = () => {
     if (currentIndex < ONBOARDING_SCREENS.length - 1) {
       const nextIndex = currentIndex + 1;
-      flatListRef.current?.scrollToIndex({ index: nextIndex });
       setCurrentIndex(nextIndex);
+      flatListRef.current?.scrollToIndex({ index: nextIndex, animated: true });
     } else {
       handleSkip();
     }
