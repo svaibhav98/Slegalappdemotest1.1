@@ -219,10 +219,10 @@ export default function NyayAIChatScreen() {
           <View style={styles.header}>
             <TouchableOpacity 
               style={styles.backButton} 
-              onPress={handleBack}
+              onPress={() => setShowDrawer(true)}
               activeOpacity={0.8}
             >
-              <Ionicons name="arrow-back" size={22} color={COLORS.textPrimary} />
+              <Ionicons name="menu" size={24} color={COLORS.textPrimary} />
             </TouchableOpacity>
             
             <View style={styles.headerCenter}>
