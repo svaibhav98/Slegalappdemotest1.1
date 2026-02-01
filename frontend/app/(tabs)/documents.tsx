@@ -38,8 +38,10 @@ type Screen = 'list' | 'form' | 'preview' | 'success';
 interface DocumentTemplate {
   id: string;
   title: string;
+  subtitle: string;
   icon: string;
   color: string;
+  bgColor: string;
   fields: { key: string; label: string; placeholder: string; multiline?: boolean }[];
 }
 
