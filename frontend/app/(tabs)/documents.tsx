@@ -402,8 +402,8 @@ export default function DocumentsScreen() {
         
         {/* Document Preview Card */}
         <View style={styles.successDocCard}>
-          <View style={styles.successDocIcon}>
-            <Ionicons name="document-text" size={40} color={COLORS.primary} />
+          <View style={[styles.successDocIcon, { backgroundColor: getDocumentIconColor(selectedTemplate?.id || '') + '15' }]}>
+            <Ionicons name="document-text" size={40} color={getDocumentIconColor(selectedTemplate?.id || '')} />
           </View>
           <View style={styles.successDocInfo}>
             <Text style={styles.successDocName}>{selectedTemplate?.title}</Text>
