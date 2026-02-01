@@ -169,7 +169,7 @@ export default function BookingConfirmationScreen() {
         </View>
 
         {/* Bottom Navigation Bar */}
-        <BottomNavBar activeTab="home" />
+        <BottomNavBar />
       </View>
     </>
   );
