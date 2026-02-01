@@ -36,6 +36,16 @@ export default function BottomNavBar({ activeTab }: BottomNavBarProps) {
   
   const getActiveTab = () => {
     if (activeTab) return activeTab;
+    
+    // Lawyer/consultation screens should not highlight any tab
+    if (pathname.includes('/lawyer') || 
+        pathname.includes('/booking') || 
+        pathname.includes('/payment') || 
+        pathname.includes('/consultation') ||
+        pathname.includes('/schedule')) {
+      return 'none'; // Don't highlight any tab
+    }
+    
     for (const tab of TAB_ITEMS) {
       if (pathname.includes(tab.name)) return tab.name;
     }
