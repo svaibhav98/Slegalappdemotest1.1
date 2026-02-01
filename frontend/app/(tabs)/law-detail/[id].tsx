@@ -11,8 +11,8 @@ import {
 } from 'react-native';
 import { Stack, useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { getLawSchemeById, getRelatedLawsSchemes, LawScheme } from '../../services/lawsData';
-import { useSavedLaws } from '../../contexts/SavedLawsContext';
+import { getLawSchemeById, getRelatedLawsSchemes, LawScheme } from '../../../services/lawsData';
+import { useSavedLaws } from '../../../contexts/SavedLawsContext';
 
 const { width } = Dimensions.get('window');
 
