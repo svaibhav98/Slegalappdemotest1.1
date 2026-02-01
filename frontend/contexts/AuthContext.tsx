@@ -70,18 +70,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         console.log('AsyncStorage error:', error);
       }
       
-      // Fall back to Firebase auth state
-      const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-        setUser(firebaseUser);
-        setIsGuest(false);
+      // Only use Firebase auth if it's ready and not in demo mode
+      if (isFirebaseReady() && auth && !demoMode) {
+        const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+          setUser(firebaseUser);
+          setIsGuest(false);
+          setLoading(false);
+        });
+        return unsubscribe;
+      } else {
+        // In demo mode, just set loading to false
         setLoading(false);
-      });
-
-      return unsubscribe;
+      }
     };
 
     checkAuth();
-  }, []);
+  }, [demoMode]);
 
   const signOut = async () => {
     try {
