@@ -276,6 +276,148 @@ export default function NyayAILandingScreen() {
           </View>
         </KeyboardAvoidingView>
       </LinearGradient>
+      
+      {/* Menu Modal */}
+      <Modal
+        visible={showMenu}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowMenu(false)}
+      >
+        <TouchableOpacity 
+          style={styles.menuOverlay}
+          activeOpacity={1}
+          onPress={() => setShowMenu(false)}
+        >
+          <View style={styles.menuSheet}>
+            <Text style={styles.menuTitle}>Options</Text>
+            
+            <TouchableOpacity 
+              style={styles.menuItem}
+              onPress={() => {
+                setShowMenu(false);
+                setInputText('');
+                setFocusMode(false);
+                setShowDisclaimer(true);
+              }}
+            >
+              <Ionicons name="add-circle-outline" size={22} color={COLORS.textPrimary} />
+              <Text style={styles.menuItemText}>New Chat</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={styles.menuItem}
+              onPress={() => {
+                setShowMenu(false);
+                setShowDisclaimerModal(true);
+              }}
+            >
+              <Ionicons name="information-circle-outline" size={22} color={COLORS.textPrimary} />
+              <Text style={styles.menuItemText}>View Disclaimer</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={styles.menuItem}
+              onPress={() => {
+                setShowMenu(false);
+                setShowReportModal(true);
+              }}
+            >
+              <Ionicons name="flag-outline" size={22} color={COLORS.textPrimary} />
+              <Text style={styles.menuItemText}>Report an Issue</Text>
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </Modal>
+      
+      {/* Disclaimer Modal */}
+      <Modal
+        visible={showDisclaimerModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowDisclaimerModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Legal Disclaimer</Text>
+            <ScrollView style={styles.modalScroll}>
+              <Text style={styles.modalText}>
+                SunoLegal / NyayAI is an informational platform and not a law firm. We do not provide legal advice. 
+                {'\n\n'}
+                Any guidance provided is general information for awareness purposes only. For specific legal advice tailored to your situation, please consult a qualified advocate or legal professional.
+                {'\n\n'}
+                The information provided through NyayAI should not be relied upon as a substitute for professional legal counsel.
+              </Text>
+            </ScrollView>
+            <TouchableOpacity 
+              style={styles.modalButton}
+              onPress={() => setShowDisclaimerModal(false)}
+            >
+              <Text style={styles.modalButtonText}>I Understand</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+      
+      {/* Report Issue Modal */}
+      <Modal
+        visible={showReportModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowReportModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Report an Issue</Text>
+            <Text style={styles.modalSubtitle}>Select the type of issue:</Text>
+            
+            {['Incorrect information', 'Technical problem', 'Inappropriate content'].map((reason) => (
+              <TouchableOpacity
+                key={reason}
+                style={[
+                  styles.reportOption,
+                  selectedReportReason === reason && styles.reportOptionSelected
+                ]}
+                onPress={() => setSelectedReportReason(reason)}
+              >
+                <View style={[
+                  styles.reportRadio,
+                  selectedReportReason === reason && styles.reportRadioSelected
+                ]}>
+                  {selectedReportReason === reason && <View style={styles.reportRadioInner} />}
+                </View>
+                <Text style={styles.reportOptionText}>{reason}</Text>
+              </TouchableOpacity>
+            ))}
+            
+            <View style={styles.modalActions}>
+              <TouchableOpacity 
+                style={styles.modalButtonSecondary}
+                onPress={() => {
+                  setShowReportModal(false);
+                  setSelectedReportReason('');
+                }}
+              >
+                <Text style={styles.modalButtonSecondaryText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={[
+                  styles.modalButton,
+                  !selectedReportReason && styles.modalButtonDisabled
+                ]}
+                disabled={!selectedReportReason}
+                onPress={() => {
+                  setShowReportModal(false);
+                  setSelectedReportReason('');
+                  // Handle report submission
+                }}
+              >
+                <Text style={styles.modalButtonText}>Submit</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
