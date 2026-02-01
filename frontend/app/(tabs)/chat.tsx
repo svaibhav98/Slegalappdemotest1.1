@@ -38,6 +38,11 @@ export default function NyayAILandingScreen() {
   const router = useRouter();
   const [inputText, setInputText] = useState('');
   const [showDisclaimer, setShowDisclaimer] = useState(true); // Always show on first render
+  const [focusMode, setFocusMode] = useState(false); // Focus mode toggle
+  const [showMenu, setShowMenu] = useState(false); // Menu modal
+  const [showDisclaimerModal, setShowDisclaimerModal] = useState(false); // Disclaimer modal
+  const [showReportModal, setShowReportModal] = useState(false); // Report issue modal
+  const [selectedReportReason, setSelectedReportReason] = useState('');
 
   const suggestedPrompts = [
     {
