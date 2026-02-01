@@ -129,12 +129,49 @@ export default function HomeScreen() {
     router.push(route as any);
   };
 
-// Quick Access Items with consistent icons
+// Quick Access Items - Original Design with Custom Icons
 const quickAccessItems = [
-  { icon: 'sparkles', label: 'NyayAI Assistant', route: '/(tabs)/chat', color: Colors.primary },
-  { icon: 'document-text', label: 'Legal Documents', route: '/(tabs)/documents', color: Colors.secondary },
-  { icon: 'briefcase', label: 'My Cases', route: '/(tabs)/cases', color: Colors.info },
-  { icon: 'chatbubbles', label: 'Consult Lawyer', route: '/lawyers', color: Colors.warning },
+  { 
+    id: 'nyayai',
+    icon: 'sparkles', 
+    label: 'NyayAI\nAssistant', 
+    route: '/(tabs)/chat',
+    iconColor: '#FF9933',
+    secondaryColor: '#059669',
+    bgColor: '#FFF7ED',
+  },
+  { 
+    id: 'consultation',
+    icon: 'chatbubbles', 
+    label: 'Consult\nLawyer', 
+    route: '/lawyers',
+    iconColor: '#059669',
+    bgColor: '#ECFDF5',
+  },
+  { 
+    id: 'document',
+    icon: 'document-text', 
+    label: 'Legal\nDocuments', 
+    route: '/(tabs)/documents',
+    iconColor: '#6B21A8',
+    bgColor: '#F3E8FF',
+  },
+  { 
+    id: 'cases',
+    icon: 'briefcase', 
+    label: 'My\nCases', 
+    route: '/(tabs)/cases',
+    iconColor: '#3B82F6',
+    bgColor: '#EFF6FF',
+  },
+  { 
+    id: 'laws',
+    icon: 'book', 
+    label: 'Laws &\nSchemes', 
+    route: '/(tabs)/laws',
+    iconColor: '#F97316',
+    bgColor: '#FFF7ED',
+  },
 ];
 
   const categoryItems = [
