@@ -75,10 +75,12 @@ export default function OnboardingScreen() {
         style={styles.image}
         resizeMode="cover"
       />
-      {/* Overlay with title and subtitle */}
+      {/* Dark overlay gradient */}
+      <View style={styles.darkOverlay} />
+      {/* Feature copy text */}
       <View style={styles.overlay}>
         <Text style={styles.slideTitle}>{item.title}</Text>
-        <Text style={styles.slideSubtitle}>{item.subtitle}</Text>
+        {item.subtitle ? <Text style={styles.slideSubtitle}>{item.subtitle}</Text> : null}
       </View>
     </View>
   );
