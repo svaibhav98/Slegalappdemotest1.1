@@ -450,31 +450,40 @@ export default function HomeScreen() {
           />
         }
       >
-        {/* Hero Banner */}
+        {/* Hero Banner - Professional Legal Tech Design */}
         <View style={styles.heroBannerContainer}>
           <View style={styles.heroBanner}>
-            <View style={styles.heroBannerBg} />
             <LinearGradient
-              colors={['rgba(30,31,59,0.9)', 'rgba(75,43,109,0.7)', 'rgba(139,90,43,0.5)', 'rgba(230,138,0,0.3)', 'rgba(255,153,51,0.1)']}
+              colors={['#1E3A8A', '#6366F1', '#8B5CF6']}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={StyleSheet.absoluteFill}
             />
-            <View style={styles.heroOrangeGlow} />
-            <View style={styles.heroPurpleGlow} />
+            <View style={styles.heroGradientOverlay} />
+            
+            {/* Subtle Logo Watermark */}
+            <View style={styles.logoWatermark}>
+              <Image 
+                source={require('../../../assets/logo-transparent.png')} 
+                style={styles.logoWatermarkImage}
+                resizeMode="contain"
+              />
+            </View>
+            
             <View style={styles.heroContent}>
               <Text style={styles.heroTitle}>
-                NyayAI, Made Simple{`\n`}for <Text style={styles.heroTitleHindi}>भारत</Text>
+                Legal Help for Bharat
               </Text>
               <Text style={styles.heroSubtitle}>
-                Your trusted AI assistant for laws, documents,{`\n`}and legal help in everyday language
+                AI-powered legal assistance • Document generation{`\n`}Lawyer consultations • Case tracking
               </Text>
               <TouchableOpacity 
                 style={styles.heroButton} 
                 onPress={() => router.push('/(tabs)/chat')} 
-                activeOpacity={0.8}
+                activeOpacity={0.85}
               >
-                <Text style={styles.heroButtonText}>Explore NyayAI</Text>
+                <Ionicons name="sparkles" size={16} color={COLORS.white} style={{ marginRight: 6 }} />
+                <Text style={styles.heroButtonText}>Ask NyayAI</Text>
               </TouchableOpacity>
             </View>
           </View>
