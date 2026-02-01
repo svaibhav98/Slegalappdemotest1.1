@@ -38,12 +38,16 @@ const COLORS = {
 export default function NyayAILandingScreen() {
   const router = useRouter();
   const [inputText, setInputText] = useState('');
-  const [showDisclaimer, setShowDisclaimer] = useState(true); // Always show on first render
-  const [focusMode, setFocusMode] = useState(false); // Focus mode toggle
-  const [showMenu, setShowMenu] = useState(false); // Menu modal
-  const [showDisclaimerModal, setShowDisclaimerModal] = useState(false); // Disclaimer modal
-  const [showReportModal, setShowReportModal] = useState(false); // Report issue modal
+  const [showDisclaimer, setShowDisclaimer] = useState(true);
+  const [focusMode, setFocusMode] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+  const [showDisclaimerModal, setShowDisclaimerModal] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
   const [selectedReportReason, setSelectedReportReason] = useState('');
+  
+  // ChatGPT-style drawer state
+  const [showDrawer, setShowDrawer] = useState(false);
+  const [chatHistory, setChatHistory] = useState<Array<{id: string, title: string, date: string}>>([]);
 
   const suggestedPrompts = [
     {
