@@ -287,7 +287,7 @@ const quickAccessItems = [
           <LinearGradient colors={[COLORS.headerBg, COLORS.headerBgLight]} style={styles.drawerHeader}>
             <View style={styles.drawerUserInfo}>
               <View style={styles.drawerAvatar}>
-                <Ionicons name="person" size={32} color={COLORS.white} />
+                <Ionicons name="person" size={32} color={Colors.textInverse} />
               </View>
               <View style={styles.drawerUserText}>
                 <Text style={styles.drawerUserName}>Vaibhav</Text>
@@ -295,7 +295,7 @@ const quickAccessItems = [
               </View>
             </View>
             <TouchableOpacity style={styles.drawerCloseBtn} onPress={() => setDrawerOpen(false)}>
-              <Ionicons name="close" size={24} color={COLORS.white} />
+              <Ionicons name="close" size={24} color={Colors.textInverse} />
             </TouchableOpacity>
           </LinearGradient>
 
@@ -356,7 +356,7 @@ const quickAccessItems = [
               onPress={handleCloseDisclaimer}
               activeOpacity={0.8}
             >
-              <Ionicons name="close" size={16} color={COLORS.white} />
+              <Ionicons name="close" size={16} color={Colors.textInverse} />
             </TouchableOpacity>
             <Text style={styles.disclaimerTitle}>Disclaimer</Text>
             <Text style={styles.disclaimerBody}>
@@ -375,7 +375,7 @@ const quickAccessItems = [
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.menuButton} onPress={() => setDrawerOpen(true)}>
-          <Ionicons name="menu" size={24} color={COLORS.white} />
+          <Ionicons name="menu" size={24} color={Colors.textInverse} />
         </TouchableOpacity>
         
         <View style={styles.headerCenter}>
@@ -394,14 +394,14 @@ const quickAccessItems = [
         
         <View style={styles.headerActions}>
           <TouchableOpacity style={styles.iconButton}>
-            <Ionicons name="mic-outline" size={22} color={COLORS.white} />
+            <Ionicons name="mic-outline" size={22} color={Colors.textInverse} />
           </TouchableOpacity>
           <TouchableOpacity 
             style={styles.iconButton}
             onPress={() => setShowNotifications(true)}
             data-testid="notification-bell-btn"
           >
-            <Ionicons name="notifications-outline" size={22} color={COLORS.white} />
+            <Ionicons name="notifications-outline" size={22} color={Colors.textInverse} />
             <View style={styles.badge} />
           </TouchableOpacity>
         </View>
@@ -651,7 +651,7 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   disclaimerCard: {
-    backgroundColor: COLORS.white,
+    backgroundColor: Colors.textInverse,
     borderRadius: 16,
     padding: 24,
     paddingTop: 32,
@@ -729,7 +729,7 @@ const styles = StyleSheet.create({
   drawerUserName: {
     fontSize: 18,
     fontWeight: '700',
-    color: COLORS.white,
+    color: Colors.textInverse,
   },
   drawerUserEmail: {
     fontSize: 14,
@@ -816,7 +816,7 @@ const styles = StyleSheet.create({
   },
   welcomeText: { 
     fontSize: 18, 
-    color: COLORS.white, 
+    color: Colors.textInverse, 
     fontWeight: '600',
   },
   brandOrange: { 
@@ -1113,7 +1113,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center', 
     alignItems: 'center',
     borderWidth: 3,
-    borderColor: COLORS.white,
+    borderColor: Colors.textInverse,
   },
 
   // Top Lawyers Section - Modern Cards
@@ -1208,7 +1208,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
   notificationsContainer: {
-    backgroundColor: COLORS.white,
+    backgroundColor: Colors.textInverse,
     marginHorizontal: 16,
     borderRadius: 20,
     maxHeight: '70%',
