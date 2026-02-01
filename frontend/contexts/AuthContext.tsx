@@ -1,12 +1,14 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { User, onAuthStateChanged, signOut as firebaseSignOut } from 'firebase/auth';
-import { auth } from '../lib/firebase';
+import { auth, isFirebaseReady } from '../lib/firebase';
+import { isDemoMode } from '../lib/demoMode';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   isGuest: boolean;
+  isDemoMode: boolean;
   signOut: () => Promise<void>;
   setMockUser: (phone: string) => Promise<void>;
   setGuestMode: () => Promise<void>;
@@ -16,6 +18,7 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
   isGuest: false,
+  isDemoMode: true,
   signOut: async () => {},
   setMockUser: async () => {},
   setGuestMode: async () => {},
@@ -46,6 +49,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [isGuest, setIsGuest] = useState(false);
+  const demoMode = isDemoMode();
 
   useEffect(() => {
     // Check for guest mode or mock user in AsyncStorage first
