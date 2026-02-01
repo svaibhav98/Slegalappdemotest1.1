@@ -356,7 +356,7 @@ export default function DocumentsScreen() {
       <ScrollView style={styles.previewContent} showsVerticalScrollIndicator={false}>
         <View style={styles.previewCard}>
           <View style={styles.previewDocHeader}>
-            <Ionicons name="document-text" size={24} color={COLORS.primary} />
+            <Ionicons name="document-text" size={24} color={getDocumentIconColor(selectedTemplate?.id || '')} />
             <Text style={styles.previewDocTitle}>{selectedTemplate?.title}</Text>
           </View>
           <Text style={styles.previewText}>{generatePreviewContent()}</Text>
