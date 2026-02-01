@@ -195,7 +195,11 @@ export default function NyayAIChatScreen() {
               <Text style={styles.headerSubtitle}>{formatTime()}</Text>
             </View>
             
-            <TouchableOpacity style={styles.menuButton} activeOpacity={0.8}>
+            <TouchableOpacity 
+              style={styles.menuButton} 
+              onPress={() => setShowMenu(true)}
+              activeOpacity={0.8}
+            >
               <Ionicons name="ellipsis-vertical" size={20} color={COLORS.textPrimary} />
             </TouchableOpacity>
           </View>
