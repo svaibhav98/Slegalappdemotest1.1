@@ -239,7 +239,7 @@ export default function PaymentScreen() {
         </View>
 
         {/* Bottom Navigation Bar */}
-        <BottomNavBar activeTab="home" />
+        <BottomNavBar />
       </View>
     </>
   );
