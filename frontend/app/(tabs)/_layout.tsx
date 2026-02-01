@@ -72,7 +72,6 @@ export default function TabLayout() {
         name="law-detail" 
         options={{ 
           href: null,
-          tabBarButton: () => null,
         }} 
       />
     </Tabs>
