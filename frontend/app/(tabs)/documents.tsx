@@ -792,7 +792,7 @@ const styles = StyleSheet.create({
   successTitle: { fontSize: 28, fontWeight: '800', color: COLORS.success, marginBottom: 8 },
   successSubtitle: { fontSize: 16, color: COLORS.textSecondary, textAlign: 'center', marginBottom: 32 },
   successDocCard: { flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.white, borderRadius: 20, padding: 20, width: '100%', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.1, shadowRadius: 12, elevation: 5, marginBottom: 32 },
-  successDocIcon: { width: 72, height: 72, borderRadius: 18, backgroundColor: COLORS.primary + '15', justifyContent: 'center', alignItems: 'center', marginRight: 16 },
+  successDocIcon: { width: 72, height: 72, borderRadius: 18, justifyContent: 'center', alignItems: 'center', marginRight: 16 },
   successDocInfo: { flex: 1 },
   successDocName: { fontSize: 18, fontWeight: '700', color: COLORS.textPrimary, marginBottom: 4 },
   successDocMeta: { fontSize: 14, color: COLORS.textSecondary },
