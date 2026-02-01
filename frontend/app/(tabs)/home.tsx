@@ -464,7 +464,7 @@ export default function HomeScreen() {
             {/* Subtle Logo Watermark */}
             <View style={styles.logoWatermark}>
               <Image 
-                source={require('../../../assets/logo-transparent.png')} 
+                source={require('../../assets/logo-transparent.png')} 
                 style={styles.logoWatermarkImage}
                 resizeMode="contain"
               />
