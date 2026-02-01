@@ -181,7 +181,7 @@ export default function ScheduleBookingScreen() {
         </View>
 
         {/* Bottom Navigation Bar */}
-        <BottomNavBar activeTab="home" />
+        <BottomNavBar />
       </View>
     </>
   );
