@@ -141,14 +141,14 @@ const quickAccessItems = [
       id: 'join-lawyer',
       title: 'Join as a\nLawyer',
       subtitle: 'Register to offer Legal...',
-      iconColor: COLORS.purple,
+      iconColor: Colors.info,
       route: '/join-lawyer',
     },
     {
       id: 'saved',
       title: 'Saved Items',
       subtitle: 'View and manage.....',
-      iconColor: COLORS.amber,
+      iconColor: Colors.warning,
       route: '/(tabs)/documents?tab=saved' as any,
     },
   ];
@@ -322,10 +322,10 @@ const quickAccessItems = [
               onPress={handleSignOut}
               activeOpacity={0.7}
             >
-              <View style={[styles.drawerMenuIcon, { backgroundColor: COLORS.red + '15' }]}>
-                <Ionicons name="log-out" size={22} color={COLORS.red} />
+              <View style={[styles.drawerMenuIcon, { backgroundColor: Colors.error + '15' }]}>
+                <Ionicons name="log-out" size={22} color={Colors.error} />
               </View>
-              <Text style={[styles.drawerMenuLabel, { color: COLORS.red }]}>Logout</Text>
+              <Text style={[styles.drawerMenuLabel, { color: Colors.error }]}>Logout</Text>
             </TouchableOpacity>
           </ScrollView>
 
@@ -513,8 +513,8 @@ const quickAccessItems = [
             {/* Explore More Card - partially visible */}
             <View style={styles.categoryCardPartial}>
               <View style={styles.categoryCardHeader}>
-                <View style={[styles.categoryIcon, { backgroundColor: COLORS.blue + '15' }]}>
-                  <Ionicons name="compass" size={28} color={COLORS.blue} />
+                <View style={[styles.categoryIcon, { backgroundColor: Colors.info + '15' }]}>
+                  <Ionicons name="compass" size={28} color={Colors.info} />
                 </View>
               </View>
               <View style={styles.categoryInfo}>
@@ -598,7 +598,7 @@ const quickAccessItems = [
                 <Text style={styles.lawyerSpecialization}>{lawyer.title}</Text>
                 <View style={styles.lawyerMeta}>
                   <View style={styles.lawyerMetaItem}>
-                    <Ionicons name="star" size={14} color={COLORS.amber} />
+                    <Ionicons name="star" size={14} color={Colors.warning} />
                     <Text style={styles.lawyerMetaText}>{lawyer.rating} ({lawyer.reviewCount})</Text>
                   </View>
                   <View style={styles.lawyerMetaItem}>
@@ -671,7 +671,7 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: COLORS.purple,
+    backgroundColor: Colors.info,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -845,7 +845,7 @@ const styles = StyleSheet.create({
     width: 8, 
     height: 8, 
     borderRadius: 4, 
-    backgroundColor: COLORS.red,
+    backgroundColor: Colors.error,
   },
   
   // Content
