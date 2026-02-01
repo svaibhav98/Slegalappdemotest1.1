@@ -702,7 +702,7 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     width: width * 0.8,
-    backgroundColor: COLORS.white,
+    backgroundColor: Colors.surface,
   },
   drawerHeader: {
     paddingTop: 20,
