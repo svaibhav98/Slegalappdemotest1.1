@@ -67,13 +67,6 @@ export default function TabLayout() {
           tabBarIcon: ({ color, size }) => <Ionicons name="document-text" size={size} color={color} /> 
         }} 
       />
-      {/* Hide law-detail from tab bar - it's a detail screen, not a tab */}
-      <Tabs.Screen 
-        name="law-detail" 
-        options={{ 
-          href: null,
-        }} 
-      />
     </Tabs>
   );
 }
