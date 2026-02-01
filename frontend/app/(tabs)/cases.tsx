@@ -340,11 +340,6 @@ export default function CasesScreen() {
                     color={getStatusColor(caseItem.status)} 
                   />
                 </View>
-                {caseItem.reminders.length > 0 && (
-                  <View style={styles.reminderBadge}>
-                    <Ionicons name="notifications" size={12} color={COLORS.white} />
-                  </View>
-                )}
               </View>
 
               {/* Case Content */}
