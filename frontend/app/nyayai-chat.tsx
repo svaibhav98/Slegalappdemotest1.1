@@ -140,6 +140,37 @@ export default function NyayAIChatScreen() {
     return `Last Update: ${now.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit' })}`;
   };
   
+  // Load chat history
+  useEffect(() => {
+    loadChatHistory();
+  }, []);
+  
+  const loadChatHistory = async () => {
+    try {
+      const stored = await AsyncStorage.getItem('chat_history');
+      if (stored) {
+        setChatHistory(JSON.parse(stored));
+      }
+    } catch (error) {
+      console.log('Error loading chat history:', error);
+    }
+  };
+  
+  const handleNewChat = () => {
+    setShowDrawer(false);
+    setMessages([]);
+    setChatTitle('NyayAI Chat');
+    router.back();
+  };
+  
+  const handleSelectChat = (chatId: string) => {
+    setShowDrawer(false);
+    router.push({
+      pathname: '/nyayai-chat',
+      params: { chatId }
+    });
+  };
+  
   const handleExportChat = async () => {
     setShowMenu(false);
     const chatText = messages.map(m => 
