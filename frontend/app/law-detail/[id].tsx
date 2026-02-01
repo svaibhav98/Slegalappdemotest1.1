@@ -140,17 +140,16 @@ export default function LawDetailScreen() {
       <StatusBar barStyle="light-content" backgroundColor={COLORS.headerBg} />
       
       <View style={styles.container}>
-        {/* Compact Dark Header */}
+        {/* Compact Header - Single Row like Cases Screen */}
         <View style={styles.header}>
           <TouchableOpacity 
             style={styles.backButton} 
             onPress={handleBack}
             activeOpacity={0.8}
           >
-            <Ionicons name="arrow-back" size={22} color={COLORS.white} />
+            <Ionicons name="arrow-back" size={24} color={COLORS.white} />
           </TouchableOpacity>
-          
-          {/* Save/Bookmark Button - Top Right */}
+          <Text style={styles.headerTitle} numberOfLines={1}>{lawItem.title}</Text>
           <TouchableOpacity 
             style={styles.saveButton} 
             onPress={handleToggleSave}
@@ -162,27 +161,6 @@ export default function LawDetailScreen() {
               color={isSaved ? COLORS.primary : COLORS.white} 
             />
           </TouchableOpacity>
-          
-          {/* Icon and Title Row */}
-          <View style={styles.headerContent}>
-            <View style={styles.iconCircle}>
-              <Ionicons 
-                name={
-                  lawItem.category === 'tenant-housing' ? 'home' :
-                  lawItem.category === 'land-property' ? 'business' :
-                  lawItem.category === 'consumer' ? 'shield-checkmark' :
-                  lawItem.category === 'citizen-rights' ? 'person' :
-                  lawItem.category === 'labour' ? 'briefcase' :
-                  lawItem.category === 'farmer' ? 'leaf' :
-                  lawItem.category === 'family' ? 'people' :
-                  'document-text'
-                } 
-                size={32} 
-                color={COLORS.primary} 
-              />
-            </View>
-            <Text style={styles.headerTitle} numberOfLines={2}>{lawItem.title}</Text>
-          </View>
         </View>
 
         {/* Content Card */}
