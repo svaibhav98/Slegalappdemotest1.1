@@ -82,7 +82,7 @@ export default function LawDetailScreen() {
 
   const handleRelatedPress = (item: LawScheme) => {
     router.push({
-      pathname: '/law-detail/[id]',
+      pathname: '/(tabs)/law-detail/[id]',
       params: { id: item.id }
     });
   };
