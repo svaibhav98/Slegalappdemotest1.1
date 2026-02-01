@@ -450,11 +450,11 @@ export default function HomeScreen() {
           />
         }
       >
-        {/* Hero Banner - Professional Legal Tech Design */}
+        {/* Hero Banner - Professional with Original Content */}
         <View style={styles.heroBannerContainer}>
           <View style={styles.heroBanner}>
             <LinearGradient
-              colors={['#1E3A8A', '#6366F1', '#8B5CF6']}
+              colors={['#2B2D42', '#6B3FA0', '#8B5A2B', '#E68A00', '#FF9933']}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={StyleSheet.absoluteFill}
@@ -472,18 +472,17 @@ export default function HomeScreen() {
             
             <View style={styles.heroContent}>
               <Text style={styles.heroTitle}>
-                Legal Help for Bharat
+                NyayAI, Made Simple{`\n`}for <Text style={styles.heroTitleHindi}>भारत</Text>
               </Text>
               <Text style={styles.heroSubtitle}>
-                AI-powered legal assistance • Document generation{`\n`}Lawyer consultations • Case tracking
+                Your trusted AI assistant for laws, documents,{`\n`}and legal help in everyday language
               </Text>
               <TouchableOpacity 
                 style={styles.heroButton} 
                 onPress={() => router.push('/(tabs)/chat')} 
                 activeOpacity={0.85}
               >
-                <Ionicons name="sparkles" size={16} color={COLORS.white} style={{ marginRight: 6 }} />
-                <Text style={styles.heroButtonText}>Ask NyayAI</Text>
+                <Text style={styles.heroButtonText}>Explore NyayAI</Text>
               </TouchableOpacity>
             </View>
           </View>
