@@ -683,7 +683,7 @@ const styles = StyleSheet.create({
   
   // Scroll Content Container - with bottom padding for bottom nav
   scrollContentContainer: {
-    paddingBottom: 76, // Bottom nav height (56) + spacing (20)
+    paddingBottom: 20, // Just 20px spacing before bottom nav
   },
   
   // Template Grid - Modern 2-Column Grid Design
