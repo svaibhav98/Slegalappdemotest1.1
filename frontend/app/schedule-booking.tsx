@@ -167,7 +167,7 @@ export default function ScheduleBookingScreen() {
             </View>
           </View>
 
-          <View style={{ height: 100 }} />
+          <View style={{ height: 160 }} />
         </ScrollView>
 
         <View style={styles.bottomContainer}>
