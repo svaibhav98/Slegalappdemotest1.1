@@ -467,37 +467,40 @@ export default function DocumentsScreen() {
           <Text style={styles.emptySubtitle}>{showSaveButton ? 'Documents you save will appear here' : 'Create your first document'}</Text>
         </View>
       ) : (
-        docs.map((doc) => (
-          <View key={doc.id} style={styles.documentCard}>
-            <View style={styles.docIconContainer}>
-              <Ionicons name="document-text" size={28} color={COLORS.primary} />
-            </View>
-            <View style={styles.docInfo}>
-              <Text style={styles.docName} numberOfLines={1}>{doc.name}</Text>
-              <Text style={styles.docMeta}>{doc.type} • {doc.createdAt} • {doc.size}</Text>
-            </View>
-            <View style={styles.docActions}>
-              {showSaveButton ? (
-                <TouchableOpacity style={styles.docActionBtn} onPress={() => handleRemoveFromSaved(doc.id)}>
-                  <Ionicons name="bookmark" size={22} color={COLORS.amber} />
+        docs.map((doc) => {
+          const iconColor = getDocumentIconColor(doc.type);
+          return (
+            <View key={doc.id} style={styles.documentCard}>
+              <View style={[styles.docIconContainer, { backgroundColor: iconColor + '15' }]}>
+                <Ionicons name="document-text" size={28} color={iconColor} />
+              </View>
+              <View style={styles.docInfo}>
+                <Text style={styles.docName} numberOfLines={1}>{doc.name}</Text>
+                <Text style={styles.docMeta}>{doc.type} • {doc.createdAt} • {doc.size}</Text>
+              </View>
+              <View style={styles.docActions}>
+                {showSaveButton ? (
+                  <TouchableOpacity style={styles.docActionBtn} onPress={() => handleRemoveFromSaved(doc.id)}>
+                    <Ionicons name="bookmark" size={22} color={COLORS.amber} />
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity 
+                    style={styles.docActionBtn} 
+                    onPress={() => doc.isSaved ? handleRemoveFromSaved(doc.id) : handleSaveDocument(doc.id)}
+                  >
+                    <Ionicons name={doc.isSaved ? 'bookmark' : 'bookmark-outline'} size={22} color={doc.isSaved ? COLORS.amber : COLORS.textMuted} />
+                  </TouchableOpacity>
+                )}
+                <TouchableOpacity style={styles.docActionBtn}>
+                  <Ionicons name="share-outline" size={22} color={COLORS.textMuted} />
                 </TouchableOpacity>
-              ) : (
-                <TouchableOpacity 
-                  style={styles.docActionBtn} 
-                  onPress={() => doc.isSaved ? handleRemoveFromSaved(doc.id) : handleSaveDocument(doc.id)}
-                >
-                  <Ionicons name={doc.isSaved ? 'bookmark' : 'bookmark-outline'} size={22} color={doc.isSaved ? COLORS.amber : COLORS.textMuted} />
+                <TouchableOpacity style={styles.docActionBtn}>
+                  <Ionicons name="download-outline" size={22} color={COLORS.textMuted} />
                 </TouchableOpacity>
-              )}
-              <TouchableOpacity style={styles.docActionBtn}>
-                <Ionicons name="share-outline" size={22} color={COLORS.textMuted} />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.docActionBtn}>
-                <Ionicons name="download-outline" size={22} color={COLORS.textMuted} />
-              </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        ))
+          );
+        })
       )}
       <View style={{ height: 100 }} />
     </ScrollView>
