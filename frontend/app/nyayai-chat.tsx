@@ -54,6 +54,10 @@ export default function NyayAIChatScreen() {
   // Menu modal state
   const [showMenu, setShowMenu] = useState(false);
   const [showSummaryModal, setShowSummaryModal] = useState(false);
+  
+  // ChatGPT-style drawer state
+  const [showDrawer, setShowDrawer] = useState(false);
+  const [chatHistory, setChatHistory] = useState<Array<{id: string, title: string, date: string}>>([]);
 
   useEffect(() => {
     // If there's an initial message, send it automatically
