@@ -8,10 +8,10 @@ const COLORS = { background: '#F5F7FA', white: '#FFFFFF', primary: '#FF9933', te
 
 const helpItems = [
   { icon: 'chatbubbles', title: 'Chat with Support', desc: 'Get instant help from our team' },
-  { icon: 'call', title: 'Call Us', desc: '+91 1800-XXX-XXXX' },
-  { icon: 'mail', title: 'Email Support', desc: 'support@sunolegal.com' },
+  { icon: 'call', title: 'Call Us', desc: '+1 469-592-2133' },
+  { icon: 'mail', title: 'Email Support', desc: 'support@sunolegal.in' },
+  { icon: 'globe', title: 'Website', desc: 'www.sunolegal.in' },
   { icon: 'book', title: 'FAQs', desc: 'Find answers to common questions' },
-  { icon: 'videocam', title: 'Video Tutorials', desc: 'Learn how to use the app' },
 ];
 
 export default function HelpCenterScreen() {
