@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   RefreshControl,
   Image,
-  Dimensions,
   StatusBar,
   Modal,
 } from 'react-native';
@@ -25,9 +24,7 @@ import {
   ConsultationIcon,
   BookmarkIcon 
 } from '../../components/icons/LegalIcons';
-
-const { width } = Dimensions.get('window');
-const CARD_WIDTH = (width - 60) / 2;
+import { Colors, Spacing, Layout, Typography, Shadows } from '../../theme';
 
 // Design System Colors
 const COLORS = {
