@@ -495,29 +495,38 @@ const quickAccessItems = [
           </View>
         </View>
 
-        {/* Quick Access Section - Modern Design */}
+        {/* Quick Access Section - Original Design (Slightly Larger) */}
         <View style={styles.sectionWrapper}>
           <Text style={styles.sectionTitle}>Quick Access</Text>
-          <View style={styles.quickAccessGrid}>
-            {quickAccessItems.map((item, index) => (
+          <ScrollView 
+            horizontal 
+            showsHorizontalScrollIndicator={false} 
+            style={styles.quickAccessScroll}
+            contentContainerStyle={styles.quickAccessContainer}
+          >
+            {quickAccessItems.map((item) => (
               <TouchableOpacity 
-                key={index} 
+                key={item.id} 
                 style={styles.quickAccessCard} 
                 onPress={() => router.push(item.route as any)} 
-                activeOpacity={0.7}
+                activeOpacity={0.85}
               >
                 <View style={[
                   styles.quickAccessIconContainer,
-                  { backgroundColor: item.color + '15' }
+                  { backgroundColor: item.bgColor }
                 ]}>
-                  <Ionicons name={item.icon as any} size={24} color={item.color} />
+                  {item.id === 'nyayai' && <NyayAIIcon size={32} color={item.iconColor} secondaryColor={item.secondaryColor} />}
+                  {item.id === 'consultation' && <ConsultationIcon size={30} color={item.iconColor} />}
+                  {item.id === 'document' && <LegalDocumentIcon size={30} color={item.iconColor} />}
+                  {item.id === 'cases' && <BriefcaseIcon size={30} color={item.iconColor} />}
+                  {item.id === 'laws' && <LawBookIcon size={30} color={item.iconColor} />}
                 </View>
-                <Text style={styles.quickAccessLabel} numberOfLines={2}>
+                <Text style={styles.quickAccessLabel}>
                   {item.label}
                 </Text>
               </TouchableOpacity>
             ))}
-          </View>
+          </ScrollView>
         </View>
 
         {/* Category Section */}
