@@ -86,16 +86,28 @@ export default function LawyersScreen() {
   };
 
   const handleScheduleLater = () => {
-    if (selectedLawyer && selectedPackage) {
-      setShowProfileModal(false);
-      router.push({
-        pathname: '/schedule-booking',
-        params: { 
-          lawyerId: selectedLawyer.id,
-          packageId: selectedPackage.id
-        }
-      });
+    if (!selectedLawyer) {
+      console.warn('No lawyer selected');
+      return;
     }
+    
+    // Ensure we have a package selected
+    const packageToUse = selectedPackage || selectedLawyer.packages[1] || selectedLawyer.packages[0];
+    
+    if (!packageToUse) {
+      console.warn('No package available for this lawyer');
+      return;
+    }
+    
+    setShowProfileModal(false);
+    
+    router.push({
+      pathname: '/schedule-booking',
+      params: { 
+        lawyerId: selectedLawyer.id,
+        packageId: packageToUse.id
+      }
+    });
   };
 
   const getPackageIcon = (type: string) => {
