@@ -32,6 +32,22 @@ const COLORS = {
   pink: '#EC4899',
 };
 
+// Subtle icon color mapping for document types
+const DOCUMENT_COLORS: Record<string, string> = {
+  'rent_agreement': '#E67E22',        // Muted Orange
+  'legal_notice': '#5B8FB9',          // Muted Blue
+  'affidavit': '#8B7EC8',             // Muted Purple
+  'consumer_complaint': '#5FA097',    // Muted Teal
+  'nda': '#4A7BA7',                   // Muted Blue (darker)
+  'power_of_attorney': '#6B7CB7',     // Muted Indigo
+};
+
+// Helper function to get icon color by document type/id
+const getDocumentIconColor = (typeOrId: string): string => {
+  const normalized = typeOrId.toLowerCase().replace(/\s+/g, '_');
+  return DOCUMENT_COLORS[normalized] || COLORS.textSecondary;
+};
+
 type Tab = 'create' | 'documents' | 'saved';
 type Screen = 'list' | 'form' | 'preview' | 'success';
 
