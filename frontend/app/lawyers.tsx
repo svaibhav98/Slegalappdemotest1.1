@@ -243,7 +243,7 @@ export default function LawyersScreen() {
             ))}
           </View>
           
-          <View style={{ height: 16 }} />
+          <View style={{ height: 20 }} />
         </ScrollView>
 
         {/* Bottom Navigation Bar */}
