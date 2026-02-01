@@ -50,6 +50,10 @@ export default function NyayAIChatScreen() {
   const [loading, setLoading] = useState(false);
   const [chatTitle, setChatTitle] = useState('NyayAI Chat');
   const scrollViewRef = useRef<ScrollView>(null);
+  
+  // Menu modal state
+  const [showMenu, setShowMenu] = useState(false);
+  const [showSummaryModal, setShowSummaryModal] = useState(false);
 
   useEffect(() => {
     // If there's an initial message, send it automatically
