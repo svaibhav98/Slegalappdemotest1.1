@@ -248,7 +248,7 @@ export default function DocumentsScreen() {
     return content;
   };
 
-  // Render Template Selection (Create Tab) - Professional Legal-Tech Design
+  // Render Template Selection (Create Tab) - Modern 2-Column Grid Design
   const renderTemplateList = () => (
     <View style={styles.templateListContainer}>
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
@@ -262,30 +262,18 @@ export default function DocumentsScreen() {
               key={template.id}
               style={styles.templateCard}
               onPress={() => handleSelectTemplate(template)}
-              activeOpacity={0.9}
+              activeOpacity={0.85}
             >
               <View style={styles.templateIconWrapper}>
-                <Ionicons name={template.icon as any} size={22} color={COLORS.primary} />
+                <Ionicons name={template.icon as any} size={28} color={COLORS.primary} />
               </View>
-              <View style={styles.templateTextContainer}>
-                <Text style={styles.templateTitle}>{template.title}</Text>
-                <Text style={styles.templateSubtitle}>{template.subtitle}</Text>
-              </View>
-              <Ionicons name="chevron-forward" size={18} color={COLORS.textMuted} />
+              <Text style={styles.templateTitle} numberOfLines={2}>{template.title}</Text>
+              <Text style={styles.templateSubtitle}>Generate PDF</Text>
             </TouchableOpacity>
           ))}
         </View>
-        <View style={{ height: 100 }} />
+        <View style={{ height: 20 }} />
       </ScrollView>
-
-      {/* Floating Action Button */}
-      <TouchableOpacity 
-        style={styles.fab}
-        onPress={() => {}}
-        activeOpacity={0.9}
-      >
-        <Ionicons name="add" size={28} color={COLORS.white} />
-      </TouchableOpacity>
     </View>
   );
 
