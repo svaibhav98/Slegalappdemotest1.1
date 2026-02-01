@@ -106,6 +106,37 @@ export default function NyayAILandingScreen() {
   const handleBack = () => {
     router.back();
   };
+  
+  // Load chat history from storage
+  useEffect(() => {
+    loadChatHistory();
+  }, []);
+  
+  const loadChatHistory = async () => {
+    try {
+      const stored = await AsyncStorage.getItem('chat_history');
+      if (stored) {
+        setChatHistory(JSON.parse(stored));
+      }
+    } catch (error) {
+      console.log('Error loading chat history:', error);
+    }
+  };
+  
+  const handleNewChat = () => {
+    setShowDrawer(false);
+    setInputText('');
+    setFocusMode(false);
+    setShowDisclaimer(true);
+  };
+  
+  const handleSelectChat = (chatId: string) => {
+    setShowDrawer(false);
+    router.push({
+      pathname: '/nyayai-chat',
+      params: { chatId }
+    });
+  };
 
   return (
     <View style={styles.container}>
