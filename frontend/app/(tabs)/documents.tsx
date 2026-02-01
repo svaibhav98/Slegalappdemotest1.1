@@ -267,7 +267,11 @@ export default function DocumentsScreen() {
   // Render Template Selection (Create Tab) - Modern 2-Column Grid Design
   const renderTemplateList = () => (
     <View style={styles.templateListContainer}>
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView 
+        style={styles.content} 
+        contentContainerStyle={styles.scrollContentContainer}
+        showsVerticalScrollIndicator={false}
+      >
         {/* Section Title */}
         <Text style={styles.sectionTitle}>Document Templates</Text>
         <Text style={styles.sectionSubtitle}>Select a template to generate your legal document</Text>
@@ -291,7 +295,6 @@ export default function DocumentsScreen() {
             );
           })}
         </View>
-        <View style={{ height: 80 }} />
       </ScrollView>
       
       {/* Floating Banner - Only in Create New Tab */}
