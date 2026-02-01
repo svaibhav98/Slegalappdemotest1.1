@@ -167,57 +167,68 @@ export default function NyayAILandingScreen() {
             contentContainerStyle={styles.scrollContent}
             showsVerticalScrollIndicator={false}
           >
-            {/* Compact AI Legal Assistant Icon */}
-            <View style={styles.mascotContainer}>
-              <View style={styles.professionalIconWrapper}>
-                {/* Outer Glow Circle */}
-                <View style={styles.outerGlow}>
-                  {/* Middle Circle */}
-                  <View style={styles.middleCircle}>
-                    {/* NyayAI Icon - Using larger size for hero display */}
-                    <NyayAIIcon size={48} color="#FF9933" secondaryColor="#059669" />
+            {!focusMode && (
+              <>
+                {/* Compact AI Legal Assistant Icon */}
+                <View style={styles.mascotContainer}>
+                  <View style={styles.professionalIconWrapper}>
+                    {/* Outer Glow Circle */}
+                    <View style={styles.outerGlow}>
+                      {/* Middle Circle */}
+                      <View style={styles.middleCircle}>
+                        {/* NyayAI Icon - Using larger size for hero display */}
+                        <NyayAIIcon size={48} color="#FF9933" secondaryColor="#059669" />
+                      </View>
+                    </View>
+                    {/* Decorative Elements - smaller */}
+                    <View style={[styles.decorativeCircle, { top: 4, left: 8 }]}>
+                      <LawBookIcon size={14} color="#059669" />
+                    </View>
+                    <View style={[styles.decorativeCircle, { top: 8, right: 10 }]}>
+                      <ShieldVerifyIcon size={14} color="#FF9933" />
+                    </View>
+                    <View style={[styles.decorativeCircle, { bottom: 12, left: 12 }]}>
+                      <LegalDocumentIcon size={14} color="#059669" />
+                    </View>
+                    <View style={[styles.decorativeCircle, { bottom: 8, right: 6 }]}>
+                      <NyayAIIcon size={16} color="#FF9933" secondaryColor="#059669" />
+                    </View>
                   </View>
                 </View>
-                {/* Decorative Elements - smaller */}
-                <View style={[styles.decorativeCircle, { top: 4, left: 8 }]}>
-                  <LawBookIcon size={14} color="#059669" />
+
+                {/* Greeting Text - Compact */}
+                <View style={styles.greetingContainer}>
+                  <Text style={styles.greetingTitle}>Hello, I'm NyayAI</Text>
+                  <Text style={styles.greetingSubtitle}>Your Legal Assistant</Text>
+                  <Text style={styles.greetingDescription}>
+                    Ask me anything about laws, rights, or government schemes
+                  </Text>
                 </View>
-                <View style={[styles.decorativeCircle, { top: 8, right: 10 }]}>
-                  <ShieldVerifyIcon size={14} color="#FF9933" />
+
+                {/* Suggested Prompts - Compact cards */}
+                <View style={styles.promptsContainer}>
+                  {suggestedPrompts.map((prompt) => (
+                    <TouchableOpacity
+                      key={prompt.id}
+                      style={styles.promptButton}
+                      onPress={() => handlePromptPressWithDisclaimer(prompt)}
+                      activeOpacity={0.8}
+                    >
+                      <View style={[styles.promptDot, { backgroundColor: prompt.color }]} />
+                      <Text style={styles.promptText} numberOfLines={2} ellipsizeMode="tail">{prompt.text}</Text>
+                      <Ionicons name="arrow-forward" size={16} color={COLORS.textMuted} />
+                    </TouchableOpacity>
+                  ))}
                 </View>
-                <View style={[styles.decorativeCircle, { bottom: 12, left: 12 }]}>
-                  <LegalDocumentIcon size={14} color="#059669" />
-                </View>
-                <View style={[styles.decorativeCircle, { bottom: 8, right: 6 }]}>
-                  <NyayAIIcon size={16} color="#FF9933" secondaryColor="#059669" />
-                </View>
+              </>
+            )}
+            
+            {focusMode && (
+              <View style={styles.focusModeContainer}>
+                <Text style={styles.focusModeText}>Focus Mode Active</Text>
+                <Text style={styles.focusModeSubtext}>Ask your legal question below</Text>
               </View>
-            </View>
-
-            {/* Greeting Text - Compact */}
-            <View style={styles.greetingContainer}>
-              <Text style={styles.greetingTitle}>Hello, I'm NyayAI</Text>
-              <Text style={styles.greetingSubtitle}>Your Legal Assistant</Text>
-              <Text style={styles.greetingDescription}>
-                Ask me anything about laws, rights, or government schemes
-              </Text>
-            </View>
-
-            {/* Suggested Prompts - Compact cards */}
-            <View style={styles.promptsContainer}>
-              {suggestedPrompts.map((prompt) => (
-                <TouchableOpacity
-                  key={prompt.id}
-                  style={styles.promptButton}
-                  onPress={() => handlePromptPressWithDisclaimer(prompt)}
-                  activeOpacity={0.8}
-                >
-                  <View style={[styles.promptDot, { backgroundColor: prompt.color }]} />
-                  <Text style={styles.promptText} numberOfLines={2} ellipsizeMode="tail">{prompt.text}</Text>
-                  <Ionicons name="arrow-forward" size={16} color={COLORS.textMuted} />
-                </TouchableOpacity>
-              ))}
-            </View>
+            )}
           </ScrollView>
 
           {/* Bottom Section */}
