@@ -319,6 +319,91 @@ export default function NyayAIChatScreen() {
           </View>
         </KeyboardAvoidingView>
       </LinearGradient>
+      
+      {/* Menu Modal */}
+      <Modal
+        visible={showMenu}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowMenu(false)}
+      >
+        <TouchableOpacity 
+          style={styles.menuOverlay}
+          activeOpacity={1}
+          onPress={() => setShowMenu(false)}
+        >
+          <View style={styles.menuSheet}>
+            <Text style={styles.menuTitle}>Chat Options</Text>
+            
+            <TouchableOpacity 
+              style={styles.menuItem}
+              onPress={() => {
+                setShowMenu(false);
+                setShowSummaryModal(true);
+              }}
+              disabled={messages.length === 0}
+            >
+              <Ionicons name="document-text-outline" size={22} color={messages.length === 0 ? COLORS.textMuted : COLORS.textPrimary} />
+              <Text style={[styles.menuItemText, messages.length === 0 && styles.menuItemDisabled]}>
+                View Chat Summary
+              </Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={styles.menuItem}
+              onPress={handleExportChat}
+              disabled={messages.length === 0}
+            >
+              <Ionicons name="share-outline" size={22} color={messages.length === 0 ? COLORS.textMuted : COLORS.textPrimary} />
+              <Text style={[styles.menuItemText, messages.length === 0 && styles.menuItemDisabled]}>
+                Export Chat
+              </Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={styles.menuItem}
+              onPress={handleConnectLawyer}
+            >
+              <Ionicons name="people-outline" size={22} color={COLORS.textPrimary} />
+              <Text style={styles.menuItemText}>Connect with Lawyer</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={styles.menuItem}
+              onPress={handleClearChat}
+              disabled={messages.length === 0}
+            >
+              <Ionicons name="trash-outline" size={22} color={messages.length === 0 ? COLORS.textMuted : COLORS.orange} />
+              <Text style={[styles.menuItemText, messages.length === 0 ? styles.menuItemDisabled : styles.menuItemDanger]}>
+                Clear Chat
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </Modal>
+      
+      {/* Summary Modal */}
+      <Modal
+        visible={showSummaryModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowSummaryModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Chat Summary</Text>
+            <ScrollView style={styles.modalScroll}>
+              <Text style={styles.modalText}>{generateSummary()}</Text>
+            </ScrollView>
+            <TouchableOpacity 
+              style={styles.modalButton}
+              onPress={() => setShowSummaryModal(false)}
+            >
+              <Text style={styles.modalButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </>
   );
 }
