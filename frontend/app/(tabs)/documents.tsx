@@ -295,12 +295,10 @@ export default function DocumentsScreen() {
             );
           })}
         </View>
-      </ScrollView>
-      
-      {/* Floating Banner - Only in Create New Tab */}
-      <View style={styles.floatingBannerContainer}>
+        
+        {/* Banner as normal card - AFTER template cards */}
         <TouchableOpacity 
-          style={styles.floatingBanner}
+          style={styles.consultBannerCard}
           onPress={() => router.push('/lawyers')}
           activeOpacity={0.9}
         >
@@ -310,7 +308,7 @@ export default function DocumentsScreen() {
           <Text style={styles.bannerText}>Need legal help? Consult an expert</Text>
           <Ionicons name="arrow-forward" size={18} color={COLORS.textSecondary} />
         </TouchableOpacity>
-      </View>
+      </ScrollView>
     </View>
   );
 
