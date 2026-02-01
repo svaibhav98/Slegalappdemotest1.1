@@ -440,6 +440,71 @@ export default function NyayAIChatScreen() {
           </View>
         </View>
       </Modal>
+      
+      {/* ChatGPT-Style Left Drawer */}
+      <Modal
+        visible={showDrawer}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setShowDrawer(false)}
+      >
+        <View style={styles.drawerOverlay}>
+          <TouchableOpacity 
+            style={styles.drawerBackdrop}
+            activeOpacity={1}
+            onPress={() => setShowDrawer(false)}
+          />
+          
+          <View style={styles.drawerContainer}>
+            <View style={styles.drawerHeader}>
+              <Text style={styles.drawerTitle}>NyayAI Chats</Text>
+              <TouchableOpacity onPress={() => setShowDrawer(false)}>
+                <Ionicons name="close" size={24} color={COLORS.textPrimary} />
+              </TouchableOpacity>
+            </View>
+            
+            <TouchableOpacity 
+              style={styles.newChatButton}
+              onPress={handleNewChat}
+            >
+              <Ionicons name="add-circle-outline" size={22} color={COLORS.orange} />
+              <Text style={styles.newChatText}>New Chat</Text>
+            </TouchableOpacity>
+            
+            <ScrollView style={styles.drawerContent}>
+              <Text style={styles.drawerSectionTitle}>Recent Chats</Text>
+              {chatHistory.length === 0 ? (
+                <View style={styles.emptyState}>
+                  <Ionicons name="chatbubbles-outline" size={48} color={COLORS.textMuted} />
+                  <Text style={styles.emptyStateText}>No chat history yet</Text>
+                  <Text style={styles.emptyStateSubtext}>Start a conversation to see it here</Text>
+                </View>
+              ) : (
+                chatHistory.map((chat) => (
+                  <TouchableOpacity 
+                    key={chat.id}
+                    style={styles.chatHistoryItem}
+                    onPress={() => handleSelectChat(chat.id)}
+                  >
+                    <Ionicons name="chatbubble-outline" size={20} color={COLORS.textSecondary} />
+                    <View style={styles.chatHistoryContent}>
+                      <Text style={styles.chatHistoryTitle} numberOfLines={1}>{chat.title}</Text>
+                      <Text style={styles.chatHistoryDate}>{chat.date}</Text>
+                    </View>
+                    <Ionicons name="chevron-forward" size={18} color={COLORS.textMuted} />
+                  </TouchableOpacity>
+                ))
+              )}
+              
+              <Text style={styles.drawerSectionTitle}>Saved</Text>
+              <View style={styles.emptyState}>
+                <Ionicons name="bookmark-outline" size={32} color={COLORS.textMuted} />
+                <Text style={styles.emptyStateSubtext}>No saved chats</Text>
+              </View>
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
     </>
   );
 }
