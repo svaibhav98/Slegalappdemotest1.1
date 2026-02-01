@@ -67,6 +67,12 @@ export default function TabLayout() {
           tabBarIcon: ({ color, size }) => <Ionicons name="document-text" size={size} color={color} /> 
         }} 
       />
+      <Tabs.Screen 
+        name="law-detail/[id]" 
+        options={{ 
+          href: null,
+        }} 
+      />
     </Tabs>
   );
 }
