@@ -56,8 +56,10 @@ const TEMPLATES: DocumentTemplate[] = [
   {
     id: 'consumer_complaint',
     title: 'Consumer Complaint',
+    subtitle: 'File product/service complaints',
     icon: 'megaphone',
-    color: COLORS.red,
+    color: '#FF9933',
+    bgColor: '#FFF7ED',
     fields: [
       { key: 'complainant_name', label: 'Complainant Name', placeholder: 'Enter your full name' },
       { key: 'complainant_address', label: 'Address', placeholder: 'Enter your address' },
@@ -70,8 +72,10 @@ const TEMPLATES: DocumentTemplate[] = [
   {
     id: 'rent_agreement',
     title: 'Rent Agreement',
+    subtitle: 'Property lease documentation',
     icon: 'home',
-    color: COLORS.blue,
+    color: '#138808',
+    bgColor: '#F0FDF4',
     fields: [
       { key: 'landlord_name', label: 'Landlord Name', placeholder: 'Enter landlord name' },
       { key: 'tenant_name', label: 'Tenant Name', placeholder: 'Enter tenant name' },
@@ -84,8 +88,10 @@ const TEMPLATES: DocumentTemplate[] = [
   {
     id: 'affidavit',
     title: 'Affidavit',
+    subtitle: 'Sworn legal statement',
     icon: 'document-text',
-    color: COLORS.purple,
+    color: '#FF9933',
+    bgColor: '#FFF7ED',
     fields: [
       { key: 'declarant_name', label: 'Declarant Name', placeholder: 'Enter your full name' },
       { key: 'father_name', label: 'Father\'s Name', placeholder: 'Enter father\'s name' },
@@ -97,8 +103,10 @@ const TEMPLATES: DocumentTemplate[] = [
   {
     id: 'nda',
     title: 'NDA',
+    subtitle: 'Non-Disclosure Agreement',
     icon: 'lock-closed',
-    color: COLORS.teal,
+    color: '#138808',
+    bgColor: '#F0FDF4',
     fields: [
       { key: 'disclosing_party', label: 'Disclosing Party', placeholder: 'Enter party name' },
       { key: 'receiving_party', label: 'Receiving Party', placeholder: 'Enter party name' },
@@ -110,8 +118,10 @@ const TEMPLATES: DocumentTemplate[] = [
   {
     id: 'legal_notice',
     title: 'Legal Notice',
+    subtitle: 'Formal legal communication',
     icon: 'mail',
-    color: COLORS.amber,
+    color: '#FF9933',
+    bgColor: '#FFF7ED',
     fields: [
       { key: 'sender_name', label: 'Sender Name', placeholder: 'Enter your name' },
       { key: 'sender_address', label: 'Sender Address', placeholder: 'Enter your address' },
@@ -124,8 +134,10 @@ const TEMPLATES: DocumentTemplate[] = [
   {
     id: 'power_of_attorney',
     title: 'Power of Attorney',
+    subtitle: 'Legal authority delegation',
     icon: 'person',
-    color: COLORS.pink,
+    color: '#138808',
+    bgColor: '#F0FDF4',
     fields: [
       { key: 'principal_name', label: 'Principal Name', placeholder: 'Enter principal name' },
       { key: 'agent_name', label: 'Agent/Attorney Name', placeholder: 'Enter agent name' },
