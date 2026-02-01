@@ -95,7 +95,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       await AsyncStorage.removeItem('mockUserPhone');
       await AsyncStorage.removeItem('isGuest');
-      await firebaseSignOut(auth);
+      if (isFirebaseReady() && auth) {
+        await firebaseSignOut(auth);
+      }
       setUser(null);
       setIsGuest(false);
     } catch (error) {
@@ -127,7 +129,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, isGuest, signOut, setMockUser, setGuestMode }}>
+    <AuthContext.Provider value={{ user, loading, isGuest, isDemoMode: demoMode, signOut, setMockUser, setGuestMode }}>
       {children}
     </AuthContext.Provider>
   );
