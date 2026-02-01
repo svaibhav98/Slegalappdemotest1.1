@@ -28,6 +28,7 @@ import {
 import { Colors, Spacing, Layout, Typography, Shadows } from '../../theme';
 
 const { width } = Dimensions.get('window');
+const CARD_WIDTH = (width - 60) / 2;
 
 // Design System Colors
 const COLORS = {
