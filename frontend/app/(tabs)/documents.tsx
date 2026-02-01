@@ -291,8 +291,23 @@ export default function DocumentsScreen() {
             );
           })}
         </View>
-        <View style={{ height: 20 }} />
+        <View style={{ height: 80 }} />
       </ScrollView>
+      
+      {/* Floating Banner - Only in Create New Tab */}
+      <View style={styles.floatingBannerContainer}>
+        <TouchableOpacity 
+          style={styles.floatingBanner}
+          onPress={() => router.push('/lawyers')}
+          activeOpacity={0.9}
+        >
+          <View style={styles.bannerIconWrapper}>
+            <Ionicons name="chatbubble-ellipses" size={20} color={COLORS.white} />
+          </View>
+          <Text style={styles.bannerText}>Need legal help? Consult an expert</Text>
+          <Ionicons name="arrow-forward" size={18} color={COLORS.textSecondary} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 
