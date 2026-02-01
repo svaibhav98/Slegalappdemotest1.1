@@ -979,30 +979,31 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
   },
   
-  // Quick Access - Modern Grid
-  quickAccessGrid: { 
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    paddingHorizontal: Layout.screenPadding,
-    gap: Layout.itemSpacing,
+  // Quick Access - Original Design (Slightly Larger)
+  quickAccessScroll: { 
+    paddingLeft: Layout.screenPadding,
+  },
+  quickAccessContainer: { 
+    paddingRight: Layout.screenPadding, 
+    gap: 14,
   },
   quickAccessCard: { 
-    width: '47%',
+    width: 100, // Increased from ~90
     alignItems: 'center', 
-    padding: Layout.cardPadding,
+    padding: 14, // Increased from 12
+    paddingTop: 18, // Increased
+    paddingBottom: 16, // Increased
     borderRadius: Layout.borderRadius.lg, 
     backgroundColor: Colors.surface, 
-    borderWidth: 1,
-    borderColor: Colors.border,
     ...Shadows.sm,
   },
   quickAccessIconContainer: { 
-    width: 56, 
-    height: 56, 
-    borderRadius: 28, 
+    width: 60, // Increased from 52
+    height: 60, // Increased from 52
+    borderRadius: 30, 
     justifyContent: 'center', 
     alignItems: 'center', 
-    marginBottom: Spacing.md,
+    marginBottom: 12, // Increased from 10
   },
   quickAccessLabel: { 
     ...Typography.labelSmall,
