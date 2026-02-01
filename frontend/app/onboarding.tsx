@@ -5,31 +5,31 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width, height } = Dimensions.get('window');
 
-// Clean onboarding images (no embedded UI elements) - 4 DIFFERENT images
+// SunoLegal onboarding images - 4 DIFFERENT images with clear themes
 const ONBOARDING_SCREENS = [
   {
     id: '1',
-    image: { uri: 'https://images.unsplash.com/photo-1589578527966-fdac0f44566c?w=800&q=80' },
-    title: 'Legal help simplified',
-    subtitle: '',
+    image: { uri: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&q=80' },
+    title: 'Legal help made simple',
+    subtitle: 'Navigate Indian law with ease',
   },
   {
     id: '2',
-    image: { uri: 'https://images.unsplash.com/photo-1505664194779-8beaceb93744?w=800&q=80' },
-    title: 'NyayAI – Ask legal questions instantly',
-    subtitle: '',
+    image: { uri: 'https://images.unsplash.com/photo-1589578527966-fdac0f44566c?w=800&q=80' },
+    title: 'NyayAI legal assistant',
+    subtitle: 'Get instant answers to your legal questions',
   },
   {
     id: '3',
-    image: { uri: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&q=80' },
-    title: 'Generate documents & consult lawyers',
-    subtitle: '',
+    image: { uri: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=800&q=80' },
+    title: 'Track your cases',
+    subtitle: 'Stay updated on case progress',
   },
   {
     id: '4',
-    image: { uri: 'https://images.unsplash.com/photo-1532375810709-75b1da00537c?w=800&q=80' },
-    title: 'Justice for all of Bharat',
-    subtitle: '',
+    image: { uri: 'https://images.unsplash.com/photo-1505664194779-8beaceb93744?w=800&q=80' },
+    title: 'Documents + Lawyer consultation',
+    subtitle: 'Generate legal docs and consult verified lawyers',
   },
 ];
 
