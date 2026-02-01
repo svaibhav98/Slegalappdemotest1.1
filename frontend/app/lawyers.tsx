@@ -356,7 +356,6 @@ export default function LawyersScreen() {
                         style={styles.consultNowButton}
                         onPress={handleConsultNow}
                         activeOpacity={0.9}
-                        disabled={!selectedLawyer.isAvailable}
                       >
                         <Text style={styles.consultNowText}>Consult Now</Text>
                       </TouchableOpacity>
