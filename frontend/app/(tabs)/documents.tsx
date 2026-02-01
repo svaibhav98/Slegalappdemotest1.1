@@ -262,7 +262,7 @@ export default function DocumentsScreen() {
     return content;
   };
 
-  // Render Template Selection (Create Tab)
+  // Render Template Selection (Create Tab) - Professional Legal-Tech Design
   const renderTemplateList = () => (
     <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
       <View style={styles.templateGrid}>
@@ -273,16 +273,14 @@ export default function DocumentsScreen() {
             onPress={() => handleSelectTemplate(template)}
             activeOpacity={0.9}
           >
-            <LinearGradient
-              colors={[template.color, template.color + 'CC']}
-              style={styles.templateGradient}
-            >
-              <View style={styles.templateIconWrapper}>
-                <Ionicons name={template.icon as any} size={32} color={COLORS.white} />
-              </View>
+            <View style={[styles.templateIconWrapper, { backgroundColor: template.bgColor }]}>
+              <Ionicons name={template.icon as any} size={24} color={template.color} />
+            </View>
+            <View style={styles.templateTextContainer}>
               <Text style={styles.templateTitle}>{template.title}</Text>
-              <Text style={styles.templateSubtitle}>{template.fields.length} fields</Text>
-            </LinearGradient>
+              <Text style={styles.templateSubtitle}>{template.subtitle}</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={20} color={COLORS.textMuted} />
           </TouchableOpacity>
         ))}
       </View>
