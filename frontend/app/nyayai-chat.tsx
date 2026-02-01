@@ -781,4 +781,103 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: COLORS.white,
   },
+  
+  // ChatGPT-Style Drawer
+  drawerOverlay: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  drawerBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  drawerContainer: {
+    width: '80%',
+    maxWidth: 320,
+    backgroundColor: COLORS.white,
+    shadowColor: '#000',
+    shadowOffset: { width: -2, height: 0 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 10,
+  },
+  drawerHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 20,
+    paddingTop: 60,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.inputBorder,
+  },
+  drawerTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: COLORS.textPrimary,
+  },
+  newChatButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    margin: 16,
+    backgroundColor: COLORS.inputBg,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: COLORS.inputBorder,
+  },
+  newChatText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: COLORS.textPrimary,
+    marginLeft: 12,
+  },
+  drawerContent: {
+    flex: 1,
+    padding: 16,
+  },
+  drawerSectionTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: COLORS.textMuted,
+    marginBottom: 12,
+    marginTop: 8,
+  },
+  chatHistoryItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    marginBottom: 8,
+    backgroundColor: COLORS.inputBg,
+    borderRadius: 10,
+  },
+  chatHistoryContent: {
+    flex: 1,
+    marginLeft: 12,
+  },
+  chatHistoryTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: COLORS.textPrimary,
+    marginBottom: 2,
+  },
+  chatHistoryDate: {
+    fontSize: 12,
+    color: COLORS.textMuted,
+  },
+  emptyState: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 32,
+  },
+  emptyStateText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: COLORS.textSecondary,
+    marginTop: 12,
+  },
+  emptyStateSubtext: {
+    fontSize: 12,
+    color: COLORS.textMuted,
+    marginTop: 4,
+  },
 });
