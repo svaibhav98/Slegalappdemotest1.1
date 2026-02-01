@@ -210,7 +210,7 @@ export default function BookingSummaryScreen() {
         </View>
 
         {/* Bottom Navigation Bar */}
-        <BottomNavBar activeTab="home" />
+        <BottomNavBar />
       </View>
     </>
   );
