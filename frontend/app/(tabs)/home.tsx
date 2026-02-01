@@ -419,7 +419,7 @@ export default function HomeScreen() {
             <Text style={styles.greetingText}>{greeting}, Vaibhav 👋</Text>
           </View>
           <Text style={styles.welcomeText}>
-            Welcome to <Text style={styles.brandText}>SunoLegal</Text>
+            Welcome to <Text style={styles.brandOrange}>Suno</Text><Text style={styles.brandGreen}>Legal</Text>
           </Text>
         </View>
         
