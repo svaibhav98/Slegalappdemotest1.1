@@ -726,6 +726,45 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   
+  // Floating Banner (Create New Tab Only)
+  floatingBannerContainer: { 
+    position: 'absolute', 
+    bottom: 70, 
+    left: 20, 
+    right: 20, 
+    zIndex: 10,
+  },
+  floatingBanner: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    backgroundColor: COLORS.white, 
+    borderRadius: 14, 
+    paddingHorizontal: 16, 
+    paddingVertical: 14, 
+    shadowColor: '#000', 
+    shadowOffset: { width: 0, height: 4 }, 
+    shadowOpacity: 0.12, 
+    shadowRadius: 12, 
+    elevation: 8,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+  },
+  bannerIconWrapper: { 
+    width: 36, 
+    height: 36, 
+    borderRadius: 18, 
+    backgroundColor: COLORS.primary, 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    marginRight: 12,
+  },
+  bannerText: { 
+    flex: 1, 
+    fontSize: 14, 
+    fontWeight: '600', 
+    color: COLORS.textPrimary,
+  },
+  
   sectionTitle: {
     fontSize: 18,
     fontWeight: '700',
