@@ -264,46 +264,43 @@ export default function DocumentsScreen() {
 
   // Render Template Selection (Create Tab) - Professional Legal-Tech Design
   const renderTemplateList = () => (
-    <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-      {/* Create New Document CTA Card */}
-      <TouchableOpacity
-        style={styles.createNewCard}
+    <View style={styles.templateListContainer}>
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        {/* Section Title */}
+        <Text style={styles.sectionTitle}>Document Templates</Text>
+        <Text style={styles.sectionSubtitle}>Select a template to generate your legal document</Text>
+
+        <View style={styles.templateGrid}>
+          {TEMPLATES.map((template) => (
+            <TouchableOpacity
+              key={template.id}
+              style={styles.templateCard}
+              onPress={() => handleSelectTemplate(template)}
+              activeOpacity={0.9}
+            >
+              <View style={styles.templateIconWrapper}>
+                <Ionicons name={template.icon as any} size={22} color={COLORS.primary} />
+              </View>
+              <View style={styles.templateTextContainer}>
+                <Text style={styles.templateTitle}>{template.title}</Text>
+                <Text style={styles.templateSubtitle}>{template.subtitle}</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={18} color={COLORS.textMuted} />
+            </TouchableOpacity>
+          ))}
+        </View>
+        <View style={{ height: 100 }} />
+      </ScrollView>
+
+      {/* Floating Action Button */}
+      <TouchableOpacity 
+        style={styles.fab}
         onPress={() => {}}
         activeOpacity={0.9}
       >
-        <View style={styles.createNewIconWrapper}>
-          <Ionicons name="add-circle" size={32} color="#FF9933" />
-        </View>
-        <View style={styles.createNewTextContainer}>
-          <Text style={styles.createNewTitle}>Create New Document</Text>
-          <Text style={styles.createNewSubtitle}>Start drafting a legal document</Text>
-        </View>
+        <Ionicons name="add" size={28} color={COLORS.white} />
       </TouchableOpacity>
-
-      {/* Section Title */}
-      <Text style={styles.sectionTitle}>Document Templates</Text>
-
-      <View style={styles.templateGrid}>
-        {TEMPLATES.map((template) => (
-          <TouchableOpacity
-            key={template.id}
-            style={styles.templateCard}
-            onPress={() => handleSelectTemplate(template)}
-            activeOpacity={0.9}
-          >
-            <View style={[styles.templateIconWrapper, { backgroundColor: template.bgColor }]}>
-              <Ionicons name={template.icon as any} size={24} color={template.color} />
-            </View>
-            <View style={styles.templateTextContainer}>
-              <Text style={styles.templateTitle}>{template.title}</Text>
-              <Text style={styles.templateSubtitle}>{template.subtitle}</Text>
-            </View>
-            <Ionicons name="chevron-forward" size={20} color={COLORS.textMuted} />
-          </TouchableOpacity>
-        ))}
-      </View>
-      <View style={{ height: 40 }} />
-    </ScrollView>
+    </View>
   );
 
   // Render Form Screen
