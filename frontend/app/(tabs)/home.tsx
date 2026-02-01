@@ -125,44 +125,13 @@ export default function HomeScreen() {
     router.push(route as any);
   };
 
-  const quickAccessItems = [
-    { 
-      id: 'nyayai',
-      label: 'Nyay-Ai\nAssistant', 
-      route: '/(tabs)/chat', 
-      iconColor: '#FF9933',
-      secondaryColor: '#059669',
-      bgColor: '#FEF3C7',
-    },
-    { 
-      id: 'consultation',
-      label: 'Legal\nConsultation', 
-      route: '/lawyers', 
-      iconColor: '#2B2D42',
-      bgColor: '#FEE2E2',
-    },
-    { 
-      id: 'document',
-      label: 'Notice\nDrafting', 
-      route: '/(tabs)/documents', 
-      iconColor: '#FF9933',
-      bgColor: '#FFFFFF',
-    },
-    { 
-      id: 'cases',
-      label: 'Case\nTracker', 
-      route: '/(tabs)/cases', 
-      iconColor: '#2B2D42',
-      bgColor: '#FED7AA',
-    },
-    { 
-      id: 'laws',
-      label: 'Laws &\nSchemes', 
-      route: '/(tabs)/laws', 
-      iconColor: '#2B2D42',
-      bgColor: '#DBEAFE',
-    },
-  ];
+// Quick Access Items with consistent icons
+const quickAccessItems = [
+  { icon: 'sparkles', label: 'NyayAI Assistant', route: '/(tabs)/chat', color: Colors.primary },
+  { icon: 'document-text', label: 'Legal Documents', route: '/(tabs)/documents', color: Colors.secondary },
+  { icon: 'briefcase', label: 'My Cases', route: '/(tabs)/cases', color: Colors.info },
+  { icon: 'chatbubbles', label: 'Consult Lawyer', route: '/lawyers', color: Colors.warning },
+];
 
   const categoryItems = [
     {
