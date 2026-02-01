@@ -284,7 +284,7 @@ const quickAccessItems = [
         />
         <View style={styles.drawerContainer}>
           {/* Drawer Header */}
-          <LinearGradient colors={[COLORS.headerBg, COLORS.headerBgLight]} style={styles.drawerHeader}>
+          <LinearGradient colors={[Colors.headerBg, Colors.headerBgLight]} style={styles.drawerHeader}>
             <View style={styles.drawerUserInfo}>
               <View style={styles.drawerAvatar}>
                 <Ionicons name="person" size={32} color={Colors.textInverse} />
@@ -340,7 +340,7 @@ const quickAccessItems = [
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={COLORS.headerBg} />
+      <StatusBar barStyle="light-content" backgroundColor={Colors.headerBg} />
       
       {/* Guest Disclaimer Popup */}
       <Modal
@@ -639,7 +639,7 @@ const quickAccessItems = [
 const styles = StyleSheet.create({
   container: { 
     flex: 1, 
-    backgroundColor: COLORS.headerBg,
+    backgroundColor: Colors.headerBg,
   },
   
   // Guest Disclaimer Popup
@@ -753,7 +753,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 12,
-    backgroundColor: COLORS.surface,
+    backgroundColor: Colors.background,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 14,
@@ -767,14 +767,14 @@ const styles = StyleSheet.create({
   drawerLogout: {
     marginTop: 20,
     borderTopWidth: 1,
-    borderTopColor: COLORS.surface,
+    borderTopColor: Colors.background,
     paddingTop: 20,
   },
   drawerFooter: {
     paddingVertical: 20,
     alignItems: 'center',
     borderTopWidth: 1,
-    borderTopColor: COLORS.surface,
+    borderTopColor: Colors.background,
   },
   drawerFooterText: {
     fontSize: 12,
@@ -788,7 +788,7 @@ const styles = StyleSheet.create({
     paddingTop: 12, 
     paddingBottom: 20, 
     paddingHorizontal: 20, 
-    backgroundColor: COLORS.headerBg,
+    backgroundColor: Colors.headerBg,
   },
   menuButton: { 
     padding: 10, 
@@ -851,7 +851,7 @@ const styles = StyleSheet.create({
   // Content
   content: { 
     flex: 1, 
-    backgroundColor: COLORS.surface,
+    backgroundColor: Colors.background,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     marginTop: -4,
@@ -973,7 +973,7 @@ const styles = StyleSheet.create({
   },
   categoryCard: { 
     width: CARD_WIDTH,
-    backgroundColor: COLORS.cardBg, 
+    backgroundColor: Colors.surface, 
     padding: 16, 
     borderRadius: 20, 
     shadowColor: '#000', 
@@ -984,7 +984,7 @@ const styles = StyleSheet.create({
   },
   categoryCardPartial: {
     width: CARD_WIDTH * 0.5,
-    backgroundColor: COLORS.cardBg, 
+    backgroundColor: Colors.surface, 
     padding: 16, 
     borderRadius: 20, 
     shadowColor: '#000', 
@@ -1049,7 +1049,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', 
     marginHorizontal: 20, 
     marginBottom: 10,
-    backgroundColor: COLORS.cardBg, 
+    backgroundColor: Colors.surface, 
     borderRadius: 16, 
     padding: 14, 
     shadowColor: '#000', 
@@ -1069,7 +1069,7 @@ const styles = StyleSheet.create({
     height: 100, 
     borderRadius: 12, 
     marginRight: 14,
-    backgroundColor: COLORS.surface,
+    backgroundColor: Colors.background,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -1225,7 +1225,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.surface,
+    borderBottomColor: Colors.background,
   },
   notificationsTitle: {
     fontSize: 18,
@@ -1254,7 +1254,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: COLORS.surface,
+    backgroundColor: Colors.background,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -1294,7 +1294,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     alignItems: 'center',
     borderTopWidth: 1,
-    borderTopColor: COLORS.surface,
+    borderTopColor: Colors.background,
   },
   markAllReadText: {
     fontSize: 14,
