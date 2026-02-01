@@ -651,13 +651,35 @@ const styles = StyleSheet.create({
   // Content
   content: { flex: 1, padding: 20 },
   
-  // Template Grid
-  templateGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 16 },
-  templateCard: { width: '47%', aspectRatio: 0.95, borderRadius: 20, overflow: 'hidden', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 10, elevation: 6 },
-  templateGradient: { flex: 1, padding: 20, justifyContent: 'center', alignItems: 'center' },
-  templateIconWrapper: { width: 64, height: 64, borderRadius: 32, backgroundColor: 'rgba(255,255,255,0.25)', justifyContent: 'center', alignItems: 'center', marginBottom: 12 },
-  templateTitle: { fontSize: 16, fontWeight: '700', color: COLORS.white, textAlign: 'center', marginBottom: 4 },
-  templateSubtitle: { fontSize: 12, color: COLORS.white, opacity: 0.9 },
+  // Template Grid - Professional Legal-Tech Design
+  templateGrid: { gap: 12 },
+  templateCard: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    backgroundColor: COLORS.white, 
+    borderRadius: 16, 
+    padding: 16, 
+    shadowColor: '#000', 
+    shadowOffset: { width: 0, height: 2 }, 
+    shadowOpacity: 0.06, 
+    shadowRadius: 8, 
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+  },
+  templateIconWrapper: { 
+    width: 48, 
+    height: 48, 
+    borderRadius: 12, 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    marginRight: 14,
+  },
+  templateTextContainer: {
+    flex: 1,
+  },
+  templateTitle: { fontSize: 16, fontWeight: '600', color: COLORS.textPrimary, marginBottom: 2 },
+  templateSubtitle: { fontSize: 13, color: COLORS.textSecondary },
   
   // Document Card
   documentCard: { flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.white, borderRadius: 16, padding: 16, marginBottom: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 8, elevation: 3 },
