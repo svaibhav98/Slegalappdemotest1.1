@@ -454,38 +454,29 @@ const quickAccessItems = [
           </View>
         </View>
 
-        {/* Quick Access Section */}
+        {/* Quick Access Section - Modern Design */}
         <View style={styles.sectionWrapper}>
           <Text style={styles.sectionTitle}>Quick Access</Text>
-          <ScrollView 
-            horizontal 
-            showsHorizontalScrollIndicator={false} 
-            style={styles.quickAccessScroll}
-            contentContainerStyle={styles.quickAccessContainer}
-          >
+          <View style={styles.quickAccessGrid}>
             {quickAccessItems.map((item, index) => (
               <TouchableOpacity 
-                key={item.id} 
+                key={index} 
                 style={styles.quickAccessCard} 
                 onPress={() => router.push(item.route as any)} 
-                activeOpacity={0.85}
+                activeOpacity={0.7}
               >
                 <View style={[
                   styles.quickAccessIconContainer,
-                  { backgroundColor: item.bgColor }
+                  { backgroundColor: item.color + '15' }
                 ]}>
-                  {item.id === 'nyayai' && <NyayAIIcon size={30} color={item.iconColor} secondaryColor={item.secondaryColor} />}
-                  {item.id === 'consultation' && <ConsultationIcon size={28} color={item.iconColor} />}
-                  {item.id === 'document' && <LegalDocumentIcon size={28} color={item.iconColor} />}
-                  {item.id === 'cases' && <BriefcaseIcon size={28} color={item.iconColor} />}
-                  {item.id === 'laws' && <LawBookIcon size={28} color={item.iconColor} />}
+                  <Ionicons name={item.icon as any} size={24} color={item.color} />
                 </View>
-                <Text style={styles.quickAccessLabel}>
+                <Text style={styles.quickAccessLabel} numberOfLines={2}>
                   {item.label}
                 </Text>
               </TouchableOpacity>
             ))}
-          </ScrollView>
+          </View>
         </View>
 
         {/* Category Section */}
