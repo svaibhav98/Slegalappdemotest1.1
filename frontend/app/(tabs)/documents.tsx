@@ -273,20 +273,23 @@ export default function DocumentsScreen() {
         <Text style={styles.sectionSubtitle}>Select a template to generate your legal document</Text>
 
         <View style={styles.templateGrid}>
-          {TEMPLATES.map((template) => (
-            <TouchableOpacity
-              key={template.id}
-              style={styles.templateCard}
-              onPress={() => handleSelectTemplate(template)}
-              activeOpacity={0.85}
-            >
-              <View style={styles.templateIconWrapper}>
-                <Ionicons name={template.icon as any} size={28} color={COLORS.primary} />
-              </View>
-              <Text style={styles.templateTitle} numberOfLines={2}>{template.title}</Text>
-              <Text style={styles.templateSubtitle}>Generate PDF</Text>
-            </TouchableOpacity>
-          ))}
+          {TEMPLATES.map((template) => {
+            const iconColor = getDocumentIconColor(template.id);
+            return (
+              <TouchableOpacity
+                key={template.id}
+                style={styles.templateCard}
+                onPress={() => handleSelectTemplate(template)}
+                activeOpacity={0.85}
+              >
+                <View style={[styles.templateIconWrapper, { backgroundColor: iconColor + '15' }]}>
+                  <Ionicons name={template.icon as any} size={28} color={iconColor} />
+                </View>
+                <Text style={styles.templateTitle} numberOfLines={2}>{template.title}</Text>
+                <Text style={styles.templateSubtitle}>Generate PDF</Text>
+              </TouchableOpacity>
+            );
+          })}
         </View>
         <View style={{ height: 20 }} />
       </ScrollView>
