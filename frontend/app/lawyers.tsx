@@ -247,7 +247,7 @@ export default function LawyersScreen() {
         </ScrollView>
 
         {/* Bottom Navigation Bar */}
-        <BottomNavBar activeTab="home" />
+        <BottomNavBar />
 
         {/* Lawyer Profile Modal */}
         <Modal
