@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   RefreshControl,
   Image,
+  Dimensions,
   StatusBar,
   Modal,
 } from 'react-native';
@@ -25,6 +26,8 @@ import {
   BookmarkIcon 
 } from '../../components/icons/LegalIcons';
 import { Colors, Spacing, Layout, Typography, Shadows } from '../../theme';
+
+const { width } = Dimensions.get('window');
 
 // Design System Colors
 const COLORS = {
