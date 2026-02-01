@@ -204,7 +204,7 @@ export default function PostConsultationScreen() {
         </View>
 
         {/* Bottom Navigation Bar */}
-        <BottomNavBar activeTab="home" />
+        <BottomNavBar />
       </View>
     </>
   );
