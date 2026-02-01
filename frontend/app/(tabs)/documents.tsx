@@ -640,40 +640,52 @@ const styles = StyleSheet.create({
   // Content
   content: { flex: 1, padding: 20 },
   
-  // Template Grid - Professional Legal-Tech Design
+  // Template Grid - Modern 2-Column Grid Design
   templateListContainer: {
     flex: 1,
-    position: 'relative',
   },
-  templateGrid: { gap: 10 },
+  templateGrid: { 
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
   templateCard: { 
-    flexDirection: 'row', 
-    alignItems: 'center', 
+    width: '48%',
     backgroundColor: COLORS.white, 
-    borderRadius: 12, 
-    padding: 14, 
+    borderRadius: 16, 
+    padding: 20,
+    alignItems: 'center',
     shadowColor: '#000', 
-    shadowOffset: { width: 0, height: 1 }, 
-    shadowOpacity: 0.04, 
-    shadowRadius: 4, 
-    elevation: 2,
+    shadowOffset: { width: 0, height: 2 }, 
+    shadowOpacity: 0.06, 
+    shadowRadius: 8, 
+    elevation: 3,
     borderWidth: 1,
-    borderColor: '#F0F0F0',
+    borderColor: '#F3F4F6',
   },
   templateIconWrapper: { 
-    width: 44, 
-    height: 44, 
-    borderRadius: 10, 
-    backgroundColor: '#FFF5ED',
+    width: 56, 
+    height: 56, 
+    borderRadius: 14, 
+    backgroundColor: '#FFF7ED',
     justifyContent: 'center', 
     alignItems: 'center', 
-    marginRight: 12,
+    marginBottom: 12,
   },
-  templateTextContainer: {
-    flex: 1,
+  templateTitle: { 
+    fontSize: 14, 
+    fontWeight: '600', 
+    color: COLORS.textPrimary, 
+    textAlign: 'center',
+    marginBottom: 4,
+    lineHeight: 18,
   },
-  templateTitle: { fontSize: 15, fontWeight: '600', color: COLORS.textPrimary, marginBottom: 2 },
-  templateSubtitle: { fontSize: 12, color: COLORS.textSecondary },
+  templateSubtitle: { 
+    fontSize: 11, 
+    color: COLORS.textMuted,
+    textAlign: 'center',
+  },
   
   sectionTitle: {
     fontSize: 18,
@@ -684,25 +696,7 @@ const styles = StyleSheet.create({
   sectionSubtitle: {
     fontSize: 13,
     color: COLORS.textSecondary,
-    marginBottom: 16,
-  },
-  
-  // Floating Action Button
-  fab: {
-    position: 'absolute',
-    bottom: 20,
-    right: 20,
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: COLORS.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 6,
+    marginBottom: 20,
   },
   
   // Document Card
