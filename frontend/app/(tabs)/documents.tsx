@@ -265,6 +265,24 @@ export default function DocumentsScreen() {
   // Render Template Selection (Create Tab) - Professional Legal-Tech Design
   const renderTemplateList = () => (
     <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      {/* Create New Document CTA Card */}
+      <TouchableOpacity
+        style={styles.createNewCard}
+        onPress={() => {}}
+        activeOpacity={0.9}
+      >
+        <View style={styles.createNewIconWrapper}>
+          <Ionicons name="add-circle" size={32} color="#FF9933" />
+        </View>
+        <View style={styles.createNewTextContainer}>
+          <Text style={styles.createNewTitle}>Create New Document</Text>
+          <Text style={styles.createNewSubtitle}>Start drafting a legal document</Text>
+        </View>
+      </TouchableOpacity>
+
+      {/* Section Title */}
+      <Text style={styles.sectionTitle}>Document Templates</Text>
+
       <View style={styles.templateGrid}>
         {TEMPLATES.map((template) => (
           <TouchableOpacity
