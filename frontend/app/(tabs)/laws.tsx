@@ -432,6 +432,7 @@ const styles = StyleSheet.create({
   cardContent: {
     flex: 1,
     justifyContent: 'space-between',
+    paddingRight: 40, // Space for save button (36px width + 4px margin)
   },
   cardTitle: {
     fontSize: 17,
