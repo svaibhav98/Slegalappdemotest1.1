@@ -517,28 +517,31 @@ export default function DocumentsScreen() {
           <Text style={styles.sectionEmptyText}>No saved documents yet</Text>
         </View>
       ) : (
-        savedItems.map((doc) => (
-          <View key={doc.id} style={styles.documentCard}>
-            <View style={styles.docIconContainer}>
-              <Ionicons name="document-text" size={28} color={COLORS.primary} />
+        savedItems.map((doc) => {
+          const iconColor = getDocumentIconColor(doc.type);
+          return (
+            <View key={doc.id} style={styles.documentCard}>
+              <View style={[styles.docIconContainer, { backgroundColor: iconColor + '15' }]}>
+                <Ionicons name="document-text" size={28} color={iconColor} />
+              </View>
+              <View style={styles.docInfo}>
+                <Text style={styles.docName} numberOfLines={1}>{doc.name}</Text>
+                <Text style={styles.docMeta}>{doc.type} • {doc.createdAt} • {doc.size}</Text>
+              </View>
+              <View style={styles.docActions}>
+                <TouchableOpacity style={styles.docActionBtn} onPress={() => handleRemoveFromSaved(doc.id)}>
+                  <Ionicons name="bookmark" size={22} color={COLORS.amber} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.docActionBtn}>
+                  <Ionicons name="share-outline" size={22} color={COLORS.textMuted} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.docActionBtn}>
+                  <Ionicons name="download-outline" size={22} color={COLORS.textMuted} />
+                </TouchableOpacity>
+              </View>
             </View>
-            <View style={styles.docInfo}>
-              <Text style={styles.docName} numberOfLines={1}>{doc.name}</Text>
-              <Text style={styles.docMeta}>{doc.type} • {doc.createdAt} • {doc.size}</Text>
-            </View>
-            <View style={styles.docActions}>
-              <TouchableOpacity style={styles.docActionBtn} onPress={() => handleRemoveFromSaved(doc.id)}>
-                <Ionicons name="bookmark" size={22} color={COLORS.amber} />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.docActionBtn}>
-                <Ionicons name="share-outline" size={22} color={COLORS.textMuted} />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.docActionBtn}>
-                <Ionicons name="download-outline" size={22} color={COLORS.textMuted} />
-              </TouchableOpacity>
-            </View>
-          </View>
-        ))
+          );
+        })
       )}
 
       {/* Section 2: Saved Laws & Schemes */}
