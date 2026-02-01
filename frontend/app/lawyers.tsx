@@ -52,22 +52,37 @@ export default function LawyersScreen() {
 
   const handleLawyerPress = (lawyer: Lawyer) => {
     setSelectedLawyer(lawyer);
-    setSelectedPackage(lawyer.packages[0]); // Default to first package
+    // Default to chat package (packages[1]) or first available package
+    const defaultPackage = lawyer.packages[1] || lawyer.packages[0];
+    setSelectedPackage(defaultPackage);
     setShowProfileModal(true);
   };
 
   const handleConsultNow = () => {
-    if (selectedLawyer && selectedPackage) {
-      setShowProfileModal(false);
-      router.push({
-        pathname: '/booking-summary',
-        params: { 
-          lawyerId: selectedLawyer.id,
-          packageId: selectedPackage.id,
-          mode: 'instant'
-        }
-      });
+    if (!selectedLawyer) {
+      console.warn('No lawyer selected');
+      return;
     }
+    
+    // Ensure we have a package selected, fallback to chat package or first available
+    const packageToUse = selectedPackage || selectedLawyer.packages[1] || selectedLawyer.packages[0];
+    
+    if (!packageToUse) {
+      console.warn('No package available for this lawyer');
+      return;
+    }
+    
+    setShowProfileModal(false);
+    
+    // Navigate to booking summary
+    router.push({
+      pathname: '/booking-summary',
+      params: { 
+        lawyerId: selectedLawyer.id,
+        packageId: packageToUse.id,
+        mode: 'instant'
+      }
+    });
   };
 
   const handleScheduleLater = () => {
