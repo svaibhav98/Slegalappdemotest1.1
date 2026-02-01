@@ -732,26 +732,21 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   
-  // Floating Banner (Create New Tab Only)
-  floatingBannerContainer: { 
-    position: 'absolute', 
-    bottom: 68, // Bottom nav height (56) + spacing (12)
-    left: 16, 
-    right: 16, 
-    zIndex: 10,
-  },
-  floatingBanner: { 
+  // Consult Banner Card (Normal card, not floating)
+  consultBannerCard: { 
     flexDirection: 'row', 
     alignItems: 'center', 
     backgroundColor: COLORS.white, 
     borderRadius: 16, 
     paddingHorizontal: 16, 
     paddingVertical: 14, 
+    marginTop: 20,
+    marginBottom: 20,
     shadowColor: '#000', 
-    shadowOffset: { width: 0, height: 4 }, 
-    shadowOpacity: 0.15, 
-    shadowRadius: 16, 
-    elevation: 10,
+    shadowOffset: { width: 0, height: 2 }, 
+    shadowOpacity: 0.08, 
+    shadowRadius: 8, 
+    elevation: 4,
     borderWidth: 1,
     borderColor: COLORS.border,
   },
