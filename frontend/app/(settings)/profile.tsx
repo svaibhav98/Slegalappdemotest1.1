@@ -29,9 +29,9 @@ export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
   
   const [formData, setFormData] = useState({
-    fullName: 'Vaibhav Sharma',
-    email: 'vaibhav@email.com',
-    phone: '+91 98765 43210',
+    fullName: 'Vaibhav Singh',
+    email: 'vaibhav@sunolegal.in',
+    phone: '+1 469-592-2133',
     address: 'Mumbai, Maharashtra',
     bio: 'Legal enthusiast seeking justice for all.',
   });
