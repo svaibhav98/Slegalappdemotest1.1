@@ -851,8 +851,12 @@ const styles = StyleSheet.create({
     color: COLORS.white, 
     fontWeight: '600',
   },
-  brandText: { 
-    color: COLORS.accent,
+  brandOrange: { 
+    color: '#FF9933',
+    fontWeight: '700',
+  },
+  brandGreen: { 
+    color: '#138808',
     fontWeight: '700',
   },
   headerActions: { 
