@@ -26,8 +26,16 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, Tabl
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_JUSTIFY
 
-# LLM Integration
-from emergentintegrations.llm.chat import LlmChat, UserMessage
+# LLM Integration (optional - only available in Emergent environment)
+LLM_AVAILABLE = False
+LlmChat = None
+UserMessage = None
+try:
+    from emergentintegrations.llm.chat import LlmChat, UserMessage
+    LLM_AVAILABLE = True
+    print("LLM Integration available")
+except ImportError:
+    print("LLM Integration not available - AI chat will return mock responses")
 
 # Load environment variables
 load_dotenv()

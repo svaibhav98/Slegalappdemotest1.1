@@ -12,6 +12,7 @@ import {
 import { Stack, useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { getLawSchemeById, getRelatedLawsSchemes, LawScheme } from '../../services/lawsData';
+import { useSavedLaws } from '../../contexts/SavedLawsContext';
 
 const { width } = Dimensions.get('window');
 
@@ -33,9 +34,24 @@ export default function LawDetailScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const id = params.id as string;
+  const { isLawSaved, toggleSaveLaw } = useSavedLaws();
   
   const [lawItem, setLawItem] = useState<LawScheme | null>(null);
   const [relatedItems, setRelatedItems] = useState<LawScheme[]>([]);
+  
+  const isSaved = lawItem ? isLawSaved(lawItem.id) : false;
+  
+  const handleToggleSave = () => {
+    if (lawItem) {
+      toggleSaveLaw({
+        lawId: lawItem.id,
+        title: lawItem.title,
+        category: lawItem.category,
+        tagLabel: lawItem.tagLabel,
+        tagColor: lawItem.tagColor,
+      });
+    }
+  };
 
   useEffect(() => {
     if (id) {
@@ -124,7 +140,7 @@ export default function LawDetailScreen() {
       <StatusBar barStyle="light-content" backgroundColor={COLORS.headerBg} />
       
       <View style={styles.container}>
-        {/* Dark Header */}
+        {/* Compact Dark Header */}
         <View style={styles.header}>
           <TouchableOpacity 
             style={styles.backButton} 
@@ -134,8 +150,21 @@ export default function LawDetailScreen() {
             <Ionicons name="arrow-back" size={22} color={COLORS.white} />
           </TouchableOpacity>
           
-          {/* Gavel Icon */}
-          <View style={styles.iconContainer}>
+          {/* Save/Bookmark Button - Top Right */}
+          <TouchableOpacity 
+            style={styles.saveButton} 
+            onPress={handleToggleSave}
+            activeOpacity={0.8}
+          >
+            <Ionicons 
+              name={isSaved ? "bookmark" : "bookmark-outline"} 
+              size={24} 
+              color={isSaved ? COLORS.primary : COLORS.white} 
+            />
+          </TouchableOpacity>
+          
+          {/* Icon and Title Row */}
+          <View style={styles.headerContent}>
             <View style={styles.iconCircle}>
               <Ionicons 
                 name={
@@ -148,13 +177,12 @@ export default function LawDetailScreen() {
                   lawItem.category === 'family' ? 'people' :
                   'document-text'
                 } 
-                size={48} 
+                size={32} 
                 color={COLORS.primary} 
               />
             </View>
+            <Text style={styles.headerTitle} numberOfLines={2}>{lawItem.title}</Text>
           </View>
-          
-          <Text style={styles.headerTitle}>{lawItem.title}</Text>
         </View>
 
         {/* Content Card */}
@@ -260,45 +288,59 @@ const styles = StyleSheet.create({
     color: COLORS.textSecondary,
   },
   
-  // Header
+  // Header - Compact
   header: {
     backgroundColor: COLORS.headerBg,
     paddingTop: 50,
-    paddingBottom: 30,
+    paddingBottom: 16,
     paddingHorizontal: 20,
-    alignItems: 'center',
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
   },
   backButton: {
     position: 'absolute',
     top: 50,
     left: 20,
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.3)',
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex: 10,
   },
-  iconContainer: {
-    marginBottom: 16,
+  saveButton: {
+    position: 'absolute',
+    top: 50,
+    right: 20,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10,
+  },
+  headerContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 50,
+    paddingHorizontal: 30,
   },
   iconCircle: {
-    width: 90,
-    height: 90,
-    borderRadius: 45,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     backgroundColor: 'rgba(255,255,255,0.15)',
     justifyContent: 'center',
     alignItems: 'center',
+    marginRight: 14,
   },
   headerTitle: {
-    fontSize: 22,
+    flex: 1,
+    fontSize: 18,
     fontWeight: '700',
     color: COLORS.white,
-    textAlign: 'center',
-    paddingHorizontal: 40,
   },
 
   // Content

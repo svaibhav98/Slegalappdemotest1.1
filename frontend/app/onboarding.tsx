@@ -5,18 +5,25 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width, height } = Dimensions.get('window');
 
+// Clean onboarding images (no embedded UI elements)
 const ONBOARDING_SCREENS = [
   {
     id: '1',
-    image: require('../assets/onboarding1.jpg'),
+    image: { uri: 'https://images.unsplash.com/photo-1589578527966-fdac0f44566c?w=800&q=80' },
+    title: 'Access Legal Help',
+    subtitle: 'Get instant legal guidance powered by AI',
   },
   {
     id: '2',
-    image: require('../assets/onboarding2.jpg'),
+    image: { uri: 'https://images.unsplash.com/photo-1590099543482-3b3d3083a474?w=800&q=80' },
+    title: 'Know Your Rights',
+    subtitle: 'Explore laws, schemes & government benefits',
   },
   {
     id: '3',
-    image: require('../assets/onboarding3.jpg'),
+    image: { uri: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&q=80' },
+    title: 'Connect with Lawyers',
+    subtitle: 'Consult verified legal experts anytime',
   },
 ];
 
@@ -62,6 +69,11 @@ export default function OnboardingScreen() {
         style={styles.image}
         resizeMode="cover"
       />
+      {/* Overlay with title and subtitle */}
+      <View style={styles.overlay}>
+        <Text style={styles.slideTitle}>{item.title}</Text>
+        <Text style={styles.slideSubtitle}>{item.subtitle}</Text>
+      </View>
     </View>
   );
 
@@ -140,6 +152,33 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: '100%',
+  },
+  overlay: {
+    position: 'absolute',
+    bottom: 180,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    paddingHorizontal: 40,
+  },
+  slideTitle: {
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    textAlign: 'center',
+    marginBottom: 12,
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 8,
+  },
+  slideSubtitle: {
+    fontSize: 16,
+    color: 'rgba(255, 255, 255, 0.9)',
+    textAlign: 'center',
+    lineHeight: 24,
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 4,
   },
   bottomContainer: {
     position: 'absolute',
