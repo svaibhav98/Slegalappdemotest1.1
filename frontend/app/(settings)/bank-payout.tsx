@@ -9,7 +9,7 @@ const COLORS = { background: '#F5F7FA', white: '#FFFFFF', primary: '#FF9933', te
 export default function BankPayoutScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const [bankDetails, setBankDetails] = useState({ accountName: 'Vaibhav Sharma', accountNumber: 'XXXX XXXX 4567', ifsc: 'HDFC0001234', upiId: 'vaibhav@upi' });
+  const [bankDetails, setBankDetails] = useState({ accountName: 'Vaibhav Singh', accountNumber: 'XXXX XXXX 4567', ifsc: 'HDFC0001234', upiId: 'vaibhav@upi' });
 
   const handleSave = () => Alert.alert('Success', 'Bank details updated!');
 
