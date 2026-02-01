@@ -390,6 +390,13 @@ export default function CasesScreen() {
         onRequestClose={() => setShowDetailModal(false)}
       >
         <View style={styles.modalOverlay}>
+          {/* Backdrop - Tap to close */}
+          <TouchableOpacity 
+            style={StyleSheet.absoluteFill}
+            activeOpacity={1}
+            onPress={() => setShowDetailModal(false)}
+          />
+          
           <View style={styles.modalContent}>
             {selectedCase && (
               <>
