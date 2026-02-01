@@ -46,7 +46,7 @@ export default function LawsScreen() {
 
   const handleCardPress = (item: LawScheme) => {
     router.push({
-      pathname: '/(tabs)/law-detail/[id]',
+      pathname: '/law-detail/[id]',
       params: { id: item.id }
     });
   };
