@@ -709,10 +709,7 @@ export default function DocumentsScreen() {
         onScroll={handleScroll}
         scrollEventThrottle={16}
         style={styles.pagerContainer}
-        contentContainerStyle={styles.pagerContent}
-        decelerationRate="fast"
-        snapToInterval={SCREEN_WIDTH}
-        snapToAlignment="center"
+        bounces={false}
       >
         {/* Page 1: Create New */}
         <View style={styles.page}>
