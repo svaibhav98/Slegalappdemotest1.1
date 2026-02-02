@@ -782,24 +782,23 @@ const styles = StyleSheet.create({
     color: COLORS.white,
   },
   
-  // ChatGPT-Style Drawer
+  // ChatGPT-Style Drawer - Opens from LEFT
   drawerOverlay: {
     flex: 1,
     flexDirection: 'row',
   },
-  drawerBackdrop: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
   drawerContainer: {
-    width: '80%',
-    maxWidth: 320,
+    width: 280, // Compact width
     backgroundColor: COLORS.white,
     shadowColor: '#000',
-    shadowOffset: { width: -2, height: 0 },
+    shadowOffset: { width: 2, height: 0 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
     elevation: 10,
+  },
+  drawerBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   drawerHeader: {
     flexDirection: 'row',
