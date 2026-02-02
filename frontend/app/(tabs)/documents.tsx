@@ -754,8 +754,7 @@ const styles = StyleSheet.create({
   
   // Pager Styles for Swipe Navigation
   pagerContainer: { flex: 1, overflow: 'hidden' },
-  pagerContent: { flexGrow: 1 },
-  page: { width: SCREEN_WIDTH, flex: 1 },
+  page: { flex: 1 },
   
   // Content
   content: { flex: 1, padding: 20 },
