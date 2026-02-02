@@ -1,496 +1,2724 @@
-// Laws & Schemes Data Service
-// Centralized data layer for MVP - easy to swap with API later
+// Laws & Schemes Data Service - Comprehensive Central + State Data
+// SunoLegal / NyayAI Application
 
-export type LawSchemeType = 'LAW' | 'SCHEME' | 'ARTICLE';
+export type LawSchemeType = 'law' | 'scheme' | 'portal';
+export type LevelType = 'central' | 'state';
+
+export interface Section {
+  title: string;
+  content: string[];
+}
 
 export interface LawScheme {
   id: string;
-  type: LawSchemeType;
   title: string;
+  type: LawSchemeType;
+  level: LevelType;
+  stateCode?: string; // MH, DL, UP, KA
   category: string;
+  tags: string[];
+  preview: string;
+  sections: Section[];
+  officialLinks: { label: string; url: string }[];
+  lastUpdated: string;
   tagLabel: string;
   tagColor: string;
-  shortSummary: string;
-  overviewText: string;
-  officialLink: string;
-  keywords: string[];
-  relatedIds: string[];
-  imageUrl?: string;
 }
 
+// Categories for filtering
 export const CATEGORIES = [
-  { id: 'all', name: 'All Categories', icon: 'grid' },
-  { id: 'land-property', name: 'Land & Property', icon: 'home' },
-  { id: 'tenant-housing', name: 'Tenant & Housing', icon: 'business' },
-  { id: 'consumer', name: 'Consumer', icon: 'shield-checkmark' },
-  { id: 'family', name: 'Family', icon: 'people' },
-  { id: 'labour', name: 'Labour', icon: 'briefcase' },
-  { id: 'farmer', name: 'Farmer', icon: 'leaf' },
+  { id: 'all', name: 'All', icon: 'grid' },
   { id: 'citizen-rights', name: 'Citizen Rights', icon: 'person' },
+  { id: 'housing-property', name: 'Housing & Property', icon: 'home' },
+  { id: 'employment', name: 'Employment', icon: 'briefcase' },
+  { id: 'women-family', name: 'Women & Family', icon: 'people' },
+  { id: 'welfare', name: 'Welfare Schemes', icon: 'heart' },
+  { id: 'business', name: 'Business & MSME', icon: 'business' },
+  { id: 'documents', name: 'Documents & Legal', icon: 'document-text' },
+  { id: 'health-pension', name: 'Health & Pension', icon: 'medkit' },
+  { id: 'education', name: 'Education', icon: 'school' },
+  { id: 'utilities', name: 'Utilities & Certificates', icon: 'clipboard' },
+  { id: 'grievance', name: 'Grievance & Legal Aid', icon: 'megaphone' },
 ];
 
-export const LAWS_DATA: LawScheme[] = [
-  {
-    id: 'tenancy-laws',
-    type: 'LAW',
-    title: 'Tenancy Laws',
-    category: 'tenant-housing',
-    tagLabel: 'Housing & Rental',
-    tagColor: '#10B981',
-    shortSummary: 'Know your rights as a tenant or landlord. Covers rental agreements, fair rent, eviction rules, and deposit refunds...',
-    overviewText: `Tenancy laws in India are governed by the Rent Control Acts of various states and the Model Tenancy Act, 2021.
+export const STATE_OPTIONS = [
+  { code: 'MH', name: 'Maharashtra' },
+  { code: 'DL', name: 'Delhi' },
+  { code: 'UP', name: 'Uttar Pradesh' },
+  { code: 'KA', name: 'Karnataka' },
+];
 
-**Key Tenant Rights:**
-• Right to a written rental agreement
-• Fair rent determination
-• Protection from arbitrary eviction
-• Refund of security deposit within specified time
-• Access to essential services (water, electricity)
+const DISCLAIMER = 'This information is for general awareness only and does not constitute legal advice. Please consult a qualified lawyer for specific legal matters.';
 
-**Key Landlord Rights:**
-• Right to receive rent on time
-• Right to evict for non-payment or misuse
-• Right to inspect property with notice
-• Right to reasonable rent revision
+// ================== CENTRAL LAWS & SCHEMES (25-30 items) ==================
 
-**Important Points:**
-• Security deposit typically limited to 2-3 months rent
-• Notice period usually 1-3 months for termination
-• Rent increases subject to state regulations
-• Both parties should maintain proper documentation
-
-Under the Model Tenancy Act, 2021, a Rent Authority has been established to resolve disputes efficiently.`,
-    officialLink: 'https://mohua.gov.in',
-    keywords: ['rent', 'tenant', 'landlord', 'housing', 'eviction', 'deposit'],
-    relatedIds: ['rera-act', 'consumer-protection', 'land-property-laws'],
-  },
-  {
-    id: 'rera-act',
-    type: 'LAW',
-    title: 'Real Estate (Regulation & Development) Act, 2016 (RERA)',
-    category: 'land-property',
-    tagLabel: 'Land & Property',
-    tagColor: '#F59E0B',
-    shortSummary: 'Protects homebuyers by mandating builder registration, timely project delivery, and full disclosure of project details.',
-    overviewText: `RERA was enacted to protect homebuyers and promote transparency in real estate transactions.
-
-**Key Provisions:**
-• Mandatory registration of real estate projects
-• Developers must deposit 70% of buyer funds in escrow
-• Buyers entitled to full project information
-• Standardized carpet area definition
-• Penalties for delays and defects
-
-**Buyer Rights under RERA:**
-• Right to know project details and approvals
-• Right to timely possession
-• Right to refund with interest for delays
-• Right to compensation for structural defects (5 years)
-• Right to grievance redressal through RERA Authority
-
-**Filing a RERA Complaint:**
-1. Visit your state RERA website
-2. Register and file complaint online
-3. Pay nominal filing fee
-4. Track complaint status online
-
-The Real Estate Regulatory Authority in each state handles disputes and ensures compliance.`,
-    officialLink: 'https://rera.gov.in',
-    keywords: ['real estate', 'property', 'builder', 'homebuyer', 'construction', 'RERA'],
-    relatedIds: ['tenancy-laws', 'land-property-laws', 'consumer-protection'],
-  },
-  {
-    id: 'consumer-protection',
-    type: 'LAW',
-    title: 'Consumer Protection Act, 2019',
-    category: 'consumer',
-    tagLabel: 'Consumer Law',
-    tagColor: '#3B82F6',
-    shortSummary: 'Your rights as a consumer against unfair trade practices, defective goods, and deficient services in India.',
-    overviewText: `The Consumer Protection Act, 2019 provides robust protection to consumers against unfair trade practices.
-
-**Six Consumer Rights:**
-1. Right to Safety
-2. Right to be Informed
-3. Right to Choose
-4. Right to be Heard
-5. Right to Seek Redressal
-6. Right to Consumer Education
-
-**Filing a Consumer Complaint:**
-• District Commission: Claims up to ₹1 crore
-• State Commission: ₹1 crore to ₹10 crore
-• National Commission: Above ₹10 crore
-
-**E-filing Portal:**
-• File complaints online at edaakhil.nic.in
-• No lawyer required for filing
-• Complaints must be filed within 2 years
-
-**Key Features:**
-• Product liability provisions
-• Protection against misleading advertisements
-• Penalties for unfair contracts
-• Central Consumer Protection Authority established`,
-    officialLink: 'https://consumerhelpline.gov.in',
-    keywords: ['consumer', 'complaint', 'refund', 'product', 'service', 'rights'],
-    relatedIds: ['rera-act', 'rti-act', 'tenancy-laws'],
-  },
+export const CENTRAL_LAWS: LawScheme[] = [
+  // Category 1: Core Citizen Rights
   {
     id: 'rti-act',
-    type: 'LAW',
-    title: 'Right to Information Act, 2005',
+    title: 'Right to Information (RTI) Act, 2005',
+    type: 'law',
+    level: 'central',
     category: 'citizen-rights',
-    tagLabel: 'Citizen Rights',
+    tags: ['RTI', 'transparency', 'government', 'information'],
+    preview: 'Empowers citizens to seek information from public authorities, ensuring accountability in government services.',
+    tagLabel: 'Law',
     tagColor: '#8B5CF6',
-    shortSummary: 'Empowers citizens to seek information from public authorities. Learn how to file RTI applications.',
-    overviewText: `The RTI Act empowers every Indian citizen to seek information from public authorities.
-
-**Who Can File RTI:**
-• Any Indian citizen
-• No need to give reason for seeking information
-
-**How to File RTI:**
-1. Write application to Public Information Officer (PIO)
-2. State clearly what information you need
-3. Pay ₹10 fee (Central Govt.) - varies for states
-4. BPL applicants are exempted from fees
-
-**Timeline:**
-• Response within 30 days
-• 48 hours for life/liberty matters
-• First appeal within 30 days of response
-• Second appeal to Information Commission
-
-**What You Can Ask:**
-• Government documents and records
-• Decisions and their reasons
-• Reports, papers, samples
-• Information in electronic form
-
-**Exemptions:**
-• National security matters
-• Cabinet papers
-• Personal information without public interest`,
-    officialLink: 'https://rtionline.gov.in',
-    keywords: ['RTI', 'information', 'government', 'citizen', 'transparency', 'public'],
-    relatedIds: ['consumer-protection', 'pmay-scheme', 'labour-laws'],
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'The Right to Information Act, 2005 is a landmark legislation that empowers Indian citizens to seek information from public authorities.',
+          'It promotes transparency and accountability in the working of public authorities and reduces corruption.',
+          'Every Indian citizen has the right to request information from any public authority, and the authority must respond within 30 days.',
+          'The Act applies to all constitutional authorities, including executive, legislature, and judiciary at all levels.',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          'Ensures government transparency and accountability',
+          'Empowers citizens to question government decisions',
+          'Helps expose corruption and misuse of public funds',
+          'Enables informed participation in democracy',
+          'No need to explain why information is needed',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'Government office not processing your application for months',
+          'Pension or PF amount not credited despite eligibility',
+          'Ration card or Aadhaar application stuck without updates',
+          'Building permission delayed without reason',
+          'Not knowing status of police complaint filed',
+          'Public works projects not completed in your area',
+          'Discrepancy in land records or mutation',
+          'Government scheme benefits not reaching intended beneficiaries',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: Identify the Public Authority that holds the information you need',
+          'Step 2: Write an RTI application addressed to the Public Information Officer (PIO)',
+          'Step 3: Clearly state what information you are seeking (be specific)',
+          'Step 4: Pay the application fee of Rs. 10 (BPL cardholders are exempt)',
+          'Step 5: Submit online at rtionline.gov.in OR by post/in person to the concerned office',
+          'Step 6: If no response in 30 days, file First Appeal to Appellate Authority within 30 days',
+          'Step 7: If still unsatisfied, file Second Appeal to Information Commission within 90 days',
+          'Step 8: Keep copies of all applications and acknowledgments for reference',
+          'Step 9: For life/liberty matters, response must be given within 48 hours',
+          'Step 10: Track your application status online or through acknowledgment number',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'RTI Application form (plain paper application is also valid)',
+          'Application fee of Rs. 10 (cash/DD/IPO/online)',
+          'BPL certificate (if seeking fee exemption)',
+          'Copy of previous correspondence (if following up on pending matter)',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'Online Portal: rtionline.gov.in (for central government)',
+          'State RTI Portals: Each state has its own portal',
+          'In Person: Public Information Officer of concerned department',
+          'By Post: Send to PIO with DD/IPO of Rs. 10',
+          'Appeals: First to Appellate Authority, then to Information Commission',
+          'Helpline: Check respective department websites',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'RTI Online Portal', url: 'https://rtionline.gov.in' },
+      { label: 'Central Information Commission', url: 'https://cic.gov.in' },
+      { label: 'RTI Act Full Text', url: 'https://rti.gov.in' },
+    ],
   },
   {
-    id: 'land-property-laws',
-    type: 'LAW',
-    title: 'Land & Property Laws',
-    category: 'land-property',
-    tagLabel: 'Land & Property',
-    tagColor: '#F59E0B',
-    shortSummary: 'Understanding property registration, transfer, mutation, and dispute resolution in India.',
-    overviewText: `Land and property laws in India are governed by various central and state legislations.
-
-**Key Laws:**
-• Transfer of Property Act, 1882
-• Registration Act, 1908
-• Indian Stamp Act, 1899
-• State-specific Land Revenue Codes
-
-**Property Registration:**
-• Mandatory for properties above ₹100
-• Register within 4 months of execution
-• Pay stamp duty (varies by state: 5-7%)
-• Registration fee typically 1%
-
-**Land Records:**
-• 7/12 Extract (Maharashtra)
-• Khasra/Khatauni (North India)
-• Patta/Chitta (South India)
-• Keep records updated after purchase
-
-**Mutation:**
-• Apply to Tehsildar after registration
-• Required for property tax name change
-• Usually takes 30-60 days
-
-**Dispute Resolution:**
-• Civil Courts for title disputes
-• Revenue Courts for mutation issues
-• Lok Adalat for quick settlement`,
-    officialLink: 'https://dolr.gov.in',
-    keywords: ['land', 'property', 'registration', 'mutation', 'stamp duty', 'title'],
-    relatedIds: ['rera-act', 'tenancy-laws', 'farmer-schemes'],
+    id: 'consumer-protection-act',
+    title: 'Consumer Protection Act, 2019',
+    type: 'law',
+    level: 'central',
+    category: 'citizen-rights',
+    tags: ['consumer', 'complaint', 'refund', 'product', 'service'],
+    preview: 'Protects consumers against unfair trade practices, defective products, and deficient services with e-commerce coverage.',
+    tagLabel: 'Law',
+    tagColor: '#3B82F6',
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'The Consumer Protection Act, 2019 replaced the older 1986 Act to provide stronger protection to consumers in the digital age.',
+          'It covers all goods and services including e-commerce transactions and online purchases.',
+          'The Act establishes Consumer Disputes Redressal Commissions at District, State, and National levels.',
+          'It introduces product liability provisions making manufacturers, sellers, and service providers accountable.',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          'Protection against defective products and deficient services',
+          'Coverage for online shopping and e-commerce disputes',
+          'Right to seek compensation for losses and harassment',
+          'Simplified complaint filing through e-filing portal',
+          'Celebrity endorsers can be held liable for misleading ads',
+          'Central Consumer Protection Authority for quick action',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'Defective product received - seller refusing refund/replacement',
+          'Online order not delivered or wrong item delivered',
+          'Service provider not fulfilling promised services',
+          'Hidden charges added after purchase/booking',
+          'Warranty claims rejected without valid reason',
+          'Misleading advertisements causing financial loss',
+          'Food product found adulterated or expired',
+          'Insurance claim wrongfully denied',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: Preserve all evidence - bills, receipts, product photos, communication',
+          'Step 2: First approach the seller/service provider with written complaint',
+          'Step 3: Keep record of all communications and responses',
+          'Step 4: If no resolution, register complaint on National Consumer Helpline (1800-11-4000)',
+          'Step 5: For formal complaint, use e-Daakhil portal (edaakhil.nic.in)',
+          'Step 6: Choose appropriate forum based on claim amount',
+          'Step 7: District Commission: up to Rs. 1 crore',
+          'Step 8: State Commission: Rs. 1-10 crore',
+          'Step 9: National Commission: Above Rs. 10 crore',
+          'Step 10: File complaint within 2 years of cause of action',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'Original invoice/receipt or copy',
+          'Product warranty card (if applicable)',
+          'Photos/videos of defective product',
+          'Written correspondence with seller/service provider',
+          'Bank statements showing payment',
+          'Advertisement copy (if claiming misleading ad)',
+          'Identity proof of complainant',
+          'Any other supporting evidence',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'National Consumer Helpline: 1800-11-4000 (toll-free)',
+          'e-Daakhil Portal: edaakhil.nic.in (online complaint filing)',
+          'District Consumer Forum: Located at district headquarters',
+          'State Consumer Commission: At state capital',
+          'National Commission: New Delhi',
+          'CCPA (Central Consumer Protection Authority): For misleading ads',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'Consumer Helpline', url: 'https://consumerhelpline.gov.in' },
+      { label: 'e-Daakhil Filing Portal', url: 'https://edaakhil.nic.in' },
+      { label: 'National Commission', url: 'https://ncdrc.nic.in' },
+    ],
   },
   {
-    id: 'labour-laws',
-    type: 'LAW',
-    title: 'Labour Laws & Employee Rights',
-    category: 'labour',
-    tagLabel: 'Labour & Employment',
-    tagColor: '#EC4899',
-    shortSummary: 'Know your workplace rights - minimum wages, working hours, PF, gratuity, and protection against harassment.',
-    overviewText: `Indian labour laws protect workers' rights and regulate employment conditions.
-
-**Key Labour Codes (2020):**
-1. Code on Wages
-2. Industrial Relations Code
-3. Social Security Code
-4. Occupational Safety Code
-
-**Employee Rights:**
-• Minimum wages as per state notification
-• Maximum 48 hours work per week
-• Overtime at 2x regular rate
-• Weekly off and annual leave
-• Protection from sexual harassment
-
-**Provident Fund (PF):**
-• Mandatory for establishments with 20+ employees
-• Employee contribution: 12% of basic
-• Equal employer contribution
-• Withdrawable on retirement/resignation
-
-**Gratuity:**
-• After 5 years of continuous service
-• 15 days salary per year of service
-• Maximum ₹20 lakhs
-
-**Filing Complaints:**
-• Labour Commissioner's office
-• EPFO for PF issues
-• Internal Complaints Committee for harassment`,
-    officialLink: 'https://labour.gov.in',
-    keywords: ['labour', 'employee', 'wages', 'PF', 'gratuity', 'workplace'],
-    relatedIds: ['rti-act', 'consumer-protection', 'pmay-scheme'],
-  },
-  {
-    id: 'pmay-scheme',
-    type: 'SCHEME',
-    title: 'Pradhan Mantri Awas Yojana (PMAY)',
-    category: 'tenant-housing',
-    tagLabel: 'Housing Scheme',
-    tagColor: '#10B981',
-    shortSummary: 'Government housing scheme for affordable homes. Get subsidy on home loans for EWS, LIG, and MIG categories.',
-    overviewText: `PMAY aims to provide affordable housing to all by 2024 (extended).
-
-**Eligibility:**
-• EWS: Annual income up to ₹3 lakhs
-• LIG: ₹3-6 lakhs annual income
-• MIG-I: ₹6-12 lakhs annual income
-• MIG-II: ₹12-18 lakhs annual income
-
-**Subsidy Benefits:**
-• EWS/LIG: Up to ₹2.67 lakhs
-• MIG-I: Up to ₹2.35 lakhs
-• MIG-II: Up to ₹2.30 lakhs
-
-**How to Apply:**
-1. Visit PMAY website or CSC center
-2. Fill application with Aadhaar
-3. Submit income proof documents
-4. Bank processes loan with subsidy
-
-**Key Features:**
-• Credit-linked subsidy scheme
-• Women ownership preferred
-• Subsidy directly to bank account
-• No prior home ownership allowed
-
-**Documents Required:**
-• Aadhaar card
-• Income certificate
-• Property documents
-• Bank statements`,
-    officialLink: 'https://pmaymis.gov.in',
-    keywords: ['housing', 'subsidy', 'home loan', 'affordable', 'government scheme'],
-    relatedIds: ['tenancy-laws', 'rera-act', 'farmer-schemes'],
-  },
-  {
-    id: 'farmer-schemes',
-    type: 'SCHEME',
-    title: 'Farmer Welfare Schemes',
-    category: 'farmer',
-    tagLabel: 'Agriculture',
-    tagColor: '#22C55E',
-    shortSummary: 'PM-KISAN, crop insurance, and other government schemes to support farmers and agricultural activities.',
-    overviewText: `Multiple central and state schemes support farmers in India.
-
-**PM-KISAN:**
-• ₹6,000 per year in 3 installments
-• Direct benefit transfer to bank account
-• All landholding farmers eligible
-• Register at pmkisan.gov.in
-
-**PM Fasal Bima Yojana:**
-• Crop insurance at minimal premium
-• Kharif crops: 2% premium
-• Rabi crops: 1.5% premium
-• Claims settled based on yield data
-
-**Kisan Credit Card:**
-• Short-term credit for farming
-• Interest subvention benefits
-• Easy renewal process
-• Insurance coverage included
-
-**Soil Health Card:**
-• Free soil testing
-• Crop-wise recommendations
-• Nutrient management guidance
-
-**Other Benefits:**
-• MSP for major crops
-• e-NAM for online trading
-• Custom hiring centers
-• Free electricity in some states`,
-    officialLink: 'https://pmkisan.gov.in',
-    keywords: ['farmer', 'agriculture', 'PM-KISAN', 'crop insurance', 'subsidy'],
-    relatedIds: ['land-property-laws', 'pmay-scheme', 'rti-act'],
-  },
-  {
-    id: 'family-laws',
-    type: 'LAW',
-    title: 'Family & Marriage Laws',
-    category: 'family',
-    tagLabel: 'Family Law',
-    tagColor: '#F472B6',
-    shortSummary: 'Laws governing marriage, divorce, maintenance, custody, and inheritance in India.',
-    overviewText: `Family laws in India vary based on religion but share common principles.
-
-**Marriage Laws:**
-• Hindu Marriage Act, 1955
-• Special Marriage Act, 1954
-• Muslim Personal Law
-• Indian Christian Marriage Act
-
-**Divorce Provisions:**
-• Mutual consent: 6 months cooling period
-• Contested: Cruelty, desertion, adultery
-• Maintenance during proceedings
-• One-time settlement options
-
-**Maintenance Rights:**
-• Under Section 125 CrPC (all religions)
-• Under personal laws
-• Interim maintenance during case
-• Children's maintenance until 18/education
-
-**Child Custody:**
-• Welfare of child paramount
-• Mother preferred for young children
-• Visitation rights for non-custodial parent
-• Joint custody increasingly common
-
-**Inheritance:**
-• Hindu Succession Act (amended 2005)
-• Equal rights for daughters
-• Will can override succession laws`,
-    officialLink: 'https://wcd.nic.in',
-    keywords: ['marriage', 'divorce', 'custody', 'maintenance', 'inheritance', 'family'],
-    relatedIds: ['consumer-protection', 'rti-act', 'labour-laws'],
+    id: 'data-protection-act',
+    title: 'Digital Personal Data Protection Act, 2023',
+    type: 'law',
+    level: 'central',
+    category: 'citizen-rights',
+    tags: ['data', 'privacy', 'digital', 'consent', 'DPDP'],
+    preview: 'Protects personal data of citizens in the digital space, ensuring consent-based data processing and privacy rights.',
+    tagLabel: 'Law',
+    tagColor: '#8B5CF6',
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'The Digital Personal Data Protection Act, 2023 (DPDPA) is India\'s comprehensive data protection law.',
+          'It regulates how organizations collect, store, process, and share personal data of individuals.',
+          'The Act applies to both government and private entities processing personal data.',
+          'It establishes the Data Protection Board of India for enforcement and grievance redressal.',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          'Your personal data cannot be used without your explicit consent',
+          'Right to access data that companies hold about you',
+          'Right to correction and erasure of your data',
+          'Protection against data breaches and misuse',
+          'Heavy penalties for companies violating data privacy',
+          'Special protection for children\'s data',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'Receiving spam calls/messages despite not sharing number',
+          'Personal photos/data being misused online',
+          'Apps collecting more data than necessary',
+          'Data breach exposing personal information',
+          'Unable to delete account or data from websites',
+          'Companies sharing data with third parties without consent',
+          'Targeted ads based on personal conversations',
+          'Identity theft using personal data',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: Read privacy policies before signing up for any service',
+          'Step 2: Give consent only for data necessary for the service',
+          'Step 3: Withdraw consent anytime by written request to Data Fiduciary',
+          'Step 4: Request access to your personal data held by any company',
+          'Step 5: Request correction of inaccurate personal data',
+          'Step 6: Request erasure of data when consent is withdrawn',
+          'Step 7: File complaint with company\'s Grievance Officer first',
+          'Step 8: If unresolved in 30 days, approach Data Protection Board',
+          'Step 9: Keep evidence of data misuse or breach',
+          'Step 10: Report data breaches to CERT-In',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'Proof of identity',
+          'Evidence of data being held (screenshots, emails)',
+          'Communication with the company',
+          'Evidence of data misuse or breach',
+          'Copy of consent given (if available)',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'Company\'s Data Protection Officer or Grievance Officer',
+          'Data Protection Board of India (when operational)',
+          'CERT-In for data breaches: cert-in.org.in',
+          'Cyber Crime Portal: cybercrime.gov.in',
+          'Local Cyber Police for criminal matters',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'Ministry of Electronics & IT', url: 'https://www.meity.gov.in' },
+      { label: 'CERT-In', url: 'https://www.cert-in.org.in' },
+      { label: 'Cyber Crime Portal', url: 'https://cybercrime.gov.in' },
+    ],
   },
   {
     id: 'cyber-laws',
-    type: 'LAW',
-    title: 'Cyber Laws & Digital Rights',
+    title: 'Cyber Laws & Online Safety',
+    type: 'law',
+    level: 'central',
     category: 'citizen-rights',
-    tagLabel: 'Digital & Cyber',
+    tags: ['cyber', 'online', 'fraud', 'hacking', 'IT Act'],
+    preview: 'IT Act provisions for cyber crime reporting, online fraud protection, and digital rights in India.',
+    tagLabel: 'Law',
+    tagColor: '#EF4444',
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'The Information Technology Act, 2000 (amended 2008) governs cyber activities in India.',
+          'It defines various cyber crimes and prescribes penalties for offenders.',
+          'The IT Rules 2021 regulate social media platforms and digital intermediaries.',
+          'National Cyber Crime Reporting Portal provides centralized complaint mechanism.',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          'Protection against online fraud and financial scams',
+          'Legal recourse for cyberstalking and harassment',
+          'Action against identity theft and impersonation',
+          'Protection against hacking and data theft',
+          'Quick reporting mechanism for immediate action',
+          'Social media accountability for content',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'Money lost to online fraud/phishing',
+          'Fake profiles created in your name',
+          'Harassment or threats on social media',
+          'Intimate images shared without consent',
+          'Hacking of email/social media accounts',
+          'Online shopping fraud',
+          'Job fraud or loan scam calls',
+          'OTP fraud leading to bank account loss',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: For financial fraud, call 1930 immediately (Cyber Crime Helpline)',
+          'Step 2: Report within golden hour for possible fund recovery',
+          'Step 3: File detailed complaint on cybercrime.gov.in',
+          'Step 4: Preserve evidence - screenshots, URLs, transaction details',
+          'Step 5: Block compromised cards/accounts immediately',
+          'Step 6: Change passwords of all connected accounts',
+          'Step 7: File FIR at local police station with cyber cell',
+          'Step 8: Report fake profiles to social media platforms',
+          'Step 9: For women-related cyber crimes, use separate portal section',
+          'Step 10: Keep track of complaint number for follow-up',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'Screenshots of fraud messages/posts/transactions',
+          'Bank statements showing fraudulent transactions',
+          'URLs of fake profiles or websites',
+          'Communication records with fraudster',
+          'ID proof of complainant',
+          'Device details (phone/laptop used)',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'Cyber Crime Helpline: 1930 (24x7)',
+          'National Portal: cybercrime.gov.in',
+          'Women-specific crimes: Separate category on portal',
+          'Local Police Cyber Cell',
+          'Bank fraud cell for financial crimes',
+          'Social media platform report mechanisms',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'Cyber Crime Portal', url: 'https://cybercrime.gov.in' },
+      { label: 'CERT-In', url: 'https://www.cert-in.org.in' },
+      { label: 'MHA Cyber Wing', url: 'https://www.mha.gov.in' },
+    ],
+  },
+  {
+    id: 'legal-services-authority',
+    title: 'Legal Services Authorities Act, 1987',
+    type: 'law',
+    level: 'central',
+    category: 'citizen-rights',
+    tags: ['legal aid', 'free lawyer', 'NALSA', 'justice'],
+    preview: 'Provides free legal aid to eligible citizens including women, SC/ST, disabled persons, and economically weaker sections.',
+    tagLabel: 'Law',
+    tagColor: '#10B981',
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'The Legal Services Authorities Act establishes a nationwide network to provide free legal aid.',
+          'NALSA (National Legal Services Authority) oversees State, District, and Taluk level legal services.',
+          'Article 39A of Constitution guarantees equal justice and free legal aid to economically weaker sections.',
+          'Lok Adalats provide speedy and amicable resolution of disputes.',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          'Free lawyer for those who cannot afford legal fees',
+          'Justice accessible regardless of economic status',
+          'Quick dispute resolution through Lok Adalats',
+          'Legal awareness camps in rural areas',
+          'Protection of rights for marginalized communities',
+          'Court fee waiver for eligible persons',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'Cannot afford lawyer fees for court case',
+          'Don\'t know how to approach courts',
+          'Need legal advice but no money',
+          'Property dispute with powerful party',
+          'Maintenance case but no resources',
+          'Workers\'rights violated but fear approaching court',
+          'Victim of crime but cannot hire advocate',
+          'Senior citizen facing legal issues alone',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: Check eligibility - SC/ST, women, children, disabled, victims of disasters, industrial workers earning less than Rs. 9000/month, persons in custody',
+          'Step 2: Visit nearest District Legal Services Authority (DLSA)',
+          'Step 3: Fill application form for free legal aid',
+          'Step 4: Submit income certificate and ID proof',
+          'Step 5: Get assigned panel lawyer free of cost',
+          'Step 6: For quick settlement, apply for Lok Adalat',
+          'Step 7: Attend legal aid camps in your area',
+          'Step 8: Use NALSA helpline: 15100',
+          'Step 9: Access tele-law services for remote advice',
+          'Step 10: Women can directly approach State Women Commission',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'Application form (available at DLSA)',
+          'Income certificate (for income-based eligibility)',
+          'Caste certificate (for SC/ST)',
+          'Disability certificate (for differently-abled)',
+          'ID proof (Aadhaar/Voter ID)',
+          'Case-related documents (if any)',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'NALSA Helpline: 15100',
+          'District Legal Services Authority (DLSA) at district court',
+          'State Legal Services Authority (SLSA)',
+          'Taluk Legal Services Committee',
+          'Lok Adalat (for settlement)',
+          'Tele-Law: 1800-180-7676',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'NALSA India', url: 'https://nalsa.gov.in' },
+      { label: 'Tele-Law Service', url: 'https://tele-law.in' },
+      { label: 'eLegalix', url: 'https://elegalix.alc.gov.in' },
+    ],
+  },
+
+  // Category 2: Housing & Property
+  {
+    id: 'rera',
+    title: 'Real Estate (Regulation & Development) Act, 2016 (RERA)',
+    type: 'law',
+    level: 'central',
+    category: 'housing-property',
+    tags: ['RERA', 'real estate', 'builder', 'homebuyer', 'property'],
+    preview: 'Protects homebuyers by mandating builder registration, timely delivery, and full disclosure of project details.',
+    tagLabel: 'Law',
+    tagColor: '#F59E0B',
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'RERA 2016 is a landmark law protecting homebuyers from builder fraud and delays.',
+          'All real estate projects must be registered with State RERA Authority before advertising or selling.',
+          'Builders must keep 70% of buyer money in escrow for project construction only.',
+          'Each state has its own RERA website for registration, complaints, and project tracking.',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          'Mandatory project registration ensures legitimacy',
+          'Escrow account prevents fund diversion by builders',
+          'Standardized carpet area calculation',
+          'Buyers entitled to refund with interest for delays',
+          'Compensation for structural defects (5 years warranty)',
+          'Online tracking of project status and approvals',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'Builder delaying possession beyond promised date',
+          'Flat size smaller than promised in brochure',
+          'Builder not giving proper agreements/receipts',
+          'Project abandoned midway, money stuck',
+          'Hidden charges demanded at possession',
+          'Quality issues in construction',
+          'Amenities promised but not provided',
+          'Builder not transferring property title',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: Before buying, check project registration on State RERA website',
+          'Step 2: Verify builder\'s track record and past projects',
+          'Step 3: Ensure agreement mentions RERA registration number',
+          'Step 4: Keep all payment receipts and communications',
+          'Step 5: For delays, calculate interest as per RERA (SBI MCLR + 2%)',
+          'Step 6: File complaint online on State RERA portal',
+          'Step 7: Pay nominal filing fee (varies by state)',
+          'Step 8: Attend hearings or authorize representative',
+          'Step 9: RERA order enforceable like civil court decree',
+          'Step 10: Appeal to Appellate Tribunal within 60 days if unsatisfied',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'Flat buyer agreement copy',
+          'All payment receipts',
+          'Builder\'s brochure/advertisements',
+          'Email/letter communications',
+          'RERA registration details of project',
+          'Bank loan documents (if applicable)',
+          'Allotment letter',
+          'ID proof of complainant',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'MahaRERA: maharera.mahaonline.gov.in (Maharashtra)',
+          'Delhi RERA: rera.delhi.gov.in',
+          'UP RERA: up-rera.in',
+          'Karnataka RERA: rera.karnataka.gov.in',
+          'Central RERA Portal: rera.gov.in (links to all states)',
+          'State-wise helpline numbers on respective portals',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'Central RERA Portal', url: 'https://rera.gov.in' },
+      { label: 'MahaRERA', url: 'https://maharera.mahaonline.gov.in' },
+      { label: 'Ministry of Housing', url: 'https://mohua.gov.in' },
+    ],
+  },
+  {
+    id: 'model-tenancy-act',
+    title: 'Model Tenancy Act, 2021',
+    type: 'law',
+    level: 'central',
+    category: 'housing-property',
+    tags: ['rent', 'tenant', 'landlord', 'tenancy', 'housing'],
+    preview: 'Framework for tenant-landlord relations covering rent agreements, deposits, eviction rules, and dispute resolution.',
+    tagLabel: 'Law',
+    tagColor: '#10B981',
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'The Model Tenancy Act 2021 provides a modern framework for rental housing in India.',
+          'It aims to balance interests of both tenants and landlords while promoting rental housing.',
+          'States are encouraged to adopt this model law (not mandatory).',
+          'Establishes Rent Authority and Rent Court for quick dispute resolution.',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          'Written agreement mandatory for all tenancies',
+          'Security deposit capped at 2 months rent (residential)',
+          'Clear eviction grounds and procedures',
+          'Tenant cannot be evicted without due process',
+          'Rent Court for disputes (faster than civil court)',
+          'Both parties must comply with agreement terms',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'Landlord demanding excessive security deposit',
+          'Arbitrary rent increase without notice',
+          'Landlord harassing for eviction without reason',
+          'Security deposit not returned after vacating',
+          'No proper rent agreement provided',
+          'Landlord entering premises without permission',
+          'Essential services (water/electricity) cut off',
+          'Tenant causing property damage, not vacating',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: Always insist on written rent agreement',
+          'Step 2: Register agreement (mandatory in most states)',
+          'Step 3: Keep copies of all rent receipts',
+          'Step 4: Document property condition at move-in (photos)',
+          'Step 5: For disputes, first try to negotiate',
+          'Step 6: Send written notice as per agreement terms',
+          'Step 7: Approach Rent Authority for mediation',
+          'Step 8: File case in Rent Court if unresolved',
+          'Step 9: For illegal eviction, file police complaint',
+          'Step 10: Seek legal aid if unable to afford lawyer',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'Rent agreement (registered preferred)',
+          'Rent receipts',
+          'Security deposit receipt',
+          'Property condition photos',
+          'Communication records',
+          'ID proofs of both parties',
+          'Utility bill records',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'Rent Authority (where established)',
+          'Rent Court (district level)',
+          'Civil Court (traditional route)',
+          'District Legal Services Authority for free aid',
+          'Police (for harassment/illegal eviction)',
+          'State Housing Department',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'Model Tenancy Act', url: 'https://mohua.gov.in' },
+      { label: 'Housing Ministry', url: 'https://mohua.gov.in' },
+    ],
+  },
+  {
+    id: 'pmay',
+    title: 'Pradhan Mantri Awas Yojana (PMAY)',
+    type: 'scheme',
+    level: 'central',
+    category: 'housing-property',
+    tags: ['housing', 'subsidy', 'home loan', 'affordable housing'],
+    preview: 'Government scheme providing subsidized housing for EWS, LIG, and MIG categories with interest rate benefits.',
+    tagLabel: 'Scheme',
+    tagColor: '#10B981',
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'PMAY aims to provide affordable housing to all Indians by 2024 (extended).',
+          'Offers interest subsidy on home loans through Credit Linked Subsidy Scheme (CLSS).',
+          'Separate verticals for Urban (PMAY-U) and Rural (PMAY-G) areas.',
+          'Women co-ownership is mandatory for EWS/LIG categories.',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          'Subsidy up to Rs. 2.67 lakhs for EWS/LIG',
+          'Makes home ownership affordable for middle class',
+          'Interest subsidy directly reduces EMI',
+          'Can be combined with state housing schemes',
+          'No prior pucca house ownership required',
+          'Applicable for new construction and renovation',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'Not aware of eligibility criteria',
+          'Bank not informing about PMAY benefits',
+          'Subsidy not credited to loan account',
+          'Application rejected without clear reason',
+          'Already have property but not pucca house',
+          'Documents incomplete for application',
+          'Income exceeds limit marginally',
+          'Joint ownership issues',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: Check eligibility - EWS (up to Rs. 3L), LIG (Rs. 3-6L), MIG-I (Rs. 6-12L), MIG-II (Rs. 12-18L)',
+          'Step 2: Ensure no pucca house owned by any family member',
+          'Step 3: Apply through PMAY website or visit CSC center',
+          'Step 4: Fill form with Aadhaar-linked details',
+          'Step 5: Submit income proof and property documents',
+          'Step 6: Apply for home loan from any scheduled bank',
+          'Step 7: Bank will process PMAY subsidy automatically',
+          'Step 8: Subsidy credited upfront, reducing principal',
+          'Step 9: Track application status online',
+          'Step 10: Contact PMAY helpline for issues',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'Aadhaar card of all family members',
+          'Income certificate/ITR',
+          'Address proof',
+          'Property documents/allotment letter',
+          'Bank account details',
+          'Affidavit declaring no pucca house ownership',
+          'Passport size photos',
+          'Caste certificate (if applicable)',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'PMAY-U Portal: pmaymis.gov.in',
+          'PMAY-G Portal: pmayg.nic.in',
+          'Common Service Centers (CSC)',
+          'Scheduled Banks for home loans',
+          'Urban Local Bodies (for urban)',
+          'Panchayat offices (for rural)',
+          'Helpline: 1800-11-3377',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'PMAY Urban Portal', url: 'https://pmaymis.gov.in' },
+      { label: 'PMAY Gramin Portal', url: 'https://pmayg.nic.in' },
+      { label: 'Ministry of Housing', url: 'https://mohua.gov.in' },
+    ],
+  },
+
+  // Category 3: Employment
+  {
+    id: 'labour-codes',
+    title: 'Labour Codes Overview (2020)',
+    type: 'law',
+    level: 'central',
+    category: 'employment',
+    tags: ['labour', 'employment', 'worker', 'wages', 'workplace'],
+    preview: 'Four new labour codes consolidating 29 labour laws covering wages, social security, industrial relations, and safety.',
+    tagLabel: 'Law',
+    tagColor: '#EC4899',
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'India consolidated 29 labour laws into 4 Labour Codes in 2020 for simplification.',
+          'Code on Wages, 2019: Minimum wages, payment timelines, bonus',
+          'Industrial Relations Code, 2020: Trade unions, strikes, layoffs',
+          'Social Security Code, 2020: PF, ESI, gratuity, maternity benefits',
+          'Occupational Safety Code, 2020: Working conditions, health, welfare',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          'Universal minimum wage across sectors',
+          'Timely payment of wages (monthly/weekly)',
+          'Gratuity rights after 5 years of service',
+          'PF and ESI benefits for more workers',
+          'Safe working conditions mandatory',
+          'Better dispute resolution mechanisms',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'Salary not paid on time',
+          'Paid less than minimum wage',
+          'PF not deposited by employer',
+          'No appointment letter given',
+          'Forced to work overtime without pay',
+          'Unsafe working conditions',
+          'Terminated without notice or compensation',
+          'Gratuity denied after long service',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: Know your minimum wage (check state notification)',
+          'Step 2: Insist on written employment letter',
+          'Step 3: Check UAN portal for PF deposits monthly',
+          'Step 4: Report non-payment to Labour Commissioner',
+          'Step 5: For safety issues, complain to Factory Inspector',
+          'Step 6: Join registered trade union for collective strength',
+          'Step 7: File complaint in Labour Court for disputes',
+          'Step 8: Approach EPFO for PF-related grievances',
+          'Step 9: Document all issues with dates and evidence',
+          'Step 10: Seek legal aid if employer retaliates',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'Employment/appointment letter',
+          'Salary slips',
+          'Bank statements showing salary credits',
+          'PF account statements',
+          'Attendance records',
+          'Communication with employer',
+          'Witness statements',
+          'Medical records (for injury claims)',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'Labour Commissioner Office (District level)',
+          'Labour Court',
+          'EPFO: epfindia.gov.in (for PF)',
+          'ESIC: esic.nic.in (for ESI)',
+          'Factory Inspector (safety issues)',
+          'Shram Suvidha Portal: shramsuvidha.gov.in',
+          'State Labour Department websites',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'Ministry of Labour', url: 'https://labour.gov.in' },
+      { label: 'Shram Suvidha Portal', url: 'https://shramsuvidha.gov.in' },
+      { label: 'e-Shram Portal', url: 'https://eshram.gov.in' },
+    ],
+  },
+  {
+    id: 'epfo',
+    title: 'Employees Provident Fund Organisation (EPFO)',
+    type: 'scheme',
+    level: 'central',
+    category: 'employment',
+    tags: ['PF', 'provident fund', 'retirement', 'EPFO', 'pension'],
+    preview: 'Mandatory retirement savings for organized sector workers with employer matching contribution and pension benefits.',
+    tagLabel: 'Scheme',
+    tagColor: '#3B82F6',
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'EPFO manages world\'s largest contributory provident fund scheme.',
+          'Mandatory for establishments with 20+ employees.',
+          'Employee contributes 12% of basic salary, employer matches.',
+          'Includes Employees\' Pension Scheme (EPS) and Employees\' Deposit Linked Insurance Scheme (EDLI).',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          'Forced savings for retirement security',
+          'Employer matching doubles your contribution',
+          'Tax benefits under Section 80C',
+          'Emergency withdrawal for housing, medical, education',
+          'Pension after 10 years of service',
+          'Life insurance cover through EDLI',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'Employer not depositing PF despite salary deduction',
+          'Unable to withdraw PF after leaving job',
+          'Multiple PF accounts need consolidation',
+          'UAN not activated or details wrong',
+          'Pension application rejected',
+          'Nominee not updated in records',
+          'Previous employer details not available',
+          'Advance for housing/medical rejected',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: Activate UAN through employer or UAN portal',
+          'Step 2: Link Aadhaar to UAN (mandatory for online services)',
+          'Step 3: Check monthly PF deposits on passbook',
+          'Step 4: For transfer, use online member portal',
+          'Step 5: For advance, apply online with documents',
+          'Step 6: Update KYC (bank, Aadhaar, PAN) for seamless claims',
+          'Step 7: For complaints, use EPFiGMS portal',
+          'Step 8: Visit EPFO office with documents for complex issues',
+          'Step 9: For pension, apply 6 months before retirement',
+          'Step 10: Nominate family members for death benefits',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'UAN number',
+          'Aadhaar card',
+          'PAN card',
+          'Bank account details (IFSC)',
+          'Previous employer details (for transfer)',
+          'Form 19/10C (for withdrawal)',
+          'Medical certificates (for medical advance)',
+          'Property documents (for housing advance)',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'EPFO Portal: epfindia.gov.in',
+          'Member Portal: unifiedportal-mem.epfindia.gov.in',
+          'UMANG App: For mobile services',
+          'EPFiGMS: epfigms.gov.in (grievances)',
+          'Regional PF Office',
+          'Helpline: 1800-118-005',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'EPFO India', url: 'https://epfindia.gov.in' },
+      { label: 'Member Portal', url: 'https://unifiedportal-mem.epfindia.gov.in' },
+      { label: 'EPFiGMS Grievance', url: 'https://epfigms.gov.in' },
+    ],
+  },
+  {
+    id: 'esic',
+    title: 'Employees State Insurance Corporation (ESIC)',
+    type: 'scheme',
+    level: 'central',
+    category: 'employment',
+    tags: ['ESI', 'health insurance', 'medical', 'workers', 'ESIC'],
+    preview: 'Health insurance scheme for workers earning up to Rs. 21,000/month providing medical, maternity, and disability benefits.',
+    tagLabel: 'Scheme',
+    tagColor: '#10B981',
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'ESIC provides health insurance to workers earning up to Rs. 21,000/month.',
+          'Covers medical, sickness, maternity, disability, and unemployment benefits.',
+          'Applicable to establishments with 10+ employees (some states 20+).',
+          'Employees pay 0.75% of wages, employers pay 3.25%.',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          'Free medical treatment at ESI hospitals/dispensaries',
+          'Cash benefit during sickness',
+          '26 weeks maternity leave with full pay',
+          'Permanent disability pension',
+          'Dependant benefit on death',
+          'Unemployment allowance (Atal Bimit Vyakti Kalyan Yojana)',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'ESI card not generated',
+          'Treatment denied at hospital',
+          'Sickness benefit not received',
+          'Maternity benefit delayed',
+          'Employer not depositing ESI',
+          'Family members not added to card',
+          'No ESI dispensary near residence',
+          'Medicine not available at dispensary',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: Get ESI number from employer',
+          'Step 2: Download e-Pehchan card from ESIC portal',
+          'Step 3: Add family members to ESI coverage',
+          'Step 4: Visit empanelled hospital for treatment',
+          'Step 5: For sickness benefit, submit Form 28',
+          'Step 6: For maternity, submit Form 21 before delivery',
+          'Step 7: For complaints, use grievance portal',
+          'Step 8: Check contribution status online',
+          'Step 9: For emergencies, get treatment first, inform later',
+          'Step 10: Keep employer informed about medical issues',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'ESI number/e-Pehchan card',
+          'Aadhaar card',
+          'Family details (for adding dependents)',
+          'Medical certificates (for claims)',
+          'Discharge summary (for hospitalization)',
+          'Form specific to benefit type',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'ESIC Portal: esic.nic.in',
+          'ESI Hospitals and Dispensaries',
+          'Grievance Portal: esic.nic.in',
+          'Regional ESI Office',
+          'UMANG App',
+          'Helpline: 1800-11-4000',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'ESIC Portal', url: 'https://esic.nic.in' },
+      { label: 'ESI Online Services', url: 'https://esic.in' },
+    ],
+  },
+  {
+    id: 'minimum-wages',
+    title: 'Minimum Wages Act',
+    type: 'law',
+    level: 'central',
+    category: 'employment',
+    tags: ['wages', 'salary', 'minimum wage', 'worker rights'],
+    preview: 'Ensures workers receive fair minimum wages as notified by state governments for scheduled employment.',
+    tagLabel: 'Law',
+    tagColor: '#F59E0B',
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'Minimum Wages Act ensures fair pay for workers in scheduled employments.',
+          'State governments notify minimum wages for different job categories.',
+          'Wages revised periodically based on consumer price index.',
+          'Code on Wages, 2019 introduces floor wage concept for uniformity.',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          'Prevents exploitation of workers',
+          'Ensures basic living standards',
+          'Legal right to demand minimum wage',
+          'Employer can be prosecuted for violation',
+          'Applies to both organized and unorganized sector',
+          'Includes domestic workers in many states',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'Paid less than minimum wage',
+          'Unaware of applicable minimum wage',
+          'Employer claims exemption wrongly',
+          'Wage deductions without explanation',
+          'Overtime not paid at higher rate',
+          'Piece-rate workers exploited',
+          'Contract workers paid less than regular',
+          'Wages delayed for weeks/months',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: Check your state\'s minimum wage notification',
+          'Step 2: Compare your wages with scheduled rates',
+          'Step 3: Maintain record of hours worked and payment',
+          'Step 4: Demand written wage slip from employer',
+          'Step 5: If underpaid, first request employer in writing',
+          'Step 6: File complaint with Labour Inspector',
+          'Step 7: Approach Labour Court for wage recovery',
+          'Step 8: Join workers\' union for collective action',
+          'Step 9: Report on Shram Suvidha portal',
+          'Step 10: Seek legal aid if needed',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'Employment proof (letter/ID)',
+          'Wage slips',
+          'Bank statements',
+          'Attendance records',
+          'State minimum wage notification',
+          'Communication with employer',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'Labour Commissioner Office',
+          'Labour Inspector',
+          'Labour Court',
+          'Shram Suvidha Portal: shramsuvidha.gov.in',
+          'State Labour Department',
+          'Trade Unions',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'Ministry of Labour', url: 'https://labour.gov.in' },
+      { label: 'Shram Suvidha', url: 'https://shramsuvidha.gov.in' },
+      { label: 'e-Shram', url: 'https://eshram.gov.in' },
+    ],
+  },
+
+  // Category 4: Women / Family / Seniors
+  {
+    id: 'domestic-violence-act',
+    title: 'Protection of Women from Domestic Violence Act, 2005',
+    type: 'law',
+    level: 'central',
+    category: 'women-family',
+    tags: ['domestic violence', 'women protection', 'DV Act'],
+    preview: 'Protects women from physical, emotional, sexual, and economic abuse within domestic relationships.',
+    tagLabel: 'Law',
+    tagColor: '#EC4899',
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'The DV Act provides civil remedies to women facing domestic violence.',
+          'Covers physical, sexual, verbal, emotional, and economic abuse.',
+          'Applicable to wife, live-in partner, mother, sister, widow, single woman.',
+          'Protection Orders, Residence Orders, and Monetary Relief available.',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          'Immediate protection through court orders',
+          'Right to reside in shared household',
+          'Monetary compensation for injuries',
+          'Custody and maintenance orders',
+          'Free legal aid available',
+          'Breach of order is criminal offense',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'Physical beating by husband/in-laws',
+          'Verbal abuse and humiliation',
+          'Dowry demands and harassment',
+          'Thrown out of matrimonial home',
+          'Economic abuse - no money for expenses',
+          'Threats to take away children',
+          'Sexual abuse within marriage',
+          'Isolation from family and friends',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: In emergency, call 181 (Women Helpline) or 100',
+          'Step 2: Contact nearest Protection Officer',
+          'Step 3: Visit One Stop Centre (Sakhi) for support',
+          'Step 4: File complaint with Protection Officer or police',
+          'Step 5: Get medical examination done (free at govt hospital)',
+          'Step 6: Apply for Protection Order through Magistrate',
+          'Step 7: Seek Residence Order to stay in shared household',
+          'Step 8: Apply for monetary relief and maintenance',
+          'Step 9: Free legal aid available at DLSA',
+          'Step 10: If order violated, file breach application',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'Application in prescribed form (Form I)',
+          'ID proof',
+          'Medical reports (if injured)',
+          'Marriage certificate (if applicable)',
+          'Photos of injuries',
+          'Witness statements',
+          'Communication/messages showing abuse',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'Women Helpline: 181 (24x7)',
+          'One Stop Centre (Sakhi)',
+          'Protection Officer (at District Magistrate office)',
+          'Local Police Station',
+          'Magistrate Court',
+          'State Women Commission',
+          'National Commission for Women: ncw.nic.in',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'National Commission for Women', url: 'https://ncw.nic.in' },
+      { label: 'Women Helpline', url: 'https://wcd.nic.in' },
+      { label: 'One Stop Centre', url: 'http://www.integratedservicescheme.gov.in' },
+    ],
+  },
+  {
+    id: 'maintenance-alimony',
+    title: 'Maintenance & Alimony Rights',
+    type: 'law',
+    level: 'central',
+    category: 'women-family',
+    tags: ['maintenance', 'alimony', 'wife', 'divorce', 'support'],
+    preview: 'Rights to claim maintenance from spouse during marriage, separation, or divorce proceedings.',
+    tagLabel: 'Law',
+    tagColor: '#F472B6',
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'Maintenance can be claimed under various laws based on religion.',
+          'Section 125 CrPC provides quick maintenance (secular, all religions).',
+          'Hindu Marriage Act, Muslim Personal Law also have provisions.',
+          'Applicable to wife, children, and dependent parents.',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          'Financial support during separation/divorce',
+          'Quick remedy under Section 125 CrPC',
+          'Children entitled to maintenance from father',
+          'Interim maintenance during case proceedings',
+          'Can be claimed without filing divorce',
+          'Enforceable through court',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'Husband not providing money after separation',
+          'Left without income source after marriage',
+          'Children\'s education expenses not paid',
+          'Husband hiding income to avoid maintenance',
+          'Maintenance amount too low to survive',
+          'Husband not following court order',
+          'Long delays in getting maintenance',
+          'Live-in partner not providing support',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: Gather proof of husband\'s income',
+          'Step 2: Calculate your monthly expenses',
+          'Step 3: File application under Section 125 CrPC (quickest)',
+          'Step 4: Or under personal law through family court',
+          'Step 5: Apply for interim maintenance first',
+          'Step 6: Provide bank statements, salary slips, property details of spouse',
+          'Step 7: Attend all court hearings',
+          'Step 8: If maintenance not paid, file execution petition',
+          'Step 9: Husband can be sent to jail for non-payment',
+          'Step 10: Review and revise amount if circumstances change',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'Marriage certificate',
+          'Proof of spouse\'s income',
+          'Your monthly expense details',
+          'Children\'s school fees, medical bills',
+          'Property documents (if known)',
+          'Bank statements of both parties',
+          'ID proofs',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'Family Court',
+          'Magistrate Court (for Section 125 CrPC)',
+          'District Legal Services Authority (for free aid)',
+          'State Women Commission',
+          'Mediation Centre (for settlement)',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'National Commission for Women', url: 'https://ncw.nic.in' },
+      { label: 'Ministry of WCD', url: 'https://wcd.nic.in' },
+    ],
+  },
+  {
+    id: 'maternity-benefit-act',
+    title: 'Maternity Benefit Act, 1961',
+    type: 'law',
+    level: 'central',
+    category: 'women-family',
+    tags: ['maternity', 'pregnancy', 'women', 'leave', 'workplace'],
+    preview: 'Provides 26 weeks paid maternity leave and other benefits to working women during pregnancy.',
+    tagLabel: 'Law',
+    tagColor: '#EC4899',
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'Maternity Benefit Act amended in 2017 increased leave to 26 weeks.',
+          'Applicable to establishments with 10+ employees.',
+          'Women must have worked at least 80 days in preceding 12 months.',
+          'Includes benefits for adoption, miscarriage, and tubectomy.',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          '26 weeks paid leave for first two children',
+          '12 weeks for third child onwards',
+          'Cannot be terminated during maternity leave',
+          'Work from home option post-maternity',
+          'Creche facility mandatory (50+ employees)',
+          'Leave for miscarriage and medical termination',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'Employer denying maternity leave',
+          'Terminated or demoted due to pregnancy',
+          'Full salary not paid during leave',
+          'Forced to resign after announcing pregnancy',
+          'No creche facility despite law requirement',
+          'Leave not sanctioned for adoption',
+          'Work from home option denied',
+          'Medical expenses not reimbursed',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: Inform employer in writing about pregnancy',
+          'Step 2: Submit Form 1 (notice of pregnancy)',
+          'Step 3: Apply for leave 6 weeks before expected delivery',
+          'Step 4: Provide medical certificate confirming due date',
+          'Step 5: If denied, escalate to HR in writing',
+          'Step 6: File complaint with Labour Inspector',
+          'Step 7: Approach State Women Commission',
+          'Step 8: File case in Labour Court',
+          'Step 9: Document all communication',
+          'Step 10: Seek legal aid if needed',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'Employment proof',
+          'Medical certificate (pregnancy confirmation)',
+          'Expected delivery date certificate',
+          'Form 1 (notice of pregnancy)',
+          'Bank account details for salary',
+          'Previous work history (80 days proof)',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'HR Department of employer',
+          'Labour Inspector',
+          'Labour Commissioner',
+          'State Women Commission',
+          'Labour Court',
+          'National Commission for Women',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'Ministry of Labour', url: 'https://labour.gov.in' },
+      { label: 'Women & Child Development', url: 'https://wcd.nic.in' },
+    ],
+  },
+  {
+    id: 'senior-citizens-act',
+    title: 'Maintenance and Welfare of Parents and Senior Citizens Act, 2007',
+    type: 'law',
+    level: 'central',
+    category: 'women-family',
+    tags: ['senior citizens', 'parents', 'elderly', 'maintenance', 'old age'],
+    preview: 'Ensures children and legal heirs provide maintenance to senior citizens and parents aged 60+.',
+    tagLabel: 'Law',
     tagColor: '#8B5CF6',
-    shortSummary: 'IT Act provisions, cyber crime reporting, data protection, and digital privacy rights in India.',
-    overviewText: `The Information Technology Act, 2000 (amended 2008) governs cyber activities in India.
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'Senior Citizens Act mandates adult children to maintain parents aged 60+.',
+          'Children cannot evict parents from property transferred to them.',
+          'Tribunal proceedings are summary (quick resolution).',
+          'Maximum maintenance of Rs. 10,000/month per parent.',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          'Quick remedy without going to civil court',
+          'Adult children legally bound to maintain',
+          'Property transfer can be voided for neglect',
+          'Protection from eviction',
+          'Abandonment is criminal offense',
+          'All children share maintenance responsibility',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'Children not providing basic needs',
+          'Thrown out of house after property transfer',
+          'Abuse and neglect by children/grandchildren',
+          'No medical expenses paid',
+          'Living separately, no financial support',
+          'Property grabbed by children',
+          'Abandoned in old age homes',
+          'Multiple children refusing responsibility',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: Try family mediation first',
+          'Step 2: File application before Maintenance Tribunal (SDM)',
+          'Step 3: List all children as respondents',
+          'Step 4: Provide details of children\'s income/property',
+          'Step 5: Tribunal to pass order within 90 days',
+          'Step 6: Appeal to Appellate Tribunal within 60 days',
+          'Step 7: For eviction threat, file immediate complaint',
+          'Step 8: To cancel property transfer, show neglect/abandonment',
+          'Step 9: Police action for physical abuse',
+          'Step 10: State Helpline: 14567 (Elder Line)',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'Age proof',
+          'Details of children (names, addresses)',
+          'Proof of children\'s income/assets',
+          'Property documents (if transferred)',
+          'Medical expense records',
+          'Evidence of neglect/abuse',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'Maintenance Tribunal (Sub-Divisional Magistrate)',
+          'Elder Line: 14567 (national helpline)',
+          'Police (for abuse/abandonment)',
+          'District Magistrate',
+          'State Commissioner for Senior Citizens',
+          'District Legal Services Authority',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'Ministry of Social Justice', url: 'https://socialjustice.gov.in' },
+      { label: 'Elder Line', url: 'https://elderline.in' },
+    ],
+  },
 
-**Key Cyber Crimes:**
-• Identity theft and phishing
-• Online fraud and cheating
-• Cyberstalking and harassment
-• Data theft and hacking
-• Spreading obscene content
+  // Category 5: Welfare Schemes
+  {
+    id: 'pm-kisan',
+    title: 'PM-KISAN (Pradhan Mantri Kisan Samman Nidhi)',
+    type: 'scheme',
+    level: 'central',
+    category: 'welfare',
+    tags: ['farmer', 'PM-KISAN', 'income support', 'agriculture'],
+    preview: 'Direct income support of Rs. 6,000 per year to farmer families through three equal installments.',
+    tagLabel: 'Scheme',
+    tagColor: '#22C55E',
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'PM-KISAN provides Rs. 6,000 per year to eligible farmer families.',
+          'Amount transferred in 3 installments of Rs. 2,000 each.',
+          'Direct Benefit Transfer to Aadhaar-linked bank account.',
+          'All land-holding farmer families eligible (some exclusions apply).',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          'Regular income support for small farmers',
+          'Helps meet agricultural expenses',
+          'Direct transfer prevents middlemen',
+          'No need for physical visits to claim',
+          'Linked to Aadhaar for transparency',
+          'Covers over 11 crore farmers',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'Application rejected without clear reason',
+          'Installment not credited to account',
+          'Name mismatch in records',
+          'Aadhaar not linked properly',
+          'Land records not updated',
+          'Wrongly marked as ineligible',
+          'Bank account details incorrect',
+          'Duplicate registration',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: Check eligibility (must have agricultural land)',
+          'Step 2: Ensure land records are in your name',
+          'Step 3: Register at pmkisan.gov.in or through CSC',
+          'Step 4: Link Aadhaar to bank account',
+          'Step 5: Complete e-KYC through OTP',
+          'Step 6: Check status on portal regularly',
+          'Step 7: For issues, contact state nodal officer',
+          'Step 8: Verify bank account details are correct',
+          'Step 9: Update records if name mismatch',
+          'Step 10: File grievance on portal for unresolved issues',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'Aadhaar card',
+          'Land ownership documents',
+          'Bank account with IFSC code',
+          'Mobile number (for OTP)',
+          'Land record extract (7/12, Khatauni etc.)',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'PM-KISAN Portal: pmkisan.gov.in',
+          'Common Service Centre (CSC)',
+          'Agriculture Department (state level)',
+          'Patwari/Village Revenue Officer',
+          'Helpline: 155261 or 011-24300606',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'PM-KISAN Portal', url: 'https://pmkisan.gov.in' },
+      { label: 'Agriculture Ministry', url: 'https://agricoop.nic.in' },
+    ],
+  },
+  {
+    id: 'ayushman-bharat',
+    title: 'Ayushman Bharat - PM-JAY',
+    type: 'scheme',
+    level: 'central',
+    category: 'welfare',
+    tags: ['health', 'insurance', 'Ayushman', 'PM-JAY', 'hospital'],
+    preview: 'Free health insurance of Rs. 5 lakh per family per year for hospitalization at empanelled hospitals.',
+    tagLabel: 'Scheme',
+    tagColor: '#3B82F6',
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'PM-JAY provides Rs. 5 lakh health cover per family per year.',
+          'Covers secondary and tertiary hospitalization.',
+          'Eligible families identified through SECC 2011 data.',
+          'Over 12 crore families covered across India.',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          'Free hospitalization for major illnesses',
+          'No premium to be paid by beneficiaries',
+          'Covers pre-existing conditions from day one',
+          '3-day pre and 15-day post hospitalization',
+          'Cashless treatment at empanelled hospitals',
+          'Transportability across states',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'Hospital refusing to provide cashless treatment',
+          'Not aware if eligible for scheme',
+          'Ayushman card not generated',
+          'Treatment denied for certain procedures',
+          'Hospital demanding extra payment',
+          'Claim rejected without reason',
+          'Family members not added to card',
+          'Empanelled hospital not available nearby',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: Check eligibility at mera.pmjay.gov.in',
+          'Step 2: Enter Aadhaar/ration card/mobile number',
+          'Step 3: If eligible, download Ayushman Card',
+          'Step 4: Visit empanelled hospital for treatment',
+          'Step 5: Show Ayushman card at Ayushman Help Desk',
+          'Step 6: Get treatment authorization',
+          'Step 7: Treatment is completely cashless',
+          'Step 8: For denied claims, file grievance',
+          'Step 9: Helpline: 14555',
+          'Step 10: If not in list, check state scheme eligibility',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'Aadhaar card',
+          'Ration card',
+          'Ayushman Card (e-card acceptable)',
+          'Hospital admission slip',
+          'Doctor prescription',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'PM-JAY Portal: pmjay.gov.in',
+          'Eligibility Check: mera.pmjay.gov.in',
+          'Ayushman Help Desk at empanelled hospitals',
+          'Common Service Centre',
+          'Helpline: 14555',
+          'State Health Agency',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'PM-JAY Portal', url: 'https://pmjay.gov.in' },
+      { label: 'Check Eligibility', url: 'https://mera.pmjay.gov.in' },
+      { label: 'Hospital Locator', url: 'https://hospitals.pmjay.gov.in' },
+    ],
+  },
+  {
+    id: 'jan-dhan',
+    title: 'Pradhan Mantri Jan Dhan Yojana (PMJDY)',
+    type: 'scheme',
+    level: 'central',
+    category: 'welfare',
+    tags: ['bank account', 'financial inclusion', 'Jan Dhan', 'savings'],
+    preview: 'Zero-balance bank accounts with RuPay card, accident insurance, and overdraft facility for unbanked citizens.',
+    tagLabel: 'Scheme',
+    tagColor: '#F59E0B',
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'PMJDY provides universal banking access to all households.',
+          'Zero-balance savings account at any bank.',
+          'Includes RuPay debit card with accident insurance.',
+          'Overdraft facility up to Rs. 10,000 for eligible accounts.',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          'Banking facility for previously unbanked',
+          'Free RuPay card for cashless transactions',
+          'Rs. 2 lakh accident insurance cover',
+          'Overdraft up to Rs. 10,000 without collateral',
+          'Direct benefit transfer linkage',
+          'Zero maintenance charges',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'Bank refusing to open zero-balance account',
+          'RuPay card not issued',
+          'Overdraft facility denied',
+          'Account made inactive/frozen',
+          'Unable to link for DBT',
+          'Branch not providing services properly',
+          'Mobile banking not activated',
+          'Insurance claim process unclear',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: Visit any bank branch with KYC documents',
+          'Step 2: Fill PMJDY account opening form',
+          'Step 3: Submit Aadhaar for instant KYC',
+          'Step 4: Get account number and RuPay card',
+          'Step 5: Activate mobile banking if needed',
+          'Step 6: Link account to Aadhaar for DBT',
+          'Step 7: For overdraft, maintain good transaction history',
+          'Step 8: For issues, approach Bank Manager',
+          'Step 9: File complaint on RBI Ombudsman portal',
+          'Step 10: Use banking correspondent in villages',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'Aadhaar card (sufficient for small accounts)',
+          'Passport size photo',
+          'Address proof (if different from Aadhaar)',
+          'Mobile number',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'Any scheduled commercial bank branch',
+          'Bank Mitra/Banking Correspondent',
+          'Post Office (for India Post Payments Bank)',
+          'RBI Ombudsman: cms.rbi.org.in',
+          'Bank\'s grievance cell',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'PMJDY Portal', url: 'https://pmjdy.gov.in' },
+      { label: 'Financial Services', url: 'https://financialservices.gov.in' },
+    ],
+  },
+  {
+    id: 'atal-pension',
+    title: 'Atal Pension Yojana (APY)',
+    type: 'scheme',
+    level: 'central',
+    category: 'welfare',
+    tags: ['pension', 'retirement', 'Atal Pension', 'old age'],
+    preview: 'Guaranteed pension of Rs. 1,000 to Rs. 5,000 per month after age 60 for unorganized sector workers.',
+    tagLabel: 'Scheme',
+    tagColor: '#8B5CF6',
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'APY provides guaranteed pension to unorganized sector workers.',
+          'Monthly pension of Rs. 1,000 to Rs. 5,000 after age 60.',
+          'Eligibility: Age 18-40 years with savings bank account.',
+          'Contribution varies based on joining age and pension amount.',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          'Guaranteed lifetime pension',
+          'Spouse continues to receive after subscriber death',
+          'Accumulated corpus to nominee',
+          'Low monthly contribution',
+          'Government co-contribution (for eligible)',
+          'Tax benefit under Section 80CCD',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'Contribution not deducted from account',
+          'PRAN not generated',
+          'Nomination not updated',
+          'Auto-debit failed repeatedly',
+          'Want to change pension amount',
+          'Account frozen due to non-payment',
+          'Spouse pension claim process unclear',
+          'Premature exit not allowed',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: Ensure savings account with bank',
+          'Step 2: Fill APY registration form at bank',
+          'Step 3: Choose pension amount (Rs. 1000-5000)',
+          'Step 4: Provide Aadhaar and mobile number',
+          'Step 5: Set up auto-debit for monthly contribution',
+          'Step 6: Keep sufficient balance on debit dates',
+          'Step 7: Update nomination details',
+          'Step 8: Track contribution through statement',
+          'Step 9: At 60, pension starts automatically',
+          'Step 10: For issues, contact bank or PFRDA',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'Savings bank account',
+          'Aadhaar card',
+          'Mobile number linked to Aadhaar',
+          'Nominee details',
+          'Spouse Aadhaar (if spouse nominated)',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'Bank where savings account exists',
+          'Post Office (for India Post)',
+          'PFRDA: pfrda.org.in',
+          'CRA portal: cra-nsdl.com or karvy.com',
+          'APY Helpline: 1800-889-1030',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'APY Portal', url: 'https://npscra.nsdl.co.in/scheme-details/APY' },
+      { label: 'PFRDA', url: 'https://pfrda.org.in' },
+    ],
+  },
 
-**Reporting Cyber Crime:**
-• National Cyber Crime Portal: cybercrime.gov.in
-• Call 1930 for financial fraud
-• Local police cyber cell
-• Preserve evidence (screenshots, URLs)
+  // Category 6: Business / MSME
+  {
+    id: 'udyam-msme',
+    title: 'Udyam Registration (MSME)',
+    type: 'portal',
+    level: 'central',
+    category: 'business',
+    tags: ['MSME', 'Udyam', 'business registration', 'small business'],
+    preview: 'Free online registration for micro, small, and medium enterprises to avail government benefits and subsidies.',
+    tagLabel: 'Portal',
+    tagColor: '#F59E0B',
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'Udyam Registration is the official MSME registration in India.',
+          'Free, permanent, and paperless registration based on self-declaration.',
+          'Classification: Micro (up to Rs. 1 Cr), Small (Rs. 1-10 Cr), Medium (Rs. 10-50 Cr).',
+          'Aadhaar is mandatory for registration.',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          'Priority sector lending from banks',
+          'Government tender preferences',
+          'Protection against delayed payments',
+          'Subsidy on patent/trademark registration',
+          'Credit Guarantee Fund support',
+          'Tax rebates and exemptions',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'Unable to complete registration',
+          'Aadhaar-PAN mismatch',
+          'GST details not verified',
+          'Classification unclear (turnover vs investment)',
+          'Certificate not downloadable',
+          'Bank not recognizing registration',
+          'Delayed payment recovery process',
+          'Multiple registrations for same entity',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: Visit udyamregistration.gov.in',
+          'Step 2: Enter Aadhaar number and validate OTP',
+          'Step 3: PAN is optional but helps verify turnover',
+          'Step 4: Enter business details and address',
+          'Step 5: Declare investment and turnover',
+          'Step 6: Submit and get Udyam Registration Number (URN)',
+          'Step 7: Download e-certificate instantly',
+          'Step 8: Update details annually if changed',
+          'Step 9: Use URN for all government dealings',
+          'Step 10: For issues, contact District Industries Centre',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'Aadhaar card of proprietor/partner/director',
+          'PAN (optional but recommended)',
+          'GST number (if registered)',
+          'Bank account details',
+          'Business address proof',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'Udyam Portal: udyamregistration.gov.in',
+          'CHAMPIONS Portal: champions.gov.in (grievances)',
+          'District Industries Centre',
+          'MSME Ministry: msme.gov.in',
+          'Helpline: 011-23063288',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'Udyam Registration', url: 'https://udyamregistration.gov.in' },
+      { label: 'CHAMPIONS Portal', url: 'https://champions.gov.in' },
+      { label: 'MSME Ministry', url: 'https://msme.gov.in' },
+    ],
+  },
+  {
+    id: 'startup-india',
+    title: 'Startup India Scheme',
+    type: 'scheme',
+    level: 'central',
+    category: 'business',
+    tags: ['startup', 'entrepreneur', 'innovation', 'funding'],
+    preview: 'Recognition and benefits for startups including tax exemption, self-certification, faster exit, and funding support.',
+    tagLabel: 'Scheme',
+    tagColor: '#3B82F6',
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'Startup India provides recognition and support to innovative startups.',
+          'Eligible: Entity less than 10 years old, turnover under Rs. 100 crore.',
+          'Must work towards innovation/improvement of products/processes.',
+          'Recognition gives access to various government schemes and benefits.',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          '3-year tax exemption for eligible startups',
+          'Self-certification for 9 labour and environmental laws',
+          'Fast-track patent examination at 80% rebate',
+          'Fund of Funds for Startups (FFS) access',
+          'Easy public procurement norms',
+          'Faster exit through simplified bankruptcy',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'Recognition application rejected',
+          'Unclear what qualifies as "innovation"',
+          'Tax exemption not granted',
+          'Fund of Funds access difficult',
+          'Compliance burden despite self-certification',
+          'Patent application process slow',
+          'Investor verification challenges',
+          'State vs Central scheme confusion',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: Register company/LLP/Partnership',
+          'Step 2: Create account on startupindia.gov.in',
+          'Step 3: Apply for DPIIT Recognition',
+          'Step 4: Submit pitch deck and innovation details',
+          'Step 5: Get Certificate of Recognition',
+          'Step 6: Apply for tax exemption through Inter-Ministerial Board',
+          'Step 7: Avail self-certification on startup portal',
+          'Step 8: Apply to startup funding programs',
+          'Step 9: Participate in Startup India events',
+          'Step 10: Connect with incubators and mentors',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'Company incorporation certificate',
+          'PAN of entity',
+          'Founder Aadhaar',
+          'Brief about product/service innovation',
+          'Pitch deck/business plan',
+          'Financial statements (if applicable)',
+          'Recommendation letter from incubator (optional)',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'Startup India Portal: startupindia.gov.in',
+          'DPIIT Recognition: startup recognition page',
+          'Startup India Hub: hub.startupindia.gov.in',
+          'State Startup Cells',
+          'Helpline: 1800-115-565',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'Startup India Portal', url: 'https://startupindia.gov.in' },
+      { label: 'Startup India Hub', url: 'https://hub.startupindia.gov.in' },
+      { label: 'DPIIT', url: 'https://dpiit.gov.in' },
+    ],
+  },
+  {
+    id: 'gst-basics',
+    title: 'GST (Goods and Services Tax) Basics',
+    type: 'law',
+    level: 'central',
+    category: 'business',
+    tags: ['GST', 'tax', 'business', 'compliance'],
+    preview: 'Understanding GST registration, filing, input tax credit, and compliance requirements for businesses.',
+    tagLabel: 'Law',
+    tagColor: '#10B981',
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'GST is India\'s unified indirect tax replacing multiple central and state taxes.',
+          'Mandatory registration if turnover exceeds Rs. 40 lakh (Rs. 20 lakh for services).',
+          'Categories: CGST (Central), SGST (State), IGST (Inter-state), Cess.',
+          'Composition scheme available for small businesses up to Rs. 1.5 crore.',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          'Mandatory for inter-state supplies',
+          'Input Tax Credit reduces tax burden',
+          'Required for e-commerce sellers',
+          'Enables participation in government tenders',
+          'Non-compliance attracts heavy penalties',
+          'Simplifies tax structure',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'Registration taking too long',
+          'Input Tax Credit blocked',
+          'Mismatch in GSTR-2A/2B',
+          'Filing return errors',
+          'Received notice for non-compliance',
+          'Cash ledger balance issues',
+          'E-way bill generation problems',
+          'Supplier not uploading invoices',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: Check if registration is required (threshold limits)',
+          'Step 2: Apply at gst.gov.in with required documents',
+          'Step 3: Complete verification process',
+          'Step 4: Get GSTIN (15-digit number)',
+          'Step 5: File monthly/quarterly returns (GSTR-1, GSTR-3B)',
+          'Step 6: Claim Input Tax Credit properly',
+          'Step 7: Generate e-invoices (if applicable)',
+          'Step 8: Generate e-way bills for transportation',
+          'Step 9: Reconcile ITC with GSTR-2B monthly',
+          'Step 10: File annual return (GSTR-9)',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'PAN of business/proprietor',
+          'Aadhaar of authorized signatory',
+          'Business registration proof',
+          'Bank account details',
+          'Address proof of business place',
+          'Photograph of proprietor/partners/directors',
+          'Authorization letter',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'GST Portal: gst.gov.in',
+          'GST Helpdesk: 1800-103-4786',
+          'CBIC: cbic.gov.in',
+          'GST Seva Kendra (at tax offices)',
+          'GST Council Secretariat',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'GST Portal', url: 'https://gst.gov.in' },
+      { label: 'CBIC', url: 'https://cbic.gov.in' },
+      { label: 'GST Council', url: 'https://gstcouncil.gov.in' },
+    ],
+  },
 
-**Data Protection:**
-• Upcoming Digital Personal Data Protection Act
-• Right to access your data
-• Right to correction and erasure
-• Consent required for data processing
-
-**Social Media Rules:**
-• IT Rules 2021 for intermediaries
-• Grievance redressal mechanism mandatory
-• 24-hour takedown for certain content
-
-**Penalties:**
-• Unauthorized access: Up to 3 years + fine
-• Data theft: Up to 3 years + ₹5 lakhs
-• Identity theft: Up to 3 years + ₹1 lakh`,
-    officialLink: 'https://cybercrime.gov.in',
-    keywords: ['cyber', 'IT Act', 'hacking', 'fraud', 'data protection', 'privacy'],
-    relatedIds: ['rti-act', 'consumer-protection', 'labour-laws'],
+  // Category 7: Documents
+  {
+    id: 'aadhaar-pan-rights',
+    title: 'Aadhaar & PAN - Your Rights',
+    type: 'law',
+    level: 'central',
+    category: 'documents',
+    tags: ['Aadhaar', 'PAN', 'identity', 'documents'],
+    preview: 'Understanding your rights regarding Aadhaar and PAN - when mandatory, how to update, and grievance redressal.',
+    tagLabel: 'Portal',
+    tagColor: '#8B5CF6',
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'Aadhaar is a 12-digit unique identity based on biometrics.',
+          'PAN is a 10-character alphanumeric identifier for tax purposes.',
+          'Aadhaar-PAN linking is mandatory for income tax filing.',
+          'Both can be updated for corrections through official portals.',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          'Required for government scheme benefits',
+          'Bank account opening and KYC',
+          'Income tax filing and refunds',
+          'Mobile SIM activation',
+          'Property registration',
+          'DBT (Direct Benefit Transfer)',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'Name mismatch between Aadhaar and other documents',
+          'Address not updated after moving',
+          'Biometric failure at authentication',
+          'Aadhaar-PAN linking failed',
+          'Duplicate PAN issued',
+          'Mobile number change needed',
+          'Date of birth incorrect',
+          'Aadhaar services refused wrongly',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: For Aadhaar updates, visit uidai.gov.in',
+          'Step 2: Online update for mobile, email, address',
+          'Step 3: Visit Aadhaar Seva Kendra for biometric update',
+          'Step 4: For PAN update, visit onlineservices.nsdl.com',
+          'Step 5: Link Aadhaar-PAN on income tax portal',
+          'Step 6: Check linked status at incometax.gov.in',
+          'Step 7: For failed linking, verify details match',
+          'Step 8: File grievance at uidai.gov.in for Aadhaar issues',
+          'Step 9: For PAN, contact NSDL/UTIITSL',
+          'Step 10: Aadhaar cannot be refused for essential services',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'Proof of Identity (POI)',
+          'Proof of Address (POA)',
+          'Date of birth proof',
+          'Current Aadhaar/PAN card',
+          'Supporting documents for correction',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'UIDAI Portal: uidai.gov.in',
+          'Aadhaar Seva Kendra (enrolment/update)',
+          'NSDL PAN: onlineservices.nsdl.com',
+          'UTIITSL PAN: pan.utiitsl.com',
+          'Income Tax Portal: incometax.gov.in',
+          'UIDAI Helpline: 1947',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'UIDAI Portal', url: 'https://uidai.gov.in' },
+      { label: 'NSDL PAN Services', url: 'https://onlineservices.nsdl.com' },
+      { label: 'Income Tax Portal', url: 'https://incometax.gov.in' },
+    ],
+  },
+  {
+    id: 'legal-notice-basics',
+    title: 'Legal Notice - How to Send & Respond',
+    type: 'law',
+    level: 'central',
+    category: 'documents',
+    tags: ['legal notice', 'dispute', 'lawyer', 'court'],
+    preview: 'Understanding legal notices - when to send, how to draft, mandatory requirements, and how to respond to one.',
+    tagLabel: 'Law',
+    tagColor: '#EF4444',
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'Legal notice is a formal communication before initiating legal proceedings.',
+          'Some cases require mandatory notice before filing (e.g., against government).',
+          'It gives the other party opportunity to resolve the dispute amicably.',
+          'Can be sent by advocate or directly by the aggrieved party.',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          'Often resolves disputes without court',
+          'Creates documented evidence of grievance',
+          'Mandatory in many civil cases',
+          '60-day notice required against government',
+          'Starts limitation period clock',
+          'Shows serious intent to pursue legal action',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'Money not returned despite repeated requests',
+          'Cheque bounced - need to recover money',
+          'Property encroachment by neighbor',
+          'Employer not paying dues',
+          'Received legal notice - don\'t know how to respond',
+          'Builder not delivering possession',
+          'Insurance company rejected claim',
+          'Defamation on social media',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: Clearly identify the issue and demand',
+          'Step 2: Gather all supporting documents',
+          'Step 3: Draft notice with facts, grievance, and demand',
+          'Step 4: Include response deadline (usually 15-30 days)',
+          'Step 5: Send through registered post AD or speed post',
+          'Step 6: Keep postal receipt and AD card safely',
+          'Step 7: Wait for response within given time',
+          'Step 8: If no response/unsatisfactory, proceed to court',
+          'Step 9: If received notice, respond within deadline',
+          'Step 10: Consult lawyer for complex matters',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'Written legal notice',
+          'Supporting documents (agreements, receipts)',
+          'Postal receipt and AD card',
+          'Identity proof',
+          'Any previous correspondence',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'District Legal Services Authority (free aid)',
+          'Civil Court (for filing suit)',
+          'Consumer Forum (consumer matters)',
+          'Labour Court (employment matters)',
+          'Post Office (for registered AD)',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'NALSA Legal Aid', url: 'https://nalsa.gov.in' },
+      { label: 'eCourts Services', url: 'https://ecourts.gov.in' },
+    ],
+  },
+  
+  // Additional Central Laws to reach 30
+  {
+    id: 'motor-vehicle-act',
+    title: 'Motor Vehicles Act, 2019 (Amended)',
+    type: 'law',
+    level: 'central',
+    category: 'citizen-rights',
+    tags: ['driving', 'license', 'vehicle', 'traffic', 'accident'],
+    preview: 'Road safety laws covering driving licenses, vehicle registration, traffic violations, and accident compensation.',
+    tagLabel: 'Law',
+    tagColor: '#3B82F6',
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'Motor Vehicles Act governs road transport, vehicle registration, and driving licenses.',
+          '2019 Amendment introduced stricter penalties for traffic violations.',
+          'Third-party insurance mandatory for all vehicles.',
+          'Hit-and-run compensation increased significantly.',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          'Higher penalties deter traffic violations',
+          'Protection for accident victims',
+          'Mandatory insurance coverage',
+          'Online services for license and registration',
+          'Good Samaritan protection for helping accident victims',
+          'Stricter norms for commercial vehicles',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'License application delayed',
+          'Challan issued unfairly',
+          'Insurance claim rejected after accident',
+          'Hit-and-run - how to claim compensation',
+          'Vehicle registration transfer issues',
+          'Excessive penalty charged',
+          'Driving license renewal problems',
+          'No-claim bonus not given',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: Apply for DL online at parivahan.gov.in',
+          'Step 2: Book slot at nearest RTO',
+          'Step 3: For challans, pay online to avoid touts',
+          'Step 4: Contest unfair challan at court',
+          'Step 5: For accidents, file FIR immediately',
+          'Step 6: Claim insurance within 24-48 hours',
+          'Step 7: For hit-and-run, claim from MACT',
+          'Step 8: Keep vehicle documents always handy',
+          'Step 9: Renew insurance before expiry',
+          'Step 10: Update registration on address change',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'Aadhaar card',
+          'Address proof',
+          'Age proof (for learner license)',
+          'Medical certificate',
+          'Vehicle registration certificate',
+          'Insurance policy',
+          'PUC certificate',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'Parivahan Portal: parivahan.gov.in',
+          'mParivahan App',
+          'State RTO offices',
+          'Motor Accident Claims Tribunal',
+          'Traffic Police (for challans)',
+          'Insurance Ombudsman (for claim issues)',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'Parivahan Portal', url: 'https://parivahan.gov.in' },
+      { label: 'Ministry of Road Transport', url: 'https://morth.nic.in' },
+    ],
+  },
+  {
+    id: 'food-safety-act',
+    title: 'Food Safety and Standards Act, 2006',
+    type: 'law',
+    level: 'central',
+    category: 'citizen-rights',
+    tags: ['food', 'safety', 'FSSAI', 'adulteration'],
+    preview: 'Consumer protection against unsafe and adulterated food through FSSAI standards and complaint mechanisms.',
+    tagLabel: 'Law',
+    tagColor: '#22C55E',
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'Food Safety Act establishes FSSAI to regulate food businesses.',
+          'All food businesses must obtain FSSAI license/registration.',
+          'Prescribes standards for food quality and labeling.',
+          'Citizens can report unsafe food to food safety officers.',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          'Protection against adulterated food',
+          'Clear labeling requirements',
+          'Date of manufacture and expiry mandatory',
+          'Complaint mechanism for unsafe food',
+          'Heavy penalties for violators',
+          'Quality standards for all food products',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'Received expired food product',
+          'Found foreign object in food',
+          'Food poisoning from restaurant',
+          'Misleading claims on food label',
+          'Suspected adulteration',
+          'Restaurant without FSSAI license',
+          'Packaged food quality poor',
+          'Street food hygiene concerns',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: Check FSSAI license of food business',
+          'Step 2: Verify license at foodlicensing.fssai.gov.in',
+          'Step 3: Check manufacturing and expiry dates',
+          'Step 4: Keep sample of suspected food',
+          'Step 5: File complaint on Food Safety Connect App',
+          'Step 6: Or write to District Food Safety Officer',
+          'Step 7: Get medical certificate if food poisoning',
+          'Step 8: File consumer complaint if needed',
+          'Step 9: Report unlicensed businesses',
+          'Step 10: Follow up on complaint status',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'Food sample (in sealed container)',
+          'Bill/receipt of purchase',
+          'Photos of product/packaging',
+          'Medical reports (for food poisoning)',
+          'Details of food business',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'Food Safety Connect App',
+          'FSSAI Portal: fssai.gov.in',
+          'District Food Safety Officer',
+          'State Food Safety Commissioner',
+          'Consumer Helpline: 1800-11-4000',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'FSSAI Portal', url: 'https://fssai.gov.in' },
+      { label: 'Food Licensing', url: 'https://foodlicensing.fssai.gov.in' },
+    ],
+  },
+  {
+    id: 'electricity-act',
+    title: 'Electricity Act, 2003 - Consumer Rights',
+    type: 'law',
+    level: 'central',
+    category: 'utilities',
+    tags: ['electricity', 'power', 'consumer', 'billing'],
+    preview: 'Rights of electricity consumers regarding supply, billing, metering, and grievance redressal.',
+    tagLabel: 'Law',
+    tagColor: '#F59E0B',
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'Electricity Act regulates generation, transmission, and distribution of electricity.',
+          'State Electricity Regulatory Commissions set tariffs and standards.',
+          'Consumer Grievance Redressal Forums established for disputes.',
+          'Open access allows consumers to choose suppliers (high consumers).',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          'Right to quality power supply',
+          'Transparent billing process',
+          'Grievance redressal mechanism',
+          'Compensation for supply failure',
+          'Protection against disconnection',
+          'Meter reading transparency',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'Inflated electricity bill',
+          'Meter not working properly',
+          'Frequent power cuts',
+          'Disconnection without notice',
+          'New connection delayed',
+          'Voltage fluctuation damaging appliances',
+          'Deposit not refunded',
+          'Name transfer issues',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: Check meter reading yourself monthly',
+          'Step 2: Compare bill with previous consumption',
+          'Step 3: For high bill, request meter testing',
+          'Step 4: File complaint with discom customer care',
+          'Step 5: Use online grievance portal of your discom',
+          'Step 6: If not resolved, approach Consumer Grievance Forum',
+          'Step 7: Appeal to Electricity Ombudsman',
+          'Step 8: Further appeal to State Electricity Commission',
+          'Step 9: For disconnection, pay and dispute later',
+          'Step 10: Document all communication',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'Electricity bills',
+          'Consumer number',
+          'Meter reading photos',
+          'Previous complaints filed',
+          'Ownership/tenancy proof',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'Local discom customer care',
+          'Discom online portal/app',
+          'Consumer Grievance Redressal Forum',
+          'Electricity Ombudsman',
+          'State Electricity Regulatory Commission',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'Ministry of Power', url: 'https://powermin.gov.in' },
+      { label: 'Central Electricity Authority', url: 'https://cea.nic.in' },
+    ],
+  },
+  {
+    id: 'posh-act',
+    title: 'POSH Act - Sexual Harassment at Workplace',
+    type: 'law',
+    level: 'central',
+    category: 'women-family',
+    tags: ['workplace', 'harassment', 'women', 'POSH', 'ICC'],
+    preview: 'Protection against sexual harassment at workplace with mandatory Internal Complaints Committee for organizations.',
+    tagLabel: 'Law',
+    tagColor: '#EC4899',
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'POSH Act 2013 protects women from sexual harassment at workplace.',
+          'Workplace includes offices, factories, and any place visited for work.',
+          'Organizations with 10+ employees must have Internal Complaints Committee.',
+          'Covers employees, contract workers, interns, and visitors.',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          'Safe working environment is a right',
+          'Confidential complaint mechanism',
+          'Time-bound inquiry process',
+          'Protection against retaliation',
+          'Applies to all sectors including unorganized',
+          'Covers physical, verbal, and non-verbal harassment',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'Inappropriate comments or jokes',
+          'Unwanted physical contact',
+          'Sexually colored messages/emails',
+          'Quid pro quo - promotion for favors',
+          'Hostile work environment',
+          'ICC not constituted in organization',
+          'Fear of retaliation',
+          'Complaint not taken seriously',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: Document all incidents with dates and details',
+          'Step 2: Identify witnesses if any',
+          'Step 3: File written complaint with ICC within 3 months',
+          'Step 4: ICC must complete inquiry within 90 days',
+          'Step 5: If no ICC, approach Local Complaints Committee',
+          'Step 6: Can also file police complaint for criminal acts',
+          'Step 7: Seek interim relief (transfer, leave)',
+          'Step 8: Maintain confidentiality of proceedings',
+          'Step 9: Appeal against ICC decision within 90 days',
+          'Step 10: Contact State Women Commission if needed',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'Written complaint',
+          'Evidence (messages, emails, CCTV)',
+          'Witness names',
+          'Incident details with timeline',
+          'Employment proof',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'Internal Complaints Committee',
+          'Local Complaints Committee (District level)',
+          'State Women Commission',
+          'National Commission for Women: ncw.nic.in',
+          'Police (for criminal complaint)',
+          'Labour Commissioner',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'Ministry of WCD', url: 'https://wcd.nic.in' },
+      { label: 'National Commission for Women', url: 'https://ncw.nic.in' },
+      { label: 'SHe-Box Portal', url: 'https://shebox.nic.in' },
+    ],
+  },
+  {
+    id: 'pwd-act',
+    title: 'Rights of Persons with Disabilities Act, 2016',
+    type: 'law',
+    level: 'central',
+    category: 'citizen-rights',
+    tags: ['disability', 'accessibility', 'reservation', 'PWD'],
+    preview: 'Rights and entitlements of persons with disabilities including reservation in jobs, education, and accessibility.',
+    tagLabel: 'Law',
+    tagColor: '#8B5CF6',
+    lastUpdated: '2024-12',
+    sections: [
+      {
+        title: 'Overview',
+        content: [
+          'RPWD Act recognizes 21 types of disabilities.',
+          'Provides 4% reservation in government jobs.',
+          'Mandates accessible buildings and public transport.',
+          'Free education for children with disabilities till 18.',
+        ],
+      },
+      {
+        title: 'Why This Matters',
+        content: [
+          'Legal protection against discrimination',
+          'Reservation in education and employment',
+          'Disability pension and social security',
+          'Accessible infrastructure mandatory',
+          'Guardianship provisions',
+          'Grievance redressal mechanism',
+        ],
+      },
+      {
+        title: 'Common Real-Life Problems',
+        content: [
+          'Disability certificate not issued',
+          'Job reserved but not given',
+          'Public building not accessible',
+          'Educational institution denying admission',
+          'Pension not sanctioned',
+          'Discrimination at workplace',
+          'Aids and appliances not provided',
+          'Travel concession denied',
+        ],
+      },
+      {
+        title: 'What Citizens Can Do (Steps)',
+        content: [
+          'Step 1: Get disability certificate from govt hospital (40%+ disability)',
+          'Step 2: Register on UDID portal for unique ID',
+          'Step 3: Apply for relevant scheme benefits',
+          'Step 4: Claim reservation in education/jobs',
+          'Step 5: Report inaccessibility to Chief Commissioner',
+          'Step 6: File complaint for discrimination',
+          'Step 7: Apply for assistive devices through ADIP',
+          'Step 8: Claim travel concession',
+          'Step 9: For issues, contact State Commissioner',
+          'Step 10: Use accessible India portal for complaints',
+        ],
+      },
+      {
+        title: 'Documents Usually Required',
+        content: [
+          'Disability certificate',
+          'UDID card',
+          'Aadhaar card',
+          'Income certificate (for schemes)',
+          'Medical reports',
+        ],
+      },
+      {
+        title: 'Where to Apply / Complain / Track',
+        content: [
+          'UDID Portal: swavlambancard.gov.in',
+          'State Commissioner for Disabilities',
+          'Chief Commissioner for PwDs',
+          'District Disability Rehabilitation Centre',
+          'ALIMCO for aids and appliances',
+          'Sugamya Bharat: accessibleindia.gov.in',
+        ],
+      },
+    ],
+    officialLinks: [
+      { label: 'UDID Portal', url: 'https://swavlambancard.gov.in' },
+      { label: 'DEPwD', url: 'https://disabilityaffairs.gov.in' },
+      { label: 'Sugamya Bharat', url: 'https://accessibleindia.gov.in' },
+    ],
   },
 ];
 
-// Service functions
-export const getLawsSchemes = (category?: string, searchQuery?: string): LawScheme[] => {
-  let results = [...LAWS_DATA];
-  
-  // Filter by category
-  if (category && category !== 'all') {
-    results = results.filter(item => item.category === category);
-  }
-  
-  // Filter by search query
-  if (searchQuery && searchQuery.trim()) {
-    const query = searchQuery.toLowerCase().trim();
-    results = results.filter(item => 
-      item.title.toLowerCase().includes(query) ||
-      item.shortSummary.toLowerCase().includes(query) ||
-      item.keywords.some(k => k.toLowerCase().includes(query)) ||
-      item.tagLabel.toLowerCase().includes(query)
-    );
-  }
-  
-  return results;
-};
-
-export const getLawSchemeById = (id: string): LawScheme | undefined => {
-  return LAWS_DATA.find(item => item.id === id);
-};
-
-export const getRelatedLawsSchemes = (item: LawScheme, limit: number = 4): LawScheme[] => {
-  const related: LawScheme[] = [];
-  
-  // First: Get items from relatedIds
-  item.relatedIds.forEach(relatedId => {
-    const relatedItem = LAWS_DATA.find(i => i.id === relatedId && i.id !== item.id);
-    if (relatedItem && !related.find(r => r.id === relatedItem.id)) {
-      related.push(relatedItem);
-    }
-  });
-  
-  // Second: Get items from same category
-  if (related.length < limit) {
-    const sameCategory = LAWS_DATA.filter(
-      i => i.category === item.category && i.id !== item.id && !related.find(r => r.id === i.id)
-    );
-    related.push(...sameCategory.slice(0, limit - related.length));
-  }
-  
-  // Third: Get items with matching keywords
-  if (related.length < limit) {
-    const matchingKeywords = LAWS_DATA.filter(i => {
-      if (i.id === item.id || related.find(r => r.id === i.id)) return false;
-      return i.keywords.some(k => item.keywords.includes(k));
-    });
-    related.push(...matchingKeywords.slice(0, limit - related.length));
-  }
-  
-  // Fourth: Fill with any remaining items
-  if (related.length < limit) {
-    const remaining = LAWS_DATA.filter(
-      i => i.id !== item.id && !related.find(r => r.id === i.id)
-    );
-    related.push(...remaining.slice(0, limit - related.length));
-  }
-  
-  return related.slice(0, limit);
-};
+// Continuing with STATE LAWS in next parts...
