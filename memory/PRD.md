@@ -134,6 +134,9 @@ SunoLegal is an Indian legal-tech mobile application (React Native/Expo) designe
 - `/app/frontend/components/icons/LegalIcons.tsx` - New NyayAI icon
 
 ## Upcoming/Future Tasks
+- **P1: Continue UI Polish Pass** - Apply design system to remaining screens
+- Enhance NyayAI chat history drawer (rename, delete, pin chats)
+- Implement file attachment and voice recording in NyayAI chat
 - Implement real Firebase authentication
 - Integrate Razorpay payment gateway
 - Add actual AI responses (OpenAI/Gemini integration)
