@@ -199,6 +199,14 @@ export default function DocumentsScreen() {
     }
   }, [params.tab]);
 
+  // Ensure scroll position is correct on mount
+  useEffect(() => {
+    const index = tabToIndex[activeTab];
+    setTimeout(() => {
+      scrollViewRef.current?.scrollTo({ x: index * SCREEN_WIDTH, animated: false });
+    }, 100);
+  }, []);
+
   const handleSelectTemplate = (template: DocumentTemplate) => {
     setSelectedTemplate(template);
     const initialData: Record<string, string> = {};
