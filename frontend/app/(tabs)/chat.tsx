@@ -140,6 +140,24 @@ export default function NyayAILandingScreen() {
       params: { chatId }
     });
   };
+  
+  // Input button handlers
+  const handleAttachment = () => {
+    // Placeholder: Show action sheet for file selection
+    alert('Attachment feature coming soon! You can upload:\n• Documents\n• Images\n• PDFs');
+  };
+  
+  const handleVoiceRecord = () => {
+    if (isRecording) {
+      setIsRecording(false);
+      // Stop recording
+      alert('Voice recording stopped. Processing...');
+    } else {
+      setIsRecording(true);
+      // Start recording
+      alert('Voice recording started. Tap again to stop.');
+    }
+  };
 
   return (
     <View style={styles.container}>
