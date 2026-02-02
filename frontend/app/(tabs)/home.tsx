@@ -106,6 +106,19 @@ export default function HomeScreen() {
     setRefreshing(true);
     setTimeout(() => setRefreshing(false), 1000);
   };
+  
+  const handleMarkAllAsRead = () => {
+    setNotifications(notifications.map(n => ({ ...n, read: true })));
+    setHasUnreadNotifications(false);
+  };
+  
+  const handleOpenNotifications = () => {
+    setShowNotifications(true);
+    // Optionally auto-mark as read on open
+    setTimeout(() => {
+      setHasUnreadNotifications(false);
+    }, 500);
+  };
 
   const handleSignOut = async () => {
     try {
