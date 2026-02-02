@@ -11,13 +11,15 @@ import {
   Dimensions,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  useWindowDimensions,
+  Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSavedLaws } from '../../contexts/SavedLawsContext';
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const { width: INITIAL_SCREEN_WIDTH } = Dimensions.get('window');
 
 const COLORS = {
   primary: '#FF9933',
