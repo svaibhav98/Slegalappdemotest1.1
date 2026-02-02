@@ -776,7 +776,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   templateCard: { 
-    width: (SCREEN_WIDTH - 40 - 12) / 2, // 40 for padding (20 each side), 12 for gap
+    width: '47%', // Slightly less than 48% to ensure proper wrapping with gap
     backgroundColor: COLORS.white, 
     borderRadius: 16, 
     padding: 20,
