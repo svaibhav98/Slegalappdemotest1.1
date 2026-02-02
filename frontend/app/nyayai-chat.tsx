@@ -342,11 +342,11 @@ export default function NyayAIChatScreen() {
                 <TouchableOpacity style={styles.inputIcon}>
                   <Ionicons name="sparkles" size={20} color={COLORS.textSecondary} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.inputIcon}>
+                <TouchableOpacity style={styles.inputIcon} onPress={handleAttachment}>
                   <Ionicons name="attach" size={20} color={COLORS.textSecondary} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.inputIcon}>
-                  <Ionicons name="mic-outline" size={20} color={COLORS.textSecondary} />
+                <TouchableOpacity style={styles.inputIcon} onPress={handleVoiceRecord}>
+                  <Ionicons name={isRecording ? "mic" : "mic-outline"} size={20} color={isRecording ? COLORS.orange : COLORS.textSecondary} />
                 </TouchableOpacity>
               </View>
               
