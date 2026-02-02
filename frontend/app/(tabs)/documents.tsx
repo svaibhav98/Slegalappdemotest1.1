@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -8,11 +8,16 @@ import {
   Image,
   TextInput,
   StatusBar,
+  Dimensions,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSavedLaws } from '../../contexts/SavedLawsContext';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const COLORS = {
   primary: '#FF9933',
