@@ -289,35 +289,38 @@ const quickAccessItems = [
                 key={notification.id} 
                 style={[
                   styles.notificationItem,
-                  notification.unread && styles.notificationItemUnread
+                  !notification.read && styles.notificationItemUnread
                 ]}
                 activeOpacity={0.8}
               >
                 <View style={[
                   styles.notificationIconContainer,
-                  notification.unread && styles.notificationIconUnread
+                  !notification.read && styles.notificationIconUnread
                 ]}>
                   <Ionicons 
-                    name={notification.icon as any} 
+                    name={!notification.read ? "notifications" : "notifications-outline"} 
                     size={18} 
-                    color={notification.unread ? Colors.primary : Colors.textMuted} 
+                    color={!notification.read ? Colors.primary : Colors.textMuted} 
                   />
                 </View>
                 <View style={styles.notificationContent}>
                   <Text style={[
                     styles.notificationItemTitle,
-                    notification.unread && styles.notificationItemTitleUnread
+                    !notification.read && styles.notificationItemTitleUnread
                   ]}>{notification.title}</Text>
-                  <Text style={styles.notificationMessage} numberOfLines={1}>
+                  <Text style={styles.notificationMessage} numberOfLines={2}>
                     {notification.message}
                   </Text>
                   <Text style={styles.notificationTime}>{notification.time}</Text>
                 </View>
-                {notification.unread && <View style={styles.unreadDot} />}
+                {!notification.read && <View style={styles.unreadDot} />}
               </TouchableOpacity>
             ))}
           </ScrollView>
-          <TouchableOpacity style={styles.markAllReadBtn}>
+          <TouchableOpacity 
+            style={styles.markAllReadBtn}
+            onPress={handleMarkAllAsRead}
+          >
             <Text style={styles.markAllReadText}>Mark all as read</Text>
           </TouchableOpacity>
         </View>
