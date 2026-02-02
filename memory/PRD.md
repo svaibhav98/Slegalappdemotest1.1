@@ -57,9 +57,33 @@ SunoLegal is an Indian legal-tech mobile application (React Native/Expo) designe
     └── services/         # Mock data services
 ```
 
-## Recent Updates (January 2025)
+## Recent Updates (February 2026)
 
-### Completed Features
+### Completed Features (This Session)
+1. **Horizontal Swipe Navigation - Legal Documents Screen**
+   - Swipe between "Create New", "My Documents", and "Saved Items" tabs
+   - PanResponder-based gesture detection (50px threshold)
+   - Visual swipe indicator dots synced with active tab
+   - Vertical scrolling preserved on all tabs
+   - Tap navigation still works
+
+2. **Horizontal Swipe Navigation - Cases Screen**
+   - Swipe between "Ongoing", "Upcoming", and "Closed" tabs
+   - Tab bar with counts (e.g., "Ongoing (2)")
+   - Summary card with case statistics
+   - Swipe indicator dots below tab bar
+
+3. **Horizontal Swipe Navigation - Laws & Schemes Screen**
+   - Swipe between category filters
+   - Horizontal scrollable category chips
+   - Swipe hint text "← Swipe to browse categories →"
+   - Visual dots indicating current category
+
+4. **Stale Closure Fix**
+   - Used useRef to track active tab state for PanResponder
+   - Prevents stale state issues in gesture handlers
+
+### Previous Session (January 2025)
 1. **NyayAI Landing Screen Optimization**
    - Reduced logo/icon size (72px → 44px)
    - Compact headline and subtext typography
