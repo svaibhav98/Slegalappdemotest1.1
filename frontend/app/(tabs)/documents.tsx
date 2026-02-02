@@ -750,9 +750,9 @@ const styles = StyleSheet.create({
   tabTextActive: { color: COLORS.primary },
   
   // Pager Styles for Swipe Navigation
-  pagerContainer: { flex: 1 },
+  pagerContainer: { flex: 1, overflow: 'hidden' },
   pagerContent: { flexGrow: 1 },
-  page: { width: SCREEN_WIDTH },
+  page: { width: SCREEN_WIDTH, flex: 1 },
   
   // Content
   content: { flex: 1, padding: 20 },
