@@ -449,12 +449,6 @@ export default function NyayAIChatScreen() {
         onRequestClose={() => setShowDrawer(false)}
       >
         <View style={styles.drawerOverlay}>
-          <TouchableOpacity 
-            style={styles.drawerBackdrop}
-            activeOpacity={1}
-            onPress={() => setShowDrawer(false)}
-          />
-          
           <View style={styles.drawerContainer}>
             <View style={styles.drawerHeader}>
               <Text style={styles.drawerTitle}>NyayAI Chats</Text>
@@ -503,6 +497,12 @@ export default function NyayAIChatScreen() {
               </View>
             </ScrollView>
           </View>
+          
+          <TouchableOpacity 
+            style={styles.drawerBackdrop}
+            activeOpacity={1}
+            onPress={() => setShowDrawer(false)}
+          />
         </View>
       </Modal>
     </>
