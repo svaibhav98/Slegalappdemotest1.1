@@ -253,6 +253,25 @@ export default function DocumentsScreen() {
     setGeneratedDocId(null);
     setActiveTab('create');
   };
+  
+  // Handle swipe navigation
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const offsetX = event.nativeEvent.contentOffset.x;
+    const page = Math.round(offsetX / SCREEN_WIDTH);
+    
+    if (page !== currentPage && page >= 0 && page <= 2) {
+      setCurrentPage(page);
+      setActiveTab(indexToTab[page]);
+    }
+  };
+  
+  // Handle tab click
+  const handleTabPress = (tab: Tab) => {
+    const index = tabToIndex[tab];
+    setActiveTab(tab);
+    setCurrentPage(index);
+    scrollViewRef.current?.scrollTo({ x: index * SCREEN_WIDTH, animated: true });
+  };
 
   const savedItems = documents.filter(d => d.isSaved);
 
