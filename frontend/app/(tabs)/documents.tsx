@@ -9,17 +9,15 @@ import {
   TextInput,
   StatusBar,
   Dimensions,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  useWindowDimensions,
-  Platform,
+  PanResponder,
+  Animated,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSavedLaws } from '../../contexts/SavedLawsContext';
 
-const { width: INITIAL_SCREEN_WIDTH } = Dimensions.get('window');
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const COLORS = {
   primary: '#FF9933',
@@ -41,15 +39,14 @@ const COLORS = {
 
 // Subtle icon color mapping for document types
 const DOCUMENT_COLORS: Record<string, string> = {
-  'rent_agreement': '#E67E22',        // Muted Orange
-  'legal_notice': '#5B8FB9',          // Muted Blue
-  'affidavit': '#8B7EC8',             // Muted Purple
-  'consumer_complaint': '#5FA097',    // Muted Teal
-  'nda': '#4A7BA7',                   // Muted Blue (darker)
-  'power_of_attorney': '#6B7CB7',     // Muted Indigo
+  'rent_agreement': '#E67E22',
+  'legal_notice': '#5B8FB9',
+  'affidavit': '#8B7EC8',
+  'consumer_complaint': '#5FA097',
+  'nda': '#4A7BA7',
+  'power_of_attorney': '#6B7CB7',
 };
 
-// Helper function to get icon color by document type/id
 const getDocumentIconColor = (typeOrId: string): string => {
   const normalized = typeOrId.toLowerCase().replace(/\s+/g, '_');
   return DOCUMENT_COLORS[normalized] || COLORS.textSecondary;
@@ -111,7 +108,7 @@ const TEMPLATES: DocumentTemplate[] = [
     icon: 'document-text',
     fields: [
       { key: 'declarant_name', label: 'Declarant Name', placeholder: 'Enter your full name' },
-      { key: 'father_name', label: 'Father\'s Name', placeholder: 'Enter father\'s name' },
+      { key: 'father_name', label: "Father's Name", placeholder: "Enter father's name" },
       { key: 'address', label: 'Address', placeholder: 'Enter your address' },
       { key: 'purpose', label: 'Purpose of Affidavit', placeholder: 'e.g., Name Change, Address Proof' },
       { key: 'declaration', label: 'Declaration Statement', placeholder: 'Enter your declaration', multiline: true },
@@ -158,17 +155,18 @@ const TEMPLATES: DocumentTemplate[] = [
   },
 ];
 
-// Mock saved documents
 const INITIAL_DOCUMENTS: SavedDocument[] = [
   { id: 'doc-1', name: 'Rent Agreement - Flat 302', type: 'Rent Agreement', createdAt: '2025-01-20', size: '245 KB', isSaved: true },
   { id: 'doc-2', name: 'Consumer Complaint - Amazon', type: 'Consumer Complaint', createdAt: '2025-01-18', size: '189 KB', isSaved: false },
   { id: 'doc-3', name: 'NDA - TechCorp India', type: 'NDA', createdAt: '2025-01-15', size: '156 KB', isSaved: true },
 ];
 
+// Swipe threshold configuration
+const SWIPE_THRESHOLD = 50;
+
 export default function DocumentsScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
-  const { width: screenWidth } = useWindowDimensions();
   const initialTab = (params.tab as Tab) || 'create';
   const [activeTab, setActiveTab] = useState<Tab>(initialTab);
   const [currentScreen, setCurrentScreen] = useState<Screen>('list');
@@ -177,38 +175,41 @@ export default function DocumentsScreen() {
   const [documents, setDocuments] = useState<SavedDocument[]>(INITIAL_DOCUMENTS);
   const [generatedDocId, setGeneratedDocId] = useState<string | null>(null);
   const { savedLaws, unsaveLaw } = useSavedLaws();
-  
-  // Swipe navigation refs
-  const scrollViewRef = useRef<ScrollView>(null);
-  const [currentPage, setCurrentPage] = useState(0);
 
-  // Map tabs to indices
-  const tabToIndex: Record<Tab, number> = {
-    'create': 0,
-    'documents': 1,
-    'saved': 2,
-  };
-  
-  const indexToTab: Tab[] = ['create', 'documents', 'saved'];
+  const tabs: Tab[] = ['create', 'documents', 'saved'];
+  const tabLabels = { create: 'Create New', documents: 'My Documents', saved: 'Saved Items' };
 
-  // Handle tab parameter from navigation
+  // Swipe gesture handling
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => false,
+      onMoveShouldSetPanResponder: (_, gestureState) => {
+        // Only capture horizontal swipes (not vertical scroll)
+        return Math.abs(gestureState.dx) > Math.abs(gestureState.dy) && Math.abs(gestureState.dx) > 10;
+      },
+      onPanResponderRelease: (_, gestureState) => {
+        if (gestureState.dx < -SWIPE_THRESHOLD) {
+          // Swipe left - go to next tab
+          const currentIndex = tabs.indexOf(activeTab);
+          if (currentIndex < tabs.length - 1) {
+            setActiveTab(tabs[currentIndex + 1]);
+          }
+        } else if (gestureState.dx > SWIPE_THRESHOLD) {
+          // Swipe right - go to previous tab
+          const currentIndex = tabs.indexOf(activeTab);
+          if (currentIndex > 0) {
+            setActiveTab(tabs[currentIndex - 1]);
+          }
+        }
+      },
+    })
+  ).current;
+
   useEffect(() => {
     if (params.tab) {
-      const tab = params.tab as Tab;
-      setActiveTab(tab);
-      const index = tabToIndex[tab];
-      scrollViewRef.current?.scrollTo({ x: index * screenWidth, animated: false });
-      setCurrentPage(index);
+      setActiveTab(params.tab as Tab);
     }
-  }, [params.tab, screenWidth]);
-
-  // Ensure scroll position is correct on mount or when width changes
-  useEffect(() => {
-    const index = tabToIndex[activeTab];
-    setTimeout(() => {
-      scrollViewRef.current?.scrollTo({ x: index * screenWidth, animated: false });
-    }, 100);
-  }, [screenWidth]);
+  }, [params.tab]);
 
   const handleSelectTemplate = (template: DocumentTemplate) => {
     setSelectedTemplate(template);
@@ -218,16 +219,10 @@ export default function DocumentsScreen() {
     setCurrentScreen('form');
   };
 
-  const handlePreview = () => {
-    setCurrentScreen('preview');
-  };
-
-  const handleEditDetails = () => {
-    setCurrentScreen('form');
-  };
+  const handlePreview = () => setCurrentScreen('preview');
+  const handleEditDetails = () => setCurrentScreen('form');
 
   const handleGeneratePDF = () => {
-    // Create new document
     const newDoc: SavedDocument = {
       id: `doc-${Date.now()}`,
       name: `${selectedTemplate?.title} - ${formData[selectedTemplate?.fields[0].key || ''] || 'Draft'}`,
@@ -264,110 +259,79 @@ export default function DocumentsScreen() {
     setGeneratedDocId(null);
     setActiveTab('create');
   };
-  
-  // Handle swipe navigation
-  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const offsetX = event.nativeEvent.contentOffset.x;
-    const page = Math.round(offsetX / screenWidth);
-    
-    if (page !== currentPage && page >= 0 && page <= 2) {
-      setCurrentPage(page);
-      setActiveTab(indexToTab[page]);
-    }
-  };
-  
-  // Handle tab click
-  const handleTabPress = (tab: Tab) => {
-    const index = tabToIndex[tab];
-    setActiveTab(tab);
-    setCurrentPage(index);
-    scrollViewRef.current?.scrollTo({ x: index * screenWidth, animated: true });
-  };
 
   const savedItems = documents.filter(d => d.isSaved);
 
-  // Handle law card press
   const handleLawPress = (lawId: string) => {
-    router.push({
-      pathname: '/law-detail/[id]',
-      params: { id: lawId }
-    });
+    router.push({ pathname: '/law-detail/[id]', params: { id: lawId } });
   };
 
-  // Handle unsave law
   const handleUnsaveLaw = (lawId: string) => {
     unsaveLaw(lawId);
   };
 
   const generatePreviewContent = () => {
     if (!selectedTemplate) return '';
-    
     let content = `\n${selectedTemplate.title.toUpperCase()}\n${'='.repeat(40)}\n\n`;
     content += `Date: ${new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}\n\n`;
-    
     selectedTemplate.fields.forEach(field => {
       content += `${field.label}:\n${formData[field.key] || '[Not provided]'}\n\n`;
     });
-    
-    content += `\n${'='.repeat(40)}\n`;
-    content += `\nGenerated by SunoLegal - NyayAI\n`;
-    content += `This is an auto-generated draft document.\n`;
-    
+    content += `\n${'='.repeat(40)}\n\nGenerated by SunoLegal - NyayAI\nThis is an auto-generated draft document.\n`;
     return content;
   };
 
-  // Render Template Selection (Create Tab) - Modern 2-Column Grid Design
+  // Render Template Selection (Create Tab)
   const renderTemplateList = () => (
-    <View style={styles.templateListContainer}>
-      <ScrollView 
-        style={styles.content} 
-        contentContainerStyle={styles.scrollContentContainer}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Section Title */}
-        <Text style={styles.sectionTitle}>Document Templates</Text>
-        <Text style={styles.sectionSubtitle}>Select a template to generate your legal document</Text>
+    <ScrollView 
+      style={styles.content} 
+      contentContainerStyle={styles.scrollContentContainer}
+      showsVerticalScrollIndicator={false}
+    >
+      <Text style={styles.sectionTitle}>Document Templates</Text>
+      <Text style={styles.sectionSubtitle}>Select a template to generate your legal document</Text>
 
-        <View style={styles.templateGrid}>
-          {TEMPLATES.map((template) => {
-            const iconColor = getDocumentIconColor(template.id);
-            return (
-              <TouchableOpacity
-                key={template.id}
-                style={styles.templateCard}
-                onPress={() => handleSelectTemplate(template)}
-                activeOpacity={0.85}
-              >
-                <View style={[styles.templateIconWrapper, { backgroundColor: iconColor + '15' }]}>
-                  <Ionicons name={template.icon as any} size={28} color={iconColor} />
-                </View>
-                <Text style={styles.templateTitle} numberOfLines={2}>{template.title}</Text>
-                <Text style={styles.templateSubtitle}>Generate PDF</Text>
-              </TouchableOpacity>
-            );
-          })}
+      <View style={styles.templateGrid}>
+        {TEMPLATES.map((template) => {
+          const iconColor = getDocumentIconColor(template.id);
+          return (
+            <TouchableOpacity
+              key={template.id}
+              style={styles.templateCard}
+              onPress={() => handleSelectTemplate(template)}
+              activeOpacity={0.85}
+              data-testid={`template-${template.id}`}
+            >
+              <View style={[styles.templateIconWrapper, { backgroundColor: iconColor + '15' }]}>
+                <Ionicons name={template.icon as any} size={28} color={iconColor} />
+              </View>
+              <Text style={styles.templateTitle} numberOfLines={2}>{template.title}</Text>
+              <Text style={styles.templateSubtitle}>Generate PDF</Text>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+      
+      <TouchableOpacity 
+        style={styles.consultBannerCard}
+        onPress={() => router.push('/lawyers')}
+        activeOpacity={0.9}
+        data-testid="consult-expert-btn"
+      >
+        <View style={styles.bannerIconWrapper}>
+          <Ionicons name="chatbubble-ellipses" size={20} color={COLORS.white} />
         </View>
-        
-        {/* Banner as normal card - AFTER template cards */}
-        <TouchableOpacity 
-          style={styles.consultBannerCard}
-          onPress={() => router.push('/lawyers')}
-          activeOpacity={0.9}
-        >
-          <View style={styles.bannerIconWrapper}>
-            <Ionicons name="chatbubble-ellipses" size={20} color={COLORS.white} />
-          </View>
-          <Text style={styles.bannerText}>Need legal help? Consult an expert</Text>
-          <Ionicons name="arrow-forward" size={18} color={COLORS.textSecondary} />
-        </TouchableOpacity>
-      </ScrollView>
-    </View>
+        <Text style={styles.bannerText}>Need legal help? Consult an expert</Text>
+        <Ionicons name="arrow-forward" size={18} color={COLORS.textSecondary} />
+      </TouchableOpacity>
+      
+      <View style={{ height: 100 }} />
+    </ScrollView>
   );
 
   // Render Form Screen
   const renderForm = () => (
     <View style={styles.formContainer}>
-      {/* Form Header */}
       <View style={styles.formHeader}>
         <TouchableOpacity style={styles.formBackButton} onPress={() => setCurrentScreen('list')}>
           <Ionicons name="arrow-back" size={24} color={COLORS.textPrimary} />
@@ -396,7 +360,6 @@ export default function DocumentsScreen() {
         <View style={{ height: 120 }} />
       </ScrollView>
 
-      {/* Preview Button */}
       <View style={styles.bottomCTA}>
         <TouchableOpacity style={styles.previewButton} onPress={handlePreview} activeOpacity={0.9}>
           <Ionicons name="eye" size={20} color={COLORS.white} />
@@ -409,7 +372,6 @@ export default function DocumentsScreen() {
   // Render Preview Screen
   const renderPreview = () => (
     <View style={styles.previewContainer}>
-      {/* Preview Header */}
       <View style={styles.previewHeader}>
         <TouchableOpacity style={styles.formBackButton} onPress={handleEditDetails}>
           <Ionicons name="arrow-back" size={24} color={COLORS.textPrimary} />
@@ -420,7 +382,6 @@ export default function DocumentsScreen() {
         </View>
       </View>
 
-      {/* Preview Content */}
       <ScrollView style={styles.previewContent} showsVerticalScrollIndicator={false}>
         <View style={styles.previewCard}>
           <View style={styles.previewDocHeader}>
@@ -430,7 +391,6 @@ export default function DocumentsScreen() {
           <Text style={styles.previewText}>{generatePreviewContent()}</Text>
         </View>
         
-        {/* Disclaimer */}
         <View style={styles.disclaimerBox}>
           <Ionicons name="information-circle" size={20} color={COLORS.amber} />
           <Text style={styles.disclaimerText}>
@@ -440,7 +400,6 @@ export default function DocumentsScreen() {
         <View style={{ height: 140 }} />
       </ScrollView>
 
-      {/* Action Buttons */}
       <View style={styles.previewActions}>
         <TouchableOpacity style={styles.editButton} onPress={handleEditDetails} activeOpacity={0.9}>
           <Ionicons name="create" size={20} color={COLORS.primary} />
@@ -468,7 +427,6 @@ export default function DocumentsScreen() {
         <Text style={styles.successTitle}>Document Ready!</Text>
         <Text style={styles.successSubtitle}>Your {selectedTemplate?.title} has been generated successfully</Text>
         
-        {/* Document Preview Card */}
         <View style={styles.successDocCard}>
           <View style={[styles.successDocIcon, { backgroundColor: getDocumentIconColor(selectedTemplate?.id || '') + '15' }]}>
             <Ionicons name="document-text" size={40} color={getDocumentIconColor(selectedTemplate?.id || '')} />
@@ -479,7 +437,6 @@ export default function DocumentsScreen() {
           </View>
         </View>
 
-        {/* Action Buttons */}
         <View style={styles.successActions}>
           <TouchableOpacity style={styles.successActionBtn} onPress={() => handleSaveDocument(generatedDocId || '')}>
             <Ionicons name="bookmark" size={24} color={COLORS.primary} />
@@ -495,7 +452,6 @@ export default function DocumentsScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* Lawyer Review CTA - NOW VISIBLE WITHOUT SCROLLING */}
         <TouchableOpacity 
           style={styles.lawyerReviewCTA}
           onPress={() => router.push('/lawyers')}
@@ -511,7 +467,6 @@ export default function DocumentsScreen() {
           <Ionicons name="chevron-forward" size={20} color={COLORS.primary} />
         </TouchableOpacity>
 
-        {/* Bottom Buttons */}
         <View style={styles.successBottomActions}>
           <TouchableOpacity style={styles.viewDocsButton} onPress={handleBackToList} activeOpacity={0.9}>
             <Text style={styles.viewDocsText}>View My Documents</Text>
@@ -574,10 +529,9 @@ export default function DocumentsScreen() {
     </ScrollView>
   );
 
-  // Render Saved Items with two sections (Documents + Laws)
+  // Render Saved Items with two sections
   const renderSavedItems = () => (
     <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-      {/* Section 1: Saved Documents */}
       <Text style={styles.savedSectionTitle}>Saved Documents</Text>
       {savedItems.length === 0 ? (
         <View style={styles.sectionEmptyState}>
@@ -612,7 +566,6 @@ export default function DocumentsScreen() {
         })
       )}
 
-      {/* Section 2: Saved Laws & Schemes */}
       <Text style={[styles.savedSectionTitle, { marginTop: 28 }]}>Saved Laws & Schemes</Text>
       {savedLaws.length === 0 ? (
         <View style={styles.sectionEmptyState}>
@@ -675,6 +628,7 @@ export default function DocumentsScreen() {
           <TouchableOpacity 
             style={styles.settingsButton} 
             onPress={() => router.push('/(settings)')}
+            data-testid="settings-btn"
           >
             <Ionicons name="settings-outline" size={22} color={COLORS.textPrimary} />
           </TouchableOpacity>
@@ -683,52 +637,36 @@ export default function DocumentsScreen() {
 
       {/* Tab Bar */}
       <View style={styles.tabBar}>
-        <TouchableOpacity 
-          style={[styles.tab, activeTab === 'create' && styles.tabActive]} 
-          onPress={() => handleTabPress('create')}
-        >
-          <Text style={[styles.tabText, activeTab === 'create' && styles.tabTextActive]}>Create New</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={[styles.tab, activeTab === 'documents' && styles.tabActive]} 
-          onPress={() => handleTabPress('documents')}
-        >
-          <Text style={[styles.tabText, activeTab === 'documents' && styles.tabTextActive]}>My Documents</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={[styles.tab, activeTab === 'saved' && styles.tabActive]} 
-          onPress={() => handleTabPress('saved')}
-        >
-          <Text style={[styles.tabText, activeTab === 'saved' && styles.tabTextActive]}>Saved Items</Text>
-        </TouchableOpacity>
+        {tabs.map((tab) => (
+          <TouchableOpacity 
+            key={tab}
+            style={[styles.tab, activeTab === tab && styles.tabActive]} 
+            onPress={() => setActiveTab(tab)}
+            data-testid={`tab-${tab}`}
+          >
+            <Text style={[styles.tabText, activeTab === tab && styles.tabTextActive]}>
+              {tabLabels[tab]}
+            </Text>
+          </TouchableOpacity>
+        ))}
       </View>
 
-      {/* Swipeable Content - Horizontal Pager */}
-      <ScrollView
-        ref={scrollViewRef}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-        style={styles.pagerContainer}
-        bounces={false}
-      >
-        {/* Page 1: Create New */}
-        <View style={[styles.page, { width: screenWidth }]}>
-          {renderTemplateList()}
-        </View>
-        
-        {/* Page 2: My Documents */}
-        <View style={[styles.page, { width: screenWidth }]}>
-          {renderDocumentsList(documents, false)}
-        </View>
-        
-        {/* Page 3: Saved Items */}
-        <View style={[styles.page, { width: screenWidth }]}>
-          {renderSavedItems()}
-        </View>
-      </ScrollView>
+      {/* Swipe indicator */}
+      <View style={styles.swipeIndicator}>
+        {tabs.map((tab, index) => (
+          <View 
+            key={tab} 
+            style={[styles.swipeDot, activeTab === tab && styles.swipeDotActive]} 
+          />
+        ))}
+      </View>
+
+      {/* Content with swipe gesture */}
+      <View style={styles.contentWrapper} {...panResponder.panHandlers}>
+        {activeTab === 'create' && renderTemplateList()}
+        {activeTab === 'documents' && renderDocumentsList(documents, false)}
+        {activeTab === 'saved' && renderSavedItems()}
+      </View>
     </View>
   );
 }
@@ -752,22 +690,19 @@ const styles = StyleSheet.create({
   tabText: { fontSize: 14, fontWeight: '600', color: COLORS.textMuted },
   tabTextActive: { color: COLORS.primary },
   
-  // Pager Styles for Swipe Navigation
-  pagerContainer: { flex: 1, overflow: 'hidden' },
-  page: { flex: 1 },
+  // Swipe Indicator
+  swipeIndicator: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingVertical: 8, gap: 6, backgroundColor: COLORS.white },
+  swipeDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: COLORS.border },
+  swipeDotActive: { width: 20, backgroundColor: COLORS.primary },
+  
+  // Content wrapper for swipe
+  contentWrapper: { flex: 1 },
   
   // Content
   content: { flex: 1, padding: 20 },
+  scrollContentContainer: { paddingBottom: 20 },
   
-  // Scroll Content Container - with bottom padding for bottom nav
-  scrollContentContainer: {
-    paddingBottom: 20, // Just 20px spacing before bottom nav
-  },
-  
-  // Template Grid - Modern 2-Column Grid Design
-  templateListContainer: {
-    flex: 1,
-  },
+  // Template Grid
   templateGrid: { 
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -775,7 +710,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   templateCard: { 
-    width: '47%', // Slightly less than 48% to ensure proper wrapping with gap
+    width: '47%',
     backgroundColor: COLORS.white, 
     borderRadius: 16, 
     padding: 20,
@@ -789,72 +724,33 @@ const styles = StyleSheet.create({
     borderColor: '#F3F4F6',
   },
   templateIconWrapper: { 
-    width: 56, 
-    height: 56, 
-    borderRadius: 14, 
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    marginBottom: 12,
+    width: 56, height: 56, borderRadius: 14, 
+    justifyContent: 'center', alignItems: 'center', marginBottom: 12,
   },
   templateTitle: { 
-    fontSize: 14, 
-    fontWeight: '600', 
-    color: COLORS.textPrimary, 
-    textAlign: 'center',
-    marginBottom: 4,
-    lineHeight: 18,
+    fontSize: 14, fontWeight: '600', color: COLORS.textPrimary, 
+    textAlign: 'center', marginBottom: 4, lineHeight: 18,
   },
-  templateSubtitle: { 
-    fontSize: 11, 
-    color: COLORS.textMuted,
-    textAlign: 'center',
-  },
+  templateSubtitle: { fontSize: 11, color: COLORS.textMuted, textAlign: 'center' },
   
-  // Consult Banner Card (Normal card, not floating)
+  // Consult Banner
   consultBannerCard: { 
-    flexDirection: 'row', 
-    alignItems: 'center', 
-    backgroundColor: COLORS.white, 
-    borderRadius: 16, 
-    paddingHorizontal: 16, 
-    paddingVertical: 14, 
-    marginTop: 20,
-    marginBottom: 20,
-    shadowColor: '#000', 
-    shadowOffset: { width: 0, height: 2 }, 
-    shadowOpacity: 0.08, 
-    shadowRadius: 8, 
-    elevation: 4,
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    flexDirection: 'row', alignItems: 'center', 
+    backgroundColor: COLORS.white, borderRadius: 16, 
+    paddingHorizontal: 16, paddingVertical: 14, 
+    marginTop: 20, marginBottom: 20,
+    shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, 
+    shadowOpacity: 0.08, shadowRadius: 8, elevation: 4,
+    borderWidth: 1, borderColor: COLORS.border,
   },
   bannerIconWrapper: { 
-    width: 36, 
-    height: 36, 
-    borderRadius: 18, 
-    backgroundColor: COLORS.primary, 
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    marginRight: 12,
+    width: 36, height: 36, borderRadius: 18, 
+    backgroundColor: COLORS.primary, justifyContent: 'center', alignItems: 'center', marginRight: 12,
   },
-  bannerText: { 
-    flex: 1, 
-    fontSize: 14, 
-    fontWeight: '600', 
-    color: COLORS.textPrimary,
-  },
+  bannerText: { flex: 1, fontSize: 14, fontWeight: '600', color: COLORS.textPrimary },
   
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: COLORS.textPrimary,
-    marginBottom: 4,
-  },
-  sectionSubtitle: {
-    fontSize: 13,
-    color: COLORS.textSecondary,
-    marginBottom: 20,
-  },
+  sectionTitle: { fontSize: 18, fontWeight: '700', color: COLORS.textPrimary, marginBottom: 4 },
+  sectionSubtitle: { fontSize: 13, color: COLORS.textSecondary, marginBottom: 20 },
   
   // Document Card
   documentCard: { flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.white, borderRadius: 16, padding: 16, marginBottom: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 8, elevation: 3 },
@@ -932,12 +828,12 @@ const styles = StyleSheet.create({
   successActions: { flexDirection: 'row', gap: 32 },
   successActionBtn: { alignItems: 'center', padding: 16, borderRadius: 16, backgroundColor: COLORS.white, minWidth: 80 },
   successActionText: { fontSize: 13, fontWeight: '600', color: COLORS.textPrimary, marginTop: 8 },
-  lawyerReviewCTA: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: COLORS.primary + '15', padding: 20, borderRadius: 16, marginTop: 24, borderWidth: 1, borderColor: COLORS.primary + '30' },
+  lawyerReviewCTA: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: COLORS.primary + '15', padding: 20, borderRadius: 16, marginTop: 24, borderWidth: 1, borderColor: COLORS.primary + '30', width: '100%' },
   lawyerReviewContent: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   lawyerReviewText: { flex: 1 },
   lawyerReviewTitle: { fontSize: 16, fontWeight: '700', color: COLORS.textPrimary, marginBottom: 2 },
   lawyerReviewSubtitle: { fontSize: 13, color: COLORS.textSecondary },
-  successBottomActions: { padding: 20, gap: 12 },
+  successBottomActions: { padding: 20, gap: 12, width: '100%' },
   viewDocsButton: { backgroundColor: COLORS.white, borderRadius: 30, paddingVertical: 16, alignItems: 'center', borderWidth: 2, borderColor: COLORS.primary },
   viewDocsText: { fontSize: 16, fontWeight: '700', color: COLORS.primary },
   createNewButton: { flexDirection: 'row', backgroundColor: COLORS.primary, borderRadius: 30, paddingVertical: 16, alignItems: 'center', justifyContent: 'center', gap: 8 },
