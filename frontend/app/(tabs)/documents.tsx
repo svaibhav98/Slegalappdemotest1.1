@@ -168,6 +168,7 @@ const INITIAL_DOCUMENTS: SavedDocument[] = [
 export default function DocumentsScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
+  const { width: screenWidth } = useWindowDimensions();
   const initialTab = (params.tab as Tab) || 'create';
   const [activeTab, setActiveTab] = useState<Tab>(initialTab);
   const [currentScreen, setCurrentScreen] = useState<Screen>('list');
