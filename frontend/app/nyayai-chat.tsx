@@ -205,6 +205,21 @@ export default function NyayAIChatScreen() {
     
     return `**Chat Summary**\n\nTotal Messages: ${messages.length}\n• Your Questions: ${userQuestions}\n• AI Responses: ${aiResponses}\n\n**Topic:** ${chatTitle}\n\n**Key Discussion Points:**\nThis conversation covered legal guidance related to ${chatTitle.toLowerCase()}. The AI provided general information and recommended consulting a qualified lawyer for specific advice.`;
   };
+  
+  // Input button handlers
+  const handleAttachment = () => {
+    alert('Attachment feature coming soon! You can upload:\n• Documents\n• Images\n• PDFs');
+  };
+  
+  const handleVoiceRecord = () => {
+    if (isRecording) {
+      setIsRecording(false);
+      alert('Voice recording stopped. Processing...');
+    } else {
+      setIsRecording(true);
+      alert('Voice recording started. Tap again to stop.');
+    }
+  };
 
   return (
     <>
