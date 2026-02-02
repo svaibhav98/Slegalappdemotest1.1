@@ -174,11 +174,28 @@ export default function DocumentsScreen() {
   const [documents, setDocuments] = useState<SavedDocument[]>(INITIAL_DOCUMENTS);
   const [generatedDocId, setGeneratedDocId] = useState<string | null>(null);
   const { savedLaws, unsaveLaw } = useSavedLaws();
+  
+  // Swipe navigation refs
+  const scrollViewRef = useRef<ScrollView>(null);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  // Map tabs to indices
+  const tabToIndex: Record<Tab, number> = {
+    'create': 0,
+    'documents': 1,
+    'saved': 2,
+  };
+  
+  const indexToTab: Tab[] = ['create', 'documents', 'saved'];
 
   // Handle tab parameter from navigation
   useEffect(() => {
     if (params.tab) {
-      setActiveTab(params.tab as Tab);
+      const tab = params.tab as Tab;
+      setActiveTab(tab);
+      const index = tabToIndex[tab];
+      scrollViewRef.current?.scrollTo({ x: index * SCREEN_WIDTH, animated: false });
+      setCurrentPage(index);
     }
   }, [params.tab]);
 
