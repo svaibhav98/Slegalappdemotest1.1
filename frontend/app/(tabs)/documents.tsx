@@ -197,18 +197,18 @@ export default function DocumentsScreen() {
       const tab = params.tab as Tab;
       setActiveTab(tab);
       const index = tabToIndex[tab];
-      scrollViewRef.current?.scrollTo({ x: index * SCREEN_WIDTH, animated: false });
+      scrollViewRef.current?.scrollTo({ x: index * screenWidth, animated: false });
       setCurrentPage(index);
     }
-  }, [params.tab]);
+  }, [params.tab, screenWidth]);
 
-  // Ensure scroll position is correct on mount
+  // Ensure scroll position is correct on mount or when width changes
   useEffect(() => {
     const index = tabToIndex[activeTab];
     setTimeout(() => {
-      scrollViewRef.current?.scrollTo({ x: index * SCREEN_WIDTH, animated: false });
+      scrollViewRef.current?.scrollTo({ x: index * screenWidth, animated: false });
     }, 100);
-  }, []);
+  }, [screenWidth]);
 
   const handleSelectTemplate = (template: DocumentTemplate) => {
     setSelectedTemplate(template);
