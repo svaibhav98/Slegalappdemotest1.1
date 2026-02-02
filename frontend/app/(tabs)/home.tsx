@@ -65,6 +65,12 @@ export default function HomeScreen() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [showDisclaimer, setShowDisclaimer] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [hasUnreadNotifications, setHasUnreadNotifications] = useState(true);
+  const [notifications, setNotifications] = useState([
+    { id: '1', title: 'New lawyer available', message: 'Adv. Priya Patel is now online', time: '5 mins ago', read: false },
+    { id: '2', title: 'Document ready', message: 'Your Rent Agreement is ready to download', time: '1 hour ago', read: false },
+    { id: '3', title: 'Case update', message: 'Your Property Dispute case has a new hearing date', time: '3 hours ago', read: false },
+  ]);
 
   useEffect(() => {
     const hour = new Date().getHours();
