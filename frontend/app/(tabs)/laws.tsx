@@ -43,6 +43,10 @@ export default function LawsScreen() {
 
   const selectedCategory = CATEGORIES[selectedCategoryIndex]?.id || 'all';
 
+  // Use ref to track current category index for PanResponder (avoids stale closure)
+  const selectedIndexRef = useRef(selectedCategoryIndex);
+  selectedIndexRef.current = selectedCategoryIndex;
+
   // Swipe gesture handling for categories
   const panResponder = useRef(
     PanResponder.create({
@@ -53,13 +57,13 @@ export default function LawsScreen() {
       onPanResponderRelease: (_, gestureState) => {
         if (gestureState.dx < -SWIPE_THRESHOLD) {
           // Swipe left - next category
-          if (selectedCategoryIndex < CATEGORIES.length - 1) {
-            setSelectedCategoryIndex(selectedCategoryIndex + 1);
+          if (selectedIndexRef.current < CATEGORIES.length - 1) {
+            setSelectedCategoryIndex(selectedIndexRef.current + 1);
           }
         } else if (gestureState.dx > SWIPE_THRESHOLD) {
           // Swipe right - previous category
-          if (selectedCategoryIndex > 0) {
-            setSelectedCategoryIndex(selectedCategoryIndex - 1);
+          if (selectedIndexRef.current > 0) {
+            setSelectedCategoryIndex(selectedIndexRef.current - 1);
           }
         }
       },
