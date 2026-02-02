@@ -744,6 +744,11 @@ const styles = StyleSheet.create({
   tabText: { fontSize: 14, fontWeight: '600', color: COLORS.textMuted },
   tabTextActive: { color: COLORS.primary },
   
+  // Pager Styles for Swipe Navigation
+  pagerContainer: { flex: 1 },
+  pagerContent: { flexGrow: 1 },
+  page: { width: SCREEN_WIDTH },
+  
   // Content
   content: { flex: 1, padding: 20 },
   
