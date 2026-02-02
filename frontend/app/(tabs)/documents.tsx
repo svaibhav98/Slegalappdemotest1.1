@@ -715,17 +715,17 @@ export default function DocumentsScreen() {
         bounces={false}
       >
         {/* Page 1: Create New */}
-        <View style={styles.page}>
+        <View style={[styles.page, { width: screenWidth }]}>
           {renderTemplateList()}
         </View>
         
         {/* Page 2: My Documents */}
-        <View style={styles.page}>
+        <View style={[styles.page, { width: screenWidth }]}>
           {renderDocumentsList(documents, false)}
         </View>
         
         {/* Page 3: Saved Items */}
-        <View style={styles.page}>
+        <View style={[styles.page, { width: screenWidth }]}>
           {renderSavedItems()}
         </View>
       </ScrollView>
