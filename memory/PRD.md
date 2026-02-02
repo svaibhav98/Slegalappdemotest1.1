@@ -1,149 +1,108 @@
-# SunoLegal - Product Requirements Document
+# SunoLegal / NyayAI - PRD (Product Requirements Document)
 
-## Overview
-SunoLegal is an Indian legal-tech mobile application (React Native/Expo) designed to democratize access to legal information and services. The app features an AI-powered legal assistant (NyayAI), lawyer marketplace, document generation, and government scheme information.
+## Original Problem Statement
+Build a comprehensive Laws & Government Schemes system for the SunoLegal / NyayAI app with:
+- Central (Pan-India) tab with 25-30 laws/schemes
+- State tab with 4 states (Maharashtra, Delhi, UP, Karnataka) each having 20 cards
+- Each card opens into a proper explainer detail page with meaningful content
+- Simple but legally accurate language for common citizens
+- Both basic text search and advanced search with filters
 
-## Core Features
+## User Personas
+1. **Common Citizen** - Needs to understand legal rights and government schemes
+2. **Victim of Issues** - Looking for solutions to specific problems (e.g., property dispute, consumer complaint)
+3. **Beneficiary Seeker** - Wants to avail government welfare schemes
 
-### 1. NyayAI - AI Legal Assistant
-- Chat interface for legal queries
-- Suggested prompts for common legal questions
-- Professional legal-AI themed iconography
-- Disclaimer showing on first landing per session
+## Core Requirements (Static)
+- ✅ Central/State tab navigation
+- ✅ 4 states: Maharashtra, Delhi, UP, Karnataka
+- ✅ State selector dropdown
+- ✅ Search functionality (basic + advanced)
+- ✅ Category filtering
+- ✅ Type filtering (Law/Scheme/Portal)
+- ✅ Law cards with title, preview, type badge, category chip
+- ✅ Detail page with structured sections
+- ✅ Official government links
+- ✅ Bookmark/save functionality
+- ✅ Disclaimer on every detail page
 
-### 2. Lawyer Marketplace
-- Browse and connect with verified lawyers
-- Filter by specialization, language, availability
-- Voice/video consultation booking
-- "Join as a Lawyer" registration flow
+## What's Been Implemented (2024-02-02)
 
-### 3. Document Generator
-- Legal document templates (Rent Agreement, NDA, Power of Attorney, etc.)
-- Form-based document creation
-- Download/share capabilities
+### Laws & Schemes Data Structure
+- **Central Laws**: 30 pan-India items covering:
+  - Citizen Rights (RTI, Consumer Protection, DPDPA, Cyber Laws, Legal Services Authority, Motor Vehicles, Food Safety, PWD Act, POSH)
+  - Housing & Property (RERA, Model Tenancy Act, PMAY)
+  - Employment (Labour Codes, EPFO, ESIC, Minimum Wages)
+  - Women & Family (Domestic Violence, Maintenance/Alimony, Maternity Benefit, Senior Citizens Act)
+  - Welfare Schemes (PM-KISAN, Ayushman Bharat, Jan Dhan, Atal Pension)
+  - Business & MSME (Udyam Registration, Startup India, GST Basics)
+  - Documents (Aadhaar/PAN Rights, Legal Notice Basics)
+  - Utilities (Electricity Act)
 
-### 4. Laws & Schemes
-- Indian laws database with search
-- Government schemes information
-- Save/bookmark functionality
+- **State Laws** (20 each):
+  - Maharashtra: MahaRERA, Rent Control, 7/12 Extract, Aaple Sarkar, e-FIR, MSLSA, Women Commission, Ladki Bahin, MJPJAY, Sanjay Gandhi Niradhar, Shiv Bhojan, Krushi Pump, MahaDBT, CMEGP, MHADA Lottery, Ration Card, Birth/Death, Domicile/Income
+  - Delhi: Delhi RERA, Rent Disputes, Property Mutation, e-District, e-FIR, DLSA, DCW, Labour Portal, Mohalla Clinics, Free Electricity, Free Bus Women, Scholarships, CM Free Coaching, Old Age Pension, Disability Pension, Ration Card, Water/Sewer, Birth/Death, Certificates
+  - UP: Jansunwai, UP RERA, e-FIR, UPSLSA, Bhulekh, Labour Dept, 181 Women Helpline, Tehsil Certificates, Kanya Sumangala, Yuva Swarozgar, CM Awas, Old Age Pension, Farmer Accident Insurance, Ration Card, Widow Pension, Scholarship Portal, Birth/Death, Electricity, e-Samaj Kalyan
+  - Karnataka: Karnataka RERA, Seva Sindhu, e-FIR, KSLSA, Bhoomi, Labour Dept, Women Commission, Revenue Certificates, Gruha Jyothi, Gruha Lakshmi, Anna Bhagya, Shakti Free Bus, Yuva Nidhi, Arogya Karnataka, Old Age Pension, Disability Pension, Ration Card, Birth/Death, Scholarships
 
-### 5. Case Tracker
-- Track ongoing legal cases
-- Hearing reminders
-- Case document storage
+### UI Components
+- Central/State tabs with visual indicators
+- State selector modal for Maharashtra, Delhi, UP, Karnataka
+- Search bar with clear functionality
+- Advanced filters panel (type filtering)
+- Category chips with counts
+- Results count display
+- Law cards with icons, badges, preview
+- Bookmark functionality
+- Detail page with collapsible sections
 
-## Technical Architecture
-
+### File Structure
 ```
-/app/
-├── backend/              # FastAPI backend (server.py)
-│   └── server.py
-└── frontend/             # React Native/Expo frontend
-    ├── app/              # Expo file-based routing
-    │   ├── (tabs)/       # Main bottom navigation screens
-    │   │   ├── home.tsx      # Home dashboard
-    │   │   ├── cases.tsx     # Case tracker
-    │   │   ├── chat.tsx      # NyayAI landing
-    │   │   ├── documents.tsx # Document management
-    │   │   └── laws.tsx      # Laws & schemes
-    │   ├── (settings)/   # Settings screens
-    │   └── lawyers.tsx   # Lawyer marketplace
-    ├── components/       # Reusable components
-    │   ├── icons/LegalIcons.tsx  # Custom SVG icons
-    │   └── BottomNavBar.tsx
-    ├── contexts/         # React Context providers
-    │   ├── AuthContext.tsx
-    │   └── SavedLawsContext.tsx
-    └── services/         # Mock data services
+/app/frontend/services/
+├── lawsData.ts           # Central laws (30 items) + types + categories
+├── stateLawsData.ts      # Maharashtra laws (20 items)
+├── stateLawsData2.ts     # Delhi + UP laws (40 items)
+├── stateLawsKarnataka.ts # Karnataka laws (20 items)
+├── lawsDataExport.ts     # Combined exports + helper functions
+
+/app/frontend/app/(tabs)/
+├── laws.tsx              # Main laws list screen
+├── law-detail/[id].tsx   # Detail screen with sections
 ```
 
-## Recent Updates (February 2026)
+## Prioritized Backlog
 
-### Completed Features (This Session)
-1. **Horizontal Swipe Navigation - Legal Documents Screen**
-   - Swipe between "Create New", "My Documents", and "Saved Items" tabs
-   - PanResponder-based gesture detection (50px threshold)
-   - Visual swipe indicator dots synced with active tab
-   - Vertical scrolling preserved on all tabs
-   - Tap navigation still works
+### P0 (Must Have) - COMPLETED ✅
+- [x] Central tab with 30 laws/schemes
+- [x] State tab with 4 states x 20 cards each
+- [x] Category filtering
+- [x] Search functionality
+- [x] Detail page with structured sections
+- [x] Official links
 
-2. **Horizontal Swipe Navigation - Cases Screen**
-   - Swipe between "Ongoing", "Upcoming", and "Closed" tabs
-   - Tab bar with counts (e.g., "Ongoing (2)")
-   - Summary card with case statistics
-   - Swipe indicator dots below tab bar
+### P1 (Should Have)
+- [ ] Recently viewed laws
+- [ ] Related laws based on user history
+- [ ] Share law/scheme on WhatsApp/social
+- [ ] PDF download of law summary
 
-3. **Horizontal Swipe Navigation - Laws & Schemes Screen**
-   - Swipe between category filters
-   - Horizontal scrollable category chips
-   - Swipe hint text "← Swipe to browse categories →"
-   - Visual dots indicating current category
+### P2 (Nice to Have)
+- [ ] AI-powered legal query assistant integration
+- [ ] Regional language support (Hindi, Marathi, Kannada, Telugu)
+- [ ] Audio read-aloud of content
+- [ ] Offline access to saved laws
+- [ ] Push notifications for scheme deadlines
 
-4. **Stale Closure Fix**
-   - Used useRef to track active tab state for PanResponder
-   - Prevents stale state issues in gesture handlers
+## Next Tasks
+1. Add remaining 2 cards to Maharashtra to reach exactly 20 (currently 18 showing)
+2. Implement search highlighting in results
+3. Add "Share" button on detail page
+4. Connect with AI chat for legal queries
+5. Test on actual mobile devices (iOS/Android)
 
-### Previous Session (January 2025)
-1. **NyayAI Landing Screen Optimization**
-   - Reduced logo/icon size (72px → 44px)
-   - Compact headline and subtext typography
-   - Smaller suggested prompt cards with reduced padding
-   - Tightened vertical spacing throughout
-   - Disclaimer appears only on first landing, disappears after first message
-
-2. **Home Screen Legal Disclaimer**
-   - Floating popup for guest users on first visit
-   - Auto-dismiss after 3 seconds
-   - Close (X) button for instant dismissal
-   - Shows once per session (AsyncStorage persistence)
-
-3. **NyayAI Icon Replacement (Global)**
-   - New professional legal-AI icon design
-   - Scales of justice with neural/AI elements
-   - Applied to: bottom navigation, NyayAI screen, floating button, quick access
-
-4. **Notification Bell Feature**
-   - Notification modal with 4 dummy items
-   - Document Ready, Lawyer Response, Case Update, New Law Alert
-   - Unread indicators and timestamps
-   - "Mark all as read" action
-
-5. **Lawyer Chat CTA Fix**
-   - "Consult Lawyer" → Routes to lawyer marketplace
-   - "Draft Document" → Routes to document generator
-
-### Previous Session Completed
-- UI spacing fixes across multiple screens
-- Professional iconography overhaul
-- Save Laws feature with dedicated section
-- "Join as a Lawyer" header button
-- Settings icon on Documents screen
-- Deployment readiness fixes
-
-## Architecture Notes
-- **Database**: Firestore-only (MongoDB NOT required)
-- **Firebase**: Authentication and Firestore (in-memory mock for development)
-- **Razorpay**: Payment processing (mock)
-- **Runtime**: Backend runs independently without MongoDB dependency
-
-## Key Files Modified This Session
-- `/app/frontend/app/(tabs)/chat.tsx` - NyayAI landing with compact UI
-- `/app/frontend/app/(tabs)/home.tsx` - Notification bell feature
-- `/app/frontend/app/nyayai-chat.tsx` - CTA link fixes
-- `/app/frontend/app/consultation-chat.tsx` - CTA link fixes
-- `/app/frontend/components/icons/LegalIcons.tsx` - New NyayAI icon
-
-## Upcoming/Future Tasks
-- **P1: Continue UI Polish Pass** - Apply design system to remaining screens
-- Enhance NyayAI chat history drawer (rename, delete, pin chats)
-- Implement file attachment and voice recording in NyayAI chat
-- Implement real Firebase authentication
-- Integrate Razorpay payment gateway
-- Add actual AI responses (OpenAI/Gemini integration)
-- Push notification support
-- Real-time lawyer availability
-- Document PDF generation
-- Multi-language support (Hindi, regional languages)
-
-## Test Credentials
-- No login required - use "Continue as Guest" option
+## Technical Notes
+- React Native Expo app
+- TypeScript for type safety
+- Local state management (no backend for laws data)
+- SavedLawsContext for bookmarks
+- Expo Router for navigation
