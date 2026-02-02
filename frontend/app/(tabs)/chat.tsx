@@ -48,6 +48,9 @@ export default function NyayAILandingScreen() {
   // ChatGPT-style drawer state
   const [showDrawer, setShowDrawer] = useState(false);
   const [chatHistory, setChatHistory] = useState<Array<{id: string, title: string, date: string}>>([]);
+  
+  // Input buttons state
+  const [isRecording, setIsRecording] = useState(false);
 
   const suggestedPrompts = [
     {
