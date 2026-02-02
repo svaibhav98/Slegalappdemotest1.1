@@ -340,15 +340,18 @@ const quickAccessItems = [
           onPress={() => setDrawerOpen(false)}
         />
         <View style={styles.drawerContainer}>
-          {/* Drawer Header */}
-          <LinearGradient colors={[Colors.headerBg, Colors.headerBgLight]} style={styles.drawerHeader}>
+          {/* Drawer Header - Blue/Gradient Banner */}
+          <LinearGradient 
+            colors={['#2B2D42', '#374151']} 
+            style={styles.drawerHeader}
+          >
             <View style={styles.drawerUserInfo}>
               <View style={styles.drawerAvatar}>
                 <Ionicons name="person" size={32} color={Colors.textInverse} />
               </View>
               <View style={styles.drawerUserText}>
-                <Text style={styles.drawerUserName}>Vaibhav</Text>
-                <Text style={styles.drawerUserEmail}>vaibhav@email.com</Text>
+                <Text style={styles.drawerUserName}>Vaibhav Singh</Text>
+                <Text style={styles.drawerUserEmail}>{user?.email || 'vaibhav@email.com'}</Text>
               </View>
             </View>
             <TouchableOpacity style={styles.drawerCloseBtn} onPress={() => setDrawerOpen(false)}>
