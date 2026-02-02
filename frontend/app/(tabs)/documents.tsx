@@ -179,6 +179,10 @@ export default function DocumentsScreen() {
   const tabs: Tab[] = ['create', 'documents', 'saved'];
   const tabLabels = { create: 'Create New', documents: 'My Documents', saved: 'Saved Items' };
 
+  // Use ref to track current tab index for PanResponder (avoids stale closure)
+  const activeTabRef = useRef(activeTab);
+  activeTabRef.current = activeTab;
+
   // Swipe gesture handling
   const panResponder = useRef(
     PanResponder.create({
@@ -190,13 +194,13 @@ export default function DocumentsScreen() {
       onPanResponderRelease: (_, gestureState) => {
         if (gestureState.dx < -SWIPE_THRESHOLD) {
           // Swipe left - go to next tab
-          const currentIndex = tabs.indexOf(activeTab);
+          const currentIndex = tabs.indexOf(activeTabRef.current);
           if (currentIndex < tabs.length - 1) {
             setActiveTab(tabs[currentIndex + 1]);
           }
         } else if (gestureState.dx > SWIPE_THRESHOLD) {
           // Swipe right - go to previous tab
-          const currentIndex = tabs.indexOf(activeTab);
+          const currentIndex = tabs.indexOf(activeTabRef.current);
           if (currentIndex > 0) {
             setActiveTab(tabs[currentIndex - 1]);
           }
