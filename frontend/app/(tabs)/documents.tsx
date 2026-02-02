@@ -674,28 +674,53 @@ export default function DocumentsScreen() {
       <View style={styles.tabBar}>
         <TouchableOpacity 
           style={[styles.tab, activeTab === 'create' && styles.tabActive]} 
-          onPress={() => setActiveTab('create')}
+          onPress={() => handleTabPress('create')}
         >
           <Text style={[styles.tabText, activeTab === 'create' && styles.tabTextActive]}>Create New</Text>
         </TouchableOpacity>
         <TouchableOpacity 
           style={[styles.tab, activeTab === 'documents' && styles.tabActive]} 
-          onPress={() => setActiveTab('documents')}
+          onPress={() => handleTabPress('documents')}
         >
           <Text style={[styles.tabText, activeTab === 'documents' && styles.tabTextActive]}>My Documents</Text>
         </TouchableOpacity>
         <TouchableOpacity 
           style={[styles.tab, activeTab === 'saved' && styles.tabActive]} 
-          onPress={() => setActiveTab('saved')}
+          onPress={() => handleTabPress('saved')}
         >
           <Text style={[styles.tabText, activeTab === 'saved' && styles.tabTextActive]}>Saved Items</Text>
         </TouchableOpacity>
       </View>
 
-      {/* Content based on active tab */}
-      {activeTab === 'create' && renderTemplateList()}
-      {activeTab === 'documents' && renderDocumentsList(documents, false)}
-      {activeTab === 'saved' && renderSavedItems()}
+      {/* Swipeable Content - Horizontal Pager */}
+      <ScrollView
+        ref={scrollViewRef}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+        style={styles.pagerContainer}
+        contentContainerStyle={styles.pagerContent}
+        decelerationRate="fast"
+        snapToInterval={SCREEN_WIDTH}
+        snapToAlignment="center"
+      >
+        {/* Page 1: Create New */}
+        <View style={styles.page}>
+          {renderTemplateList()}
+        </View>
+        
+        {/* Page 2: My Documents */}
+        <View style={styles.page}>
+          {renderDocumentsList(documents, false)}
+        </View>
+        
+        {/* Page 3: Saved Items */}
+        <View style={styles.page}>
+          {renderSavedItems()}
+        </View>
+      </ScrollView>
     </View>
   );
 }
