@@ -455,11 +455,11 @@ const quickAccessItems = [
           </TouchableOpacity>
           <TouchableOpacity 
             style={styles.iconButton}
-            onPress={() => setShowNotifications(true)}
+            onPress={handleOpenNotifications}
             data-testid="notification-bell-btn"
           >
             <Ionicons name="notifications-outline" size={22} color={Colors.textInverse} />
-            <View style={styles.badge} />
+            {hasUnreadNotifications && <View style={styles.badge} />}
           </TouchableOpacity>
         </View>
       </View>
