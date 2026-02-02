@@ -462,12 +462,6 @@ export default function NyayAILandingScreen() {
         onRequestClose={() => setShowDrawer(false)}
       >
         <View style={styles.drawerOverlay}>
-          <TouchableOpacity 
-            style={styles.drawerBackdrop}
-            activeOpacity={1}
-            onPress={() => setShowDrawer(false)}
-          />
-          
           <View style={styles.drawerContainer}>
             {/* Drawer Header */}
             <View style={styles.drawerHeader}>
@@ -522,6 +516,12 @@ export default function NyayAILandingScreen() {
               </View>
             </ScrollView>
           </View>
+          
+          <TouchableOpacity 
+            style={styles.drawerBackdrop}
+            activeOpacity={1}
+            onPress={() => setShowDrawer(false)}
+          />
         </View>
       </Modal>
     </View>
