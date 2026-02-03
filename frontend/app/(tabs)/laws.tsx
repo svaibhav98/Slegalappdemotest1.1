@@ -27,6 +27,7 @@ import {
   getCategoriesWithCounts,
   getTypeLabel,
   getTypeBadgeColor,
+  getCategoryColor,
   CATEGORIES,
   STATE_OPTIONS,
   LawScheme,
@@ -269,7 +270,13 @@ export default function LawsScreen() {
         <View style={styles.tabContainer}>
           <TouchableOpacity 
             style={[styles.tab, activeTab === 'central' && styles.tabActive]}
-            onPress={() => setActiveTab('central')}
+            onPress={() => {
+              // Reset all filters when switching tabs to prevent blank screens
+              setSelectedCategory('all');
+              setSearchQuery('');
+              setTypeFilter('all');
+              setActiveTab('central');
+            }}
             activeOpacity={0.8}
             data-testid="central-tab"
           >
@@ -285,7 +292,13 @@ export default function LawsScreen() {
           
           <TouchableOpacity 
             style={[styles.tab, activeTab === 'state' && styles.tabActive]}
-            onPress={() => setActiveTab('state')}
+            onPress={() => {
+              // Reset all filters when switching tabs to prevent blank screens
+              setSelectedCategory('all');
+              setSearchQuery('');
+              setTypeFilter('all');
+              setActiveTab('state');
+            }}
             activeOpacity={0.8}
             data-testid="state-tab"
           >

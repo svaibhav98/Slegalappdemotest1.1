@@ -10,6 +10,28 @@ import { KARNATAKA_LAWS } from './stateLawsKarnataka';
 export type { LawScheme, LawSchemeType, LevelType, Section };
 export { CATEGORIES, STATE_OPTIONS };
 
+// CATEGORY_COLOR_MAP: Consistent colors per category across Central and State
+// Each category has ONE consistent icon/accent color for visual clarity
+export const CATEGORY_COLOR_MAP: Record<string, string> = {
+  'all': '#FF9933',           // Primary orange for "All"
+  'citizen-rights': '#8B5CF6', // Purple - Citizen Rights
+  'housing-property': '#F59E0B', // Amber - Housing & Property
+  'employment': '#3B82F6',     // Blue - Employment
+  'women-family': '#EC4899',   // Pink - Women & Family
+  'welfare': '#10B981',        // Green - Welfare Schemes
+  'business': '#6366F1',       // Indigo - Business & MSME
+  'documents': '#14B8A6',      // Teal - Documents & Legal
+  'health-pension': '#EF4444', // Red - Health & Pension
+  'education': '#8B5CF6',      // Purple - Education
+  'utilities': '#F97316',      // Orange - Utilities & Certificates
+  'grievance': '#0EA5E9',      // Sky Blue - Grievance & Legal Aid
+};
+
+// Get consistent color for a category
+export const getCategoryColor = (categoryId: string): string => {
+  return CATEGORY_COLOR_MAP[categoryId] || '#6B7280'; // Default gray if not found
+};
+
 // All State Laws combined
 export const STATE_LAWS: Record<string, LawScheme[]> = {
   MH: MAHARASHTRA_LAWS,
