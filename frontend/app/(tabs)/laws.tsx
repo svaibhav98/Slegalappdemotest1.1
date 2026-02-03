@@ -71,6 +71,20 @@ export default function LawsScreen() {
   const [showStateSelector, setShowStateSelector] = useState(false);
   const { isLawSaved, toggleSaveLaw } = useSavedLaws();
 
+  // Get base laws based on tab
+  const baseLaws = useMemo(() => {
+    if (activeTab === 'central') {
+      return getCentralLaws();
+    } else {
+      return getStateLaws(selectedState);
+    }
+  }, [activeTab, selectedState]);
+
+  // Categories with counts - needs to be before availableCategories
+  const categoriesWithCounts = useMemo(() => {
+    return getCategoriesWithCounts(baseLaws);
+  }, [baseLaws]);
+
   // Get available categories for swipe navigation
   const availableCategories = useMemo(() => {
     const cats = categoriesWithCounts.filter(c => c.count > 0 || c.id === 'all');
@@ -110,7 +124,7 @@ export default function LawsScreen() {
     })
   ).current;
 
-  // Get base laws based on tab
+  // Apply filters
   const baseLaws = useMemo(() => {
     if (activeTab === 'central') {
       return getCentralLaws();
