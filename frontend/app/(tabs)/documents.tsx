@@ -18,6 +18,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSavedLaws } from '../../contexts/SavedLawsContext';
+import { useSavedDocuments, SavedDocument } from '../../contexts/SavedDocumentsContext';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
