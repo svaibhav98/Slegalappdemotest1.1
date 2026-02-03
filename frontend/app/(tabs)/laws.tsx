@@ -412,10 +412,15 @@ export default function LawsScreen() {
           <Text style={styles.resultsCount}>
             {filteredLaws.length} {filteredLaws.length === 1 ? 'result' : 'results'}
           </Text>
+          <View style={styles.swipeHint}>
+            <Ionicons name="swap-horizontal" size={14} color={COLORS.textMuted} />
+            <Text style={styles.swipeHintText}>Swipe for categories</Text>
+          </View>
         </View>
 
-        {/* Laws List */}
-        <FlatList
+        {/* Laws List with swipe gesture */}
+        <View style={styles.swipeContainer} {...categoryPanResponder.panHandlers}>
+          <FlatList
           data={filteredLaws}
           renderItem={renderLawCard}
           keyExtractor={(item) => item.id}
@@ -433,7 +438,8 @@ export default function LawsScreen() {
             </View>
           }
           ListFooterComponent={<View style={{ height: 100 }} />}
-        />
+          />
+        </View>
       </LinearGradient>
 
       {/* State Selector Modal */}
