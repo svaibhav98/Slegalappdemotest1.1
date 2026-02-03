@@ -316,6 +316,8 @@ export default function LawsScreen() {
   const renderLawCard = ({ item }: { item: LawScheme }) => {
     // Get consistent category color
     const categoryColor = getCategoryColor(item.category);
+    // Get context-relevant icon for this specific law/scheme
+    const lawIcon = getLawSchemeIcon(item);
     
     return (
     <TouchableOpacity
@@ -341,7 +343,7 @@ export default function LawsScreen() {
       <View style={styles.cardImageContainer}>
         <View style={[styles.cardImagePlaceholder, { backgroundColor: categoryColor + '15' }]}>
           <Ionicons 
-            name={getCategoryIcon(item.category) as any} 
+            name={lawIcon as any} 
             size={32} 
             color={categoryColor} 
           />
