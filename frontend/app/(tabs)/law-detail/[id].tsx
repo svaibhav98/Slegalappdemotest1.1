@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -59,6 +59,7 @@ export default function LawDetailScreen() {
   const [lawItem, setLawItem] = useState<LawScheme | null>(null);
   const [relatedItems, setRelatedItems] = useState<LawScheme[]>([]);
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['Overview']));
+  const scrollViewRef = useRef<ScrollView>(null);
   
   const isSaved = lawItem ? isLawSaved(lawItem.id) : false;
   
@@ -76,6 +77,9 @@ export default function LawDetailScreen() {
 
   useEffect(() => {
     if (id) {
+      // Scroll to top when navigating to a new law detail
+      scrollViewRef.current?.scrollTo({ y: 0, animated: false });
+      
       const item = getLawById(id);
       if (item) {
         setLawItem(item);
@@ -94,7 +98,12 @@ export default function LawDetailScreen() {
   }, [id]);
 
   const handleBack = () => {
-    router.back();
+    // Check if we can go back, otherwise navigate to laws screen
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      router.replace('/(tabs)/laws');
+    }
   };
 
   const handleOpenLink = async (url: string) => {
@@ -181,6 +190,7 @@ export default function LawDetailScreen() {
 
         {/* Content */}
         <ScrollView 
+          ref={scrollViewRef}
           style={styles.content}
           contentContainerStyle={styles.contentContainer}
           showsVerticalScrollIndicator={false}
