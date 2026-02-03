@@ -59,6 +59,7 @@ export default function LawDetailScreen() {
   const [lawItem, setLawItem] = useState<LawScheme | null>(null);
   const [relatedItems, setRelatedItems] = useState<LawScheme[]>([]);
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['Overview']));
+  const scrollViewRef = useRef<ScrollView>(null);
   
   const isSaved = lawItem ? isLawSaved(lawItem.id) : false;
   
