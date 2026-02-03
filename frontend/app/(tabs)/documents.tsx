@@ -67,8 +67,6 @@ interface DocumentTemplate {
   requiresStampDuty?: boolean; // Documents requiring government stamp duty
 }
 
- 
-
 const TEMPLATES: DocumentTemplate[] = [
   {
     id: 'consumer_complaint',
