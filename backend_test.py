@@ -15,7 +15,7 @@ from dotenv import load_dotenv
 load_dotenv('/app/frontend/.env')
 
 # Get backend URL from frontend env
-BACKEND_URL = os.getenv('EXPO_PUBLIC_BACKEND_URL', 'https://nyaysun.preview.emergentagent.com')
+BACKEND_URL = os.getenv('EXPO_PUBLIC_BACKEND_URL', 'https://nyayai-schemes.preview.emergentagent.com')
 API_BASE = f"{BACKEND_URL}/api"
 
 # Test configuration
