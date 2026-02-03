@@ -292,7 +292,7 @@ export default function DocumentsScreen() {
   };
 
   const handleRemoveFromSaved = (docId: string) => {
-    setDocuments(docs => docs.map(d => d.id === docId ? { ...d, isSaved: false } : d));
+    toggleSaveDocument(docId);
   };
 
   const handleBackToList = () => {
