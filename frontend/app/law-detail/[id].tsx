@@ -77,6 +77,9 @@ export default function LawDetailScreen() {
 
   useEffect(() => {
     if (id) {
+      // Scroll to top when navigating to a new law detail
+      scrollViewRef.current?.scrollTo({ y: 0, animated: false });
+      
       const item = getLawById(id);
       if (item) {
         setLawItem(item);
