@@ -460,6 +460,21 @@ const styles = StyleSheet.create({
   moreButton: {
     padding: 8,
   },
+  endChatButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FEE2E2',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 16,
+    marginRight: 8,
+    gap: 4,
+  },
+  endChatButtonText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#EF4444',
+  },
 
   // Messages
   messagesGradient: {
