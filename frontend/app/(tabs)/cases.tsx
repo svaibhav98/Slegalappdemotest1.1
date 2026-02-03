@@ -259,13 +259,6 @@ export default function CasesScreen() {
             </View>
           </View>
 
-          {/* Swipe indicator dots */}
-          <View style={styles.swipeIndicator}>
-            {tabs.map((tab) => (
-              <View key={tab} style={[styles.swipeDot, activeTab === tab && styles.swipeDotActive]} />
-            ))}
-          </View>
-
           {/* Cases List */}
           {filteredCases.length === 0 ? (
             <View style={styles.emptyState}>

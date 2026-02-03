@@ -655,16 +655,6 @@ export default function DocumentsScreen() {
         ))}
       </View>
 
-      {/* Swipe indicator */}
-      <View style={styles.swipeIndicator}>
-        {tabs.map((tab, index) => (
-          <View 
-            key={tab} 
-            style={[styles.swipeDot, activeTab === tab && styles.swipeDotActive]} 
-          />
-        ))}
-      </View>
-
       {/* Content with swipe gesture */}
       <View style={styles.contentWrapper} {...panResponder.panHandlers}>
         {activeTab === 'create' && renderTemplateList()}
