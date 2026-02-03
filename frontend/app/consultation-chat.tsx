@@ -148,8 +148,11 @@ export default function ConsultationChatScreen() {
     setShowEndChatModal(false);
     setSessionActive(false);
     updateBookingStatus(bookingId as string, 'completed');
-    // Navigate back to previous screen (lawyer profile or consult flow)
-    router.back();
+    // Navigate to Review screen (post-consultation) instead of going back
+    router.replace({
+      pathname: '/post-consultation',
+      params: { bookingId, lawyerId }
+    });
   };
 
   const handleConsultLawyer = () => {

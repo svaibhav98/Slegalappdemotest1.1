@@ -189,7 +189,11 @@ export default function LawsScreen() {
     return cat?.icon || 'document-text';
   };
 
-  const renderLawCard = ({ item }: { item: LawScheme }) => (
+  const renderLawCard = ({ item }: { item: LawScheme }) => {
+    // Get consistent category color
+    const categoryColor = getCategoryColor(item.category);
+    
+    return (
     <TouchableOpacity
       key={item.id}
       style={styles.card}
@@ -211,11 +215,11 @@ export default function LawsScreen() {
       </TouchableOpacity>
 
       <View style={styles.cardImageContainer}>
-        <View style={[styles.cardImagePlaceholder, { backgroundColor: item.tagColor + '15' }]}>
+        <View style={[styles.cardImagePlaceholder, { backgroundColor: categoryColor + '15' }]}>
           <Ionicons 
             name={getCategoryIcon(item.category) as any} 
             size={32} 
-            color={item.tagColor} 
+            color={categoryColor} 
           />
         </View>
       </View>
@@ -227,8 +231,8 @@ export default function LawsScreen() {
           <View style={[styles.typeBadge, { backgroundColor: getTypeBadgeColor(item.type) }]}>
             <Text style={styles.typeBadgeText}>{getTypeLabel(item.type)}</Text>
           </View>
-          <View style={styles.categoryChip}>
-            <Text style={styles.categoryChipText} numberOfLines={1}>
+          <View style={[styles.categoryChip, { backgroundColor: categoryColor + '15' }]}>
+            <Text style={[styles.categoryChipText, { color: categoryColor }]} numberOfLines={1}>
               {CATEGORIES.find(c => c.id === item.category)?.name || item.category}
             </Text>
           </View>
@@ -241,7 +245,7 @@ export default function LawsScreen() {
         </View>
       </View>
     </TouchableOpacity>
-  );
+  );};
 
   return (
     <View style={styles.container}>
