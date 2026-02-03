@@ -75,7 +75,7 @@ export default function LoginScreen() {
             <Text style={styles.brandGreen}>Legal</Text>
           </View>
           <Text style={styles.subtitle}>NyayAI made simple for भारत</Text>
-          <Text style={styles.tagline}>Your trusted AI legal assistant for India</Text>
+          <Text style={styles.tagline}>Get legal guidance, create documents, and talk to verified lawyers.</Text>
         </View>
 
         <View style={styles.formContainer}>
