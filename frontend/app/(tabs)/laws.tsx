@@ -125,15 +125,6 @@ export default function LawsScreen() {
   ).current;
 
   // Apply filters
-  const baseLaws = useMemo(() => {
-    if (activeTab === 'central') {
-      return getCentralLaws();
-    } else {
-      return getStateLaws(selectedState);
-    }
-  }, [activeTab, selectedState]);
-
-  // Apply filters
   const filteredLaws = useMemo(() => {
     let laws = baseLaws;
     
