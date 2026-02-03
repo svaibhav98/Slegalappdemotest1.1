@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 12,
     elevation: 5,
-    marginBottom: 20,
+    marginBottom: 16,
   },
   documentIconWrapper: {
     width: 64,
@@ -300,6 +300,35 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '600',
     color: COLORS.success,
+  },
+
+  // Document Actions - Save / Share / Download
+  documentActions: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: COLORS.white,
+    borderRadius: 16,
+    padding: 16,
+    width: '100%',
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  actionBtn: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+  },
+  actionBtnText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: COLORS.textPrimary,
+    marginTop: 8,
   },
 
   // Info Box
