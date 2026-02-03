@@ -30,6 +30,7 @@ const COLORS = {
   textSecondary: '#6B7280',
   textMuted: '#9CA3AF',
   inputBg: '#F5F5F5',
+  inputBorder: '#E5E7EB',
   aiBubble: '#2B2D42',
   userBubble: '#FFFFFF',
   success: '#10B981',
