@@ -98,13 +98,9 @@ export default function LawDetailScreen() {
   }, [id]);
 
   const handleBack = () => {
-    // Check if we can go back in navigation history
-    if (router.canGoBack()) {
-      router.back();
-    } else {
-      // Fallback to Laws screen if no history
-      router.replace('/(tabs)/laws');
-    }
+    // Navigate back to the Laws page
+    // Using push ensures proper navigation to the Laws screen
+    router.push('/(tabs)/laws');
   };
 
   const handleOpenLink = async (url: string) => {
