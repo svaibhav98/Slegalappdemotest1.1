@@ -140,6 +140,18 @@ export default function ConsultationChatScreen() {
     );
   };
 
+  const handleEndChat = () => {
+    setShowEndChatModal(true);
+  };
+
+  const confirmEndChat = () => {
+    setShowEndChatModal(false);
+    setSessionActive(false);
+    updateBookingStatus(bookingId as string, 'completed');
+    // Navigate back to previous screen (lawyer profile or consult flow)
+    router.back();
+  };
+
   const handleConsultLawyer = () => {
     router.push('/lawyers');
   };
