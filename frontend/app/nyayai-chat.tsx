@@ -232,6 +232,59 @@ export default function NyayAIChatScreen() {
     }
   };
 
+  // Message action handlers
+  const showToastMessage = (msg: string) => {
+    setToastMessage(msg);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 2000);
+  };
+
+  const handleCopyMessage = async (content: string) => {
+    try {
+      await ExpoClipboard.setStringAsync(content);
+      showToastMessage('Copied to clipboard');
+    } catch (error) {
+      // Fallback for web
+      if (typeof navigator !== 'undefined' && navigator.clipboard) {
+        navigator.clipboard.writeText(content);
+        showToastMessage('Copied to clipboard');
+      }
+    }
+  };
+
+  const handleFeedback = async (messageId: string, type: 'up' | 'down') => {
+    setMessages(prev => prev.map(msg => {
+      if (msg.id === messageId) {
+        // Toggle feedback if same type clicked again
+        const newFeedback = msg.feedback === type ? null : type;
+        return { ...msg, feedback: newFeedback };
+      }
+      return msg;
+    }));
+    
+    // Store feedback locally
+    try {
+      const feedbackKey = `feedback_${messageId}`;
+      const feedbackData = { messageId, type, timestamp: new Date().toISOString() };
+      await AsyncStorage.setItem(feedbackKey, JSON.stringify(feedbackData));
+    } catch (error) {
+      console.log('Error storing feedback:', error);
+    }
+    
+    showToastMessage(type === 'up' ? 'Thanks for the feedback!' : 'We\'ll improve');
+  };
+
+  const handleShareMessage = async (content: string) => {
+    try {
+      await Share.share({
+        message: content,
+        title: 'NyayAI Response',
+      });
+    } catch (error) {
+      console.log('Error sharing:', error);
+    }
+  };
+
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
