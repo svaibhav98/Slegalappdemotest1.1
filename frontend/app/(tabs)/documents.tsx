@@ -11,6 +11,8 @@ import {
   Dimensions,
   PanResponder,
   Animated,
+  Modal,
+  Linking,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
