@@ -480,6 +480,13 @@ export default function LawsScreen() {
                 key={state.code}
                 style={[styles.stateOption, selectedState === state.code && styles.stateOptionActive]}
                 onPress={() => {
+                  // Reset category filter when changing states to prevent blank screens
+                  // (in case current category has no laws in new state)
+                  if (state.code !== selectedState) {
+                    setSelectedCategory('all');
+                    setSearchQuery('');
+                    setTypeFilter('all');
+                  }
                   setSelectedState(state.code);
                   setShowStateSelector(false);
                 }}
