@@ -357,7 +357,7 @@ export default function DocumentsScreen() {
                 <Ionicons name={template.icon as any} size={28} color={iconColor} />
               </View>
               <Text style={styles.templateTitle} numberOfLines={2}>{template.title}</Text>
-              <Text style={styles.templateSubtitle}>Generate PDF</Text>
+              <Text style={styles.templateSubtitle}>{template.subtitle}</Text>
             </TouchableOpacity>
           );
         })}
