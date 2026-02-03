@@ -71,7 +71,7 @@ const TEMPLATES: DocumentTemplate[] = [
   {
     id: 'consumer_complaint',
     title: 'Consumer Complaint',
-    subtitle: 'File product/service complaints',
+    subtitle: 'File complaint against services',
     icon: 'shield-checkmark',
     requiresStampDuty: false,
     fields: [
@@ -86,7 +86,7 @@ const TEMPLATES: DocumentTemplate[] = [
   {
     id: 'rent_agreement',
     title: 'Rent Agreement',
-    subtitle: 'Property lease documentation',
+    subtitle: 'Rental agreement between parties',
     icon: 'home',
     requiresStampDuty: true, // Requires government stamp duty
     fields: [
@@ -101,7 +101,7 @@ const TEMPLATES: DocumentTemplate[] = [
   {
     id: 'affidavit',
     title: 'Affidavit',
-    subtitle: 'Sworn legal statement',
+    subtitle: 'Legal sworn declaration',
     icon: 'document-text',
     requiresStampDuty: true, // Requires government stamp duty
     fields: [
@@ -115,7 +115,7 @@ const TEMPLATES: DocumentTemplate[] = [
   {
     id: 'nda',
     title: 'NDA',
-    subtitle: 'Non-Disclosure Agreement',
+    subtitle: 'Protect confidential information',
     icon: 'lock-closed',
     requiresStampDuty: false,
     fields: [
@@ -129,7 +129,7 @@ const TEMPLATES: DocumentTemplate[] = [
   {
     id: 'legal_notice',
     title: 'Legal Notice',
-    subtitle: 'Formal legal communication',
+    subtitle: 'Formal legal warning',
     icon: 'mail',
     requiresStampDuty: false,
     fields: [
@@ -144,7 +144,7 @@ const TEMPLATES: DocumentTemplate[] = [
   {
     id: 'power_of_attorney',
     title: 'Power of Attorney',
-    subtitle: 'Legal authority delegation',
+    subtitle: 'Authorize someone legally',
     icon: 'person',
     requiresStampDuty: true, // Requires government stamp duty
     fields: [
