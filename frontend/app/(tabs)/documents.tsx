@@ -243,15 +243,54 @@ export default function DocumentsScreen() {
       type: selectedTemplate?.title || '',
       createdAt: new Date().toISOString().split('T')[0],
       size: `${Math.floor(Math.random() * 200) + 100} KB`,
-      isSaved: false,
+      isSaved: false, // Document starts UNSAVED
     };
     setDocuments([newDoc, ...documents]);
     setGeneratedDocId(newDoc.id);
-    setCurrentScreen('success');
+    
+    // Check if document requires stamp duty
+    if (selectedTemplate?.requiresStampDuty) {
+      setShowStampDutyModal(true);
+    } else {
+      setCurrentScreen('success');
+    }
+  };
+
+  // Toggle save/unsave for generated document
+  const handleToggleSaveDocument = (docId: string) => {
+    setDocuments(docs => docs.map(d => 
+      d.id === docId ? { ...d, isSaved: !d.isSaved } : d
+    ));
   };
 
   const handleSaveDocument = (docId: string) => {
     setDocuments(docs => docs.map(d => d.id === docId ? { ...d, isSaved: true } : d));
+  };
+
+  const handlePayStampDutyOnline = async () => {
+    try {
+      await Linking.openURL('https://www.shcilestamp.com');
+    } catch (error) {
+      console.log('Could not open stamp duty website');
+    }
+  };
+
+  const handleStampDutyPaid = () => {
+    setShowStampDutyModal(false);
+    // Navigate to Thank You screen
+    router.push({
+      pathname: '/stamp-duty-thank-you',
+      params: { 
+        docId: generatedDocId || '',
+        templateId: selectedTemplate?.id || '',
+        templateTitle: selectedTemplate?.title || ''
+      }
+    });
+  };
+
+  const handleSkipStampDuty = () => {
+    setShowStampDutyModal(false);
+    setCurrentScreen('success');
   };
 
   const handleRemoveFromSaved = (docId: string) => {
