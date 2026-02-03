@@ -160,11 +160,6 @@ export default function LawsScreen() {
     return laws;
   }, [baseLaws, searchQuery, selectedCategory, typeFilter]);
 
-  // Categories with counts
-  const categoriesWithCounts = useMemo(() => {
-    return getCategoriesWithCounts(baseLaws);
-  }, [baseLaws]);
-
   const handleCardPress = (item: LawScheme) => {
     router.push({
       pathname: '/(tabs)/law-detail/[id]',
