@@ -191,6 +191,7 @@ export default function LawDetailScreen() {
 
         {/* Content */}
         <ScrollView 
+          ref={scrollViewRef}
           style={styles.content}
           contentContainerStyle={styles.contentContainer}
           showsVerticalScrollIndicator={false}
