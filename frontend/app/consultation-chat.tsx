@@ -48,6 +48,7 @@ export default function ConsultationChatScreen() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
   const [sessionActive, setSessionActive] = useState(true);
+  const [showEndChatModal, setShowEndChatModal] = useState(false);
 
   useEffect(() => {
     const lawyerData = getLawyerById(lawyerId as string);
