@@ -682,11 +682,28 @@ const styles = StyleSheet.create({
   resultsHeader: {
     paddingHorizontal: 20,
     paddingVertical: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   resultsCount: {
     fontSize: 13,
     fontWeight: '500',
     color: COLORS.textSecondary,
+  },
+  swipeHint: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  swipeHintText: {
+    fontSize: 11,
+    color: COLORS.textMuted,
+  },
+
+  // Swipe Container
+  swipeContainer: {
+    flex: 1,
   },
 
   // List
