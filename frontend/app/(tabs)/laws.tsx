@@ -580,7 +580,7 @@ export default function LawsScreen() {
               </TouchableOpacity>
             </View>
           }
-          ListFooterComponent={<View style={{ height: 100 }} />}
+          ListFooterComponent={<View style={{ height: 24 }} />}
           />
         </View>
       </LinearGradient>

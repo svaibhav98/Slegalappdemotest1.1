@@ -343,7 +343,7 @@ export default function CasesScreen() {
             ))
           )}
 
-          <View style={{ height: 100 }} />
+          <View style={{ height: 24 }} />
         </ScrollView>
       </View>
 
