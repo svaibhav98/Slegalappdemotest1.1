@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -12,6 +12,7 @@ import {
 import { Stack, useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useSavedDocuments } from '../contexts/SavedDocumentsContext';
 
 const COLORS = {
   primary: '#FF9933',
@@ -32,8 +33,23 @@ export default function StampDutyThankYouScreen() {
   const params = useLocalSearchParams();
   const { docId, templateId, templateTitle } = params;
   
-  // Save toggle state - starts unsaved
-  const [isSaved, setIsSaved] = useState(false);
+  // Use shared documents context for persistence
+  const { 
+    isDocumentSaved, 
+    toggleSaveDocument, 
+    getDocument,
+    updateDocument 
+  } = useSavedDocuments();
+  
+  // Get saved state from context
+  const isSaved = isDocumentSaved(docId as string);
+  
+  // Update document to mark stamp duty as completed
+  useEffect(() => {
+    if (docId) {
+      updateDocument(docId as string, { hasStampDuty: true });
+    }
+  }, [docId]);
 
   const handleContinueToLawyerReview = () => {
     router.push('/lawyers');
@@ -51,10 +67,20 @@ export default function StampDutyThankYouScreen() {
     router.replace('/(tabs)/home');
   };
 
-  // Toggle save/unsave document
+  // Toggle save/unsave document using context
   const handleToggleSave = () => {
-    setIsSaved(!isSaved);
-    // In a real app, this would sync with backend/storage
+    if (docId) {
+      toggleSaveDocument(docId as string);
+      // Show feedback
+      const newSavedState = !isSaved;
+      Alert.alert(
+        newSavedState ? 'Document Saved' : 'Document Unsaved',
+        newSavedState 
+          ? 'Your document has been saved to My Documents and Saved Items.' 
+          : 'Your document has been removed from Saved Items.',
+        [{ text: 'OK' }]
+      );
+    }
   };
 
   // Handle download PDF
@@ -72,7 +98,7 @@ export default function StampDutyThankYouScreen() {
     try {
       await Share.share({
         message: `Check out my ${templateTitle || 'legal document'} created with SunoLegal (Stamp Duty Completed)`,
-        title: templateTitle || 'Legal Document',
+        title: templateTitle as string || 'Legal Document',
       });
     } catch (error) {
       console.log('Share error:', error);
