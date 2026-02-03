@@ -74,7 +74,7 @@ export default function LoginScreen() {
             <Text style={styles.brandOrange}>Suno</Text>
             <Text style={styles.brandGreen}>Legal</Text>
           </View>
-          <Text style={styles.subtitle}>Nyay (Justice) for All</Text>
+          <Text style={styles.subtitle}>NyayAI made simple for भारत</Text>
           <Text style={styles.tagline}>Your trusted AI legal assistant for India</Text>
         </View>
 
