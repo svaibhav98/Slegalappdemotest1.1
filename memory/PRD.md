@@ -18,7 +18,7 @@ Build a comprehensive Laws & Government Schemes system for the SunoLegal / NyayA
 - ✅ 4 states: Maharashtra, Delhi, UP, Karnataka
 - ✅ State selector dropdown
 - ✅ Search functionality (basic + advanced)
-- ✅ Category filtering
+- ✅ Category filtering with swipe gesture
 - ✅ Type filtering (Law/Scheme/Portal)
 - ✅ Law cards with title, preview, type badge, category chip
 - ✅ Detail page with structured sections
@@ -26,9 +26,33 @@ Build a comprehensive Laws & Government Schemes system for the SunoLegal / NyayA
 - ✅ Bookmark/save functionality
 - ✅ Disclaimer on every detail page
 
-## What's Been Implemented (2024-02-02)
+## What's Been Implemented
 
-### Laws & Schemes Data Structure
+### 2024-02-03 - Bug Fixes (Latest)
+
+#### Fix 1: Laws Screen Swipe Gesture ✅
+- Central/State tabs are now click-only (NOT swipeable)
+- Category filters support horizontal swipe to change category
+- "Swipe for categories" hint text added below results count
+- PanResponder implementation with refs to avoid stale closures
+
+#### Fix 2: Cases Screen Duplicate UI Removed ✅
+- Removed duplicate tab bar below search bar
+- Single "My Cases" summary card with All/Ongoing/Upcoming/Closed tabs
+- Added "All" tab (previously missing)
+- Swipe indicator dots visible below summary card
+- "Swipe" hint text in summary card header
+- Swipe gesture works across all 4 tabs
+
+#### Fix 3: Law Detail Page Navigation ✅
+- Back button now uses `router.canGoBack()` check
+- Falls back to `/(tabs)/laws` if no history
+- ScrollViewRef added with `scrollTo({y: 0})` on id change
+- Related cards navigation scrolls to top automatically
+
+### 2024-02-02 - Initial Implementation
+
+#### Laws & Schemes Data Structure
 - **Central Laws**: 30 pan-India items covering:
   - Citizen Rights (RTI, Consumer Protection, DPDPA, Cyber Laws, Legal Services Authority, Motor Vehicles, Food Safety, PWD Act, POSH)
   - Housing & Property (RERA, Model Tenancy Act, PMAY)
@@ -46,15 +70,16 @@ Build a comprehensive Laws & Government Schemes system for the SunoLegal / NyayA
   - Karnataka: Karnataka RERA, Seva Sindhu, e-FIR, KSLSA, Bhoomi, Labour Dept, Women Commission, Revenue Certificates, Gruha Jyothi, Gruha Lakshmi, Anna Bhagya, Shakti Free Bus, Yuva Nidhi, Arogya Karnataka, Old Age Pension, Disability Pension, Ration Card, Birth/Death, Scholarships
 
 ### UI Components
-- Central/State tabs with visual indicators
+- Central/State tabs with visual indicators (click-only)
 - State selector modal for Maharashtra, Delhi, UP, Karnataka
 - Search bar with clear functionality
 - Advanced filters panel (type filtering)
-- Category chips with counts
-- Results count display
+- Category chips with counts + swipe gesture
+- Results count display with swipe hint
 - Law cards with icons, badges, preview
 - Bookmark functionality
 - Detail page with collapsible sections
+- Related items with scroll-to-top navigation
 
 ### File Structure
 ```
@@ -64,10 +89,15 @@ Build a comprehensive Laws & Government Schemes system for the SunoLegal / NyayA
 ├── stateLawsData2.ts     # Delhi + UP laws (40 items)
 ├── stateLawsKarnataka.ts # Karnataka laws (20 items)
 ├── lawsDataExport.ts     # Combined exports + helper functions
+├── casesData.ts          # Cases mock data
 
 /app/frontend/app/(tabs)/
-├── laws.tsx              # Main laws list screen
-├── law-detail/[id].tsx   # Detail screen with sections
+├── laws.tsx              # Laws list screen with category swipe
+├── cases.tsx             # Cases screen with summary card tabs
+├── law-detail/[id].tsx   # Detail screen with back nav fix
+
+/app/frontend/app/
+├── law-detail/[id].tsx   # Alternate detail screen (also fixed)
 ```
 
 ## Prioritized Backlog
@@ -75,16 +105,18 @@ Build a comprehensive Laws & Government Schemes system for the SunoLegal / NyayA
 ### P0 (Must Have) - COMPLETED ✅
 - [x] Central tab with 30 laws/schemes
 - [x] State tab with 4 states x 20 cards each
-- [x] Category filtering
+- [x] Category filtering with swipe
 - [x] Search functionality
 - [x] Detail page with structured sections
 - [x] Official links
+- [x] Bug fixes (swipe, duplicate UI, back navigation)
 
 ### P1 (Should Have)
 - [ ] Recently viewed laws
 - [ ] Related laws based on user history
 - [ ] Share law/scheme on WhatsApp/social
 - [ ] PDF download of law summary
+- [ ] Consolidate duplicate law-detail folders
 
 ### P2 (Nice to Have)
 - [ ] AI-powered legal query assistant integration
@@ -94,7 +126,7 @@ Build a comprehensive Laws & Government Schemes system for the SunoLegal / NyayA
 - [ ] Push notifications for scheme deadlines
 
 ## Next Tasks
-1. Add remaining 2 cards to Maharashtra to reach exactly 20 (currently 18 showing)
+1. Consolidate duplicate `law-detail` folder structure (refactoring)
 2. Implement search highlighting in results
 3. Add "Share" button on detail page
 4. Connect with AI chat for legal queries
@@ -106,3 +138,5 @@ Build a comprehensive Laws & Government Schemes system for the SunoLegal / NyayA
 - Local state management (no backend for laws data)
 - SavedLawsContext for bookmarks
 - Expo Router for navigation
+- PanResponder for swipe gestures
+- All law/scheme data is MOCKED locally in TypeScript files
