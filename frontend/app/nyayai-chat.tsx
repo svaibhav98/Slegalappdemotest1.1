@@ -330,7 +330,7 @@ export default function NyayAIChatScreen() {
             showsVerticalScrollIndicator={false}
           >
             {messages.map((message, index) => (
-              <View key={index}>
+              <View key={message.id || index}>
                 {/* Message Bubble */}
                 <View style={[
                   styles.messageRow,
@@ -360,6 +360,53 @@ export default function NyayAIChatScreen() {
                     </View>
                   )}
                 </View>
+
+                {/* Action Bar for Assistant Messages - ChatGPT style */}
+                {message.role === 'assistant' && (
+                  <View style={styles.messageActionsContainer}>
+                    <View style={styles.messageActions}>
+                      <TouchableOpacity 
+                        style={styles.actionButton}
+                        onPress={() => handleCopyMessage(message.content)}
+                        data-testid={`copy-btn-${message.id}`}
+                      >
+                        <Ionicons name="copy-outline" size={16} color={COLORS.textSecondary} />
+                      </TouchableOpacity>
+                      
+                      <TouchableOpacity 
+                        style={styles.actionButton}
+                        onPress={() => handleFeedback(message.id, 'up')}
+                        data-testid={`thumbsup-btn-${message.id}`}
+                      >
+                        <Ionicons 
+                          name={message.feedback === 'up' ? 'thumbs-up' : 'thumbs-up-outline'} 
+                          size={16} 
+                          color={message.feedback === 'up' ? COLORS.success : COLORS.textSecondary} 
+                        />
+                      </TouchableOpacity>
+                      
+                      <TouchableOpacity 
+                        style={styles.actionButton}
+                        onPress={() => handleFeedback(message.id, 'down')}
+                        data-testid={`thumbsdown-btn-${message.id}`}
+                      >
+                        <Ionicons 
+                          name={message.feedback === 'down' ? 'thumbs-down' : 'thumbs-down-outline'} 
+                          size={16} 
+                          color={message.feedback === 'down' ? COLORS.orange : COLORS.textSecondary} 
+                        />
+                      </TouchableOpacity>
+                      
+                      <TouchableOpacity 
+                        style={styles.actionButton}
+                        onPress={() => handleShareMessage(message.content)}
+                        data-testid={`share-btn-${message.id}`}
+                      >
+                        <Ionicons name="share-outline" size={16} color={COLORS.textSecondary} />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                )}
 
                 {/* Connect to Lawyer CTA - After AI messages */}
                 {message.role === 'assistant' && (
