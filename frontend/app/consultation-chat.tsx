@@ -228,6 +228,17 @@ export default function ConsultationChatScreen() {
               </View>
             </View>
             
+            {sessionActive && (
+              <TouchableOpacity 
+                style={styles.endChatButton} 
+                onPress={handleEndChat}
+                data-testid="end-chat-button"
+              >
+                <Ionicons name="close-circle-outline" size={18} color="#EF4444" />
+                <Text style={styles.endChatButtonText}>End</Text>
+              </TouchableOpacity>
+            )}
+            
             <TouchableOpacity style={styles.moreButton}>
               <Ionicons name="ellipsis-vertical" size={22} color={COLORS.textPrimary} />
             </TouchableOpacity>
