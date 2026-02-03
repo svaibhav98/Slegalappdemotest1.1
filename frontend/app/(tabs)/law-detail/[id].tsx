@@ -98,9 +98,13 @@ export default function LawDetailScreen() {
   }, [id]);
 
   const handleBack = () => {
-    // Always use router.back() to return to the previous screen in stack
-    // This preserves proper navigation history (Laws list, Home, Saved Items, etc.)
-    router.back();
+    // Check if we can go back in navigation history
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      // Fallback to Laws screen if no history
+      router.replace('/(tabs)/laws');
+    }
   };
 
   const handleOpenLink = async (url: string) => {
