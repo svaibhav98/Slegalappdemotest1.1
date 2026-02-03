@@ -4,6 +4,7 @@ import { PaperProvider } from 'react-native-paper';
 import * as SplashScreen from 'expo-splash-screen';
 import { AuthProvider } from '../contexts/AuthContext';
 import { SavedLawsProvider } from '../contexts/SavedLawsContext';
+import { SavedDocumentsProvider } from '../contexts/SavedDocumentsContext';
 import { Colors } from '../constants/Colors';
 
 // Prevent the splash screen from auto-hiding
@@ -34,11 +35,13 @@ export default function RootLayout() {
     <PaperProvider theme={theme}>
       <AuthProvider>
         <SavedLawsProvider>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="index" />
-            <Stack.Screen name="auth/login" />
-            <Stack.Screen name="(tabs)" />
-          </Stack>
+          <SavedDocumentsProvider>
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="index" />
+              <Stack.Screen name="auth/login" />
+              <Stack.Screen name="(tabs)" />
+            </Stack>
+          </SavedDocumentsProvider>
         </SavedLawsProvider>
       </AuthProvider>
     </PaperProvider>
