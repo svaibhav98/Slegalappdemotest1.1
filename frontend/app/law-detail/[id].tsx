@@ -98,11 +98,16 @@ export default function LawDetailScreen() {
   }, [id]);
 
   const handleBack = () => {
-    // Check if we can go back in navigation history
-    if (router.canGoBack()) {
-      router.back();
-    } else {
-      // Fallback to Laws screen if no history
+    // Use router.back() which will properly navigate back in the stack
+    // If no history (e.g., direct URL access), go to Laws page
+    try {
+      if (router.canGoBack()) {
+        router.back();
+      } else {
+        router.replace('/(tabs)/laws');
+      }
+    } catch (error) {
+      // Fallback if any error
       router.replace('/(tabs)/laws');
     }
   };
