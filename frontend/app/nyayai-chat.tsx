@@ -634,6 +634,16 @@ export default function NyayAIChatScreen() {
           />
         </View>
       </Modal>
+      
+      {/* Toast Notification */}
+      {showToast && (
+        <View style={styles.toastContainer}>
+          <View style={styles.toast}>
+            <Ionicons name="checkmark-circle" size={18} color={COLORS.white} />
+            <Text style={styles.toastText}>{toastMessage}</Text>
+          </View>
+        </View>
+      )}
     </>
   );
 }
