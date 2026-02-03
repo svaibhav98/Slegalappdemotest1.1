@@ -118,8 +118,9 @@ export default function LawDetailScreen() {
   };
 
   const handleRelatedPress = (item: LawScheme) => {
+    // Navigate using replace to avoid deep stack, and scroll will happen via useEffect
     router.push({
-      pathname: '/law-detail/[id]',
+      pathname: '/(tabs)/law-detail/[id]',
       params: { id: item.id }
     });
   };
