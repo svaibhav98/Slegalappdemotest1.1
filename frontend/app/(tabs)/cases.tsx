@@ -527,11 +527,6 @@ const styles = StyleSheet.create({
   },
   searchInput: { flex: 1, marginLeft: 12, marginRight: 8, fontSize: 14, color: COLORS.textPrimary },
 
-  // Swipe Indicator (moved inside content)
-  swipeIndicator: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingVertical: 8, gap: 6 },
-  swipeDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: COLORS.border },
-  swipeDotActive: { width: 20, backgroundColor: COLORS.primary },
-
   contentWrapper: { flex: 1 },
   content: { flex: 1, backgroundColor: COLORS.background },
   contentContainer: { padding: 20 },
