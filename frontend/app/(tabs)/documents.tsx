@@ -239,8 +239,10 @@ export default function DocumentsScreen() {
       createdAt: new Date().toISOString().split('T')[0],
       size: `${Math.floor(Math.random() * 200) + 100} KB`,
       isSaved: false, // Document starts UNSAVED
+      hasStampDuty: selectedTemplate?.requiresStampDuty || false,
     };
-    setDocuments([newDoc, ...documents]);
+    // Add document to shared context (persists across screens)
+    addDocument(newDoc);
     setGeneratedDocId(newDoc.id);
     
     // Check if document requires stamp duty
@@ -251,15 +253,16 @@ export default function DocumentsScreen() {
     }
   };
 
-  // Toggle save/unsave for generated document
+  // Toggle save/unsave for generated document - uses context
   const handleToggleSaveDocument = (docId: string) => {
-    setDocuments(docs => docs.map(d => 
-      d.id === docId ? { ...d, isSaved: !d.isSaved } : d
-    ));
+    toggleSaveDocument(docId);
   };
 
   const handleSaveDocument = (docId: string) => {
-    setDocuments(docs => docs.map(d => d.id === docId ? { ...d, isSaved: true } : d));
+    // Find doc and if not saved, toggle it
+    if (!isDocumentSaved(docId)) {
+      toggleSaveDocument(docId);
+    }
   };
 
   const handlePayStampDutyOnline = async () => {
