@@ -467,7 +467,12 @@ export default function DocumentsScreen() {
   );
 
   // Render Success Screen
-  const renderSuccess = () => (
+  const renderSuccess = () => {
+    // Get current document's saved state
+    const currentDoc = documents.find(d => d.id === generatedDocId);
+    const isDocSaved = currentDoc?.isSaved || false;
+    
+    return (
     <View style={styles.successContainer}>
       <ScrollView 
         style={styles.successScrollView}
@@ -491,9 +496,19 @@ export default function DocumentsScreen() {
         </View>
 
         <View style={styles.successActions}>
-          <TouchableOpacity style={styles.successActionBtn} onPress={() => handleSaveDocument(generatedDocId || '')}>
-            <Ionicons name="bookmark" size={24} color={COLORS.primary} />
-            <Text style={styles.successActionText}>Save</Text>
+          <TouchableOpacity 
+            style={styles.successActionBtn} 
+            onPress={() => handleToggleSaveDocument(generatedDocId || '')}
+            data-testid="save-toggle-btn"
+          >
+            <Ionicons 
+              name={isDocSaved ? 'bookmark' : 'bookmark-outline'} 
+              size={24} 
+              color={isDocSaved ? COLORS.amber : COLORS.textMuted} 
+            />
+            <Text style={[styles.successActionText, isDocSaved && { color: COLORS.amber }]}>
+              {isDocSaved ? 'Saved' : 'Save'}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.successActionBtn}>
             <Ionicons name="share-social" size={24} color={COLORS.blue} />
@@ -521,8 +536,13 @@ export default function DocumentsScreen() {
         </TouchableOpacity>
 
         <View style={styles.successBottomActions}>
-          <TouchableOpacity style={styles.viewDocsButton} onPress={handleBackToList} activeOpacity={0.9}>
-            <Text style={styles.viewDocsText}>View My Documents</Text>
+          <TouchableOpacity 
+            style={styles.viewDocsButton} 
+            onPress={handleBackToList} 
+            activeOpacity={0.9}
+            data-testid="view-my-documents-btn"
+          >
+            <Text style={styles.viewDocsText}>View My Document</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.createNewButton} onPress={handleCreateNew} activeOpacity={0.9}>
             <Ionicons name="add" size={20} color={COLORS.white} />
@@ -531,7 +551,7 @@ export default function DocumentsScreen() {
         </View>
       </ScrollView>
     </View>
-  );
+  );};
 
   // Render Documents List
   const renderDocumentsList = (docs: SavedDocument[], showSaveButton: boolean) => (
