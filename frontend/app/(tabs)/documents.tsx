@@ -684,11 +684,6 @@ const styles = StyleSheet.create({
   tabText: { fontSize: 14, fontWeight: '600', color: COLORS.textMuted },
   tabTextActive: { color: COLORS.primary },
   
-  // Swipe Indicator
-  swipeIndicator: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingVertical: 8, gap: 6, backgroundColor: COLORS.white },
-  swipeDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: COLORS.border },
-  swipeDotActive: { width: 20, backgroundColor: COLORS.primary },
-  
   // Content wrapper for swipe
   contentWrapper: { flex: 1 },
   
