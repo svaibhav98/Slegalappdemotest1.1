@@ -677,10 +677,134 @@ export default function DocumentsScreen() {
     </ScrollView>
   );
 
+  // Stamp Duty Modal Component (rendered at top level)
+  const renderStampDutyModal = () => (
+    <Modal
+      visible={showStampDutyModal}
+      animationType="slide"
+      transparent={true}
+      onRequestClose={() => {}} // Prevent closing on back button
+    >
+      <View style={styles.stampDutyModalOverlay}>
+        <View style={styles.stampDutyModalContainer}>
+          <ScrollView 
+            style={styles.stampDutyModalScroll}
+            contentContainerStyle={styles.stampDutyModalContent}
+            showsVerticalScrollIndicator={false}
+          >
+            {/* Header Icon */}
+            <View style={styles.stampDutyIconWrapper}>
+              <Ionicons name="receipt" size={48} color={COLORS.primary} />
+            </View>
+            
+            {/* Title */}
+            <Text style={styles.stampDutyTitle}>Stamp Duty Required</Text>
+            
+            {/* Body */}
+            <Text style={styles.stampDutyBody}>
+              This document requires government stamp duty to become legally valid.
+            </Text>
+
+            {/* Primary CTA - Pay Online */}
+            <TouchableOpacity 
+              style={styles.stampDutyPrimaryBtn}
+              onPress={handlePayStampDutyOnline}
+              activeOpacity={0.9}
+            >
+              <Ionicons name="open-outline" size={20} color={COLORS.white} />
+              <Text style={styles.stampDutyPrimaryBtnText}>Pay Stamp Duty Online</Text>
+            </TouchableOpacity>
+
+            {/* Instructions Section */}
+            <View style={styles.stampDutyInstructions}>
+              <Text style={styles.stampDutyInstructionsTitle}>How to Complete:</Text>
+              
+              <View style={styles.stampDutyStep}>
+                <View style={styles.stampDutyStepNumber}>
+                  <Text style={styles.stampDutyStepNumberText}>1</Text>
+                </View>
+                <Text style={styles.stampDutyStepText}>Select document type (Rent Agreement / Affidavit / POA etc.)</Text>
+              </View>
+              
+              <View style={styles.stampDutyStep}>
+                <View style={styles.stampDutyStepNumber}>
+                  <Text style={styles.stampDutyStepNumberText}>2</Text>
+                </View>
+                <Text style={styles.stampDutyStepText}>Enter stamp amount</Text>
+              </View>
+              
+              <View style={styles.stampDutyStep}>
+                <View style={styles.stampDutyStepNumber}>
+                  <Text style={styles.stampDutyStepNumberText}>3</Text>
+                </View>
+                <Text style={styles.stampDutyStepText}>Fill applicant details</Text>
+              </View>
+              
+              <View style={styles.stampDutyStep}>
+                <View style={styles.stampDutyStepNumber}>
+                  <Text style={styles.stampDutyStepNumberText}>4</Text>
+                </View>
+                <Text style={styles.stampDutyStepText}>Complete payment</Text>
+              </View>
+              
+              <View style={styles.stampDutyStep}>
+                <View style={styles.stampDutyStepNumber}>
+                  <Text style={styles.stampDutyStepNumberText}>5</Text>
+                </View>
+                <Text style={styles.stampDutyStepText}>Download e-stamp / receipt</Text>
+              </View>
+              
+              <View style={styles.stampDutyStep}>
+                <View style={styles.stampDutyStepNumber}>
+                  <Text style={styles.stampDutyStepNumberText}>6</Text>
+                </View>
+                <Text style={styles.stampDutyStepText}>Return to SunoLegal</Text>
+              </View>
+            </View>
+
+            {/* Secondary CTA - I Have Paid */}
+            <TouchableOpacity 
+              style={styles.stampDutySecondaryBtn}
+              onPress={handleStampDutyPaid}
+              activeOpacity={0.9}
+            >
+              <Ionicons name="checkmark-circle" size={20} color={COLORS.success} />
+              <Text style={styles.stampDutySecondaryBtnText}>I Have Paid Stamp Duty</Text>
+            </TouchableOpacity>
+
+            {/* Skip Option */}
+            <TouchableOpacity 
+              style={styles.stampDutySkipBtn}
+              onPress={handleSkipStampDuty}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.stampDutySkipText}>Skip for now (Continue without stamp)</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </View>
+      </View>
+    </Modal>
+  );
+
   // Main render based on current screen
-  if (currentScreen === 'form') return renderForm();
-  if (currentScreen === 'preview') return renderPreview();
-  if (currentScreen === 'success') return renderSuccess();
+  if (currentScreen === 'form') return (
+    <>
+      {renderForm()}
+      {renderStampDutyModal()}
+    </>
+  );
+  if (currentScreen === 'preview') return (
+    <>
+      {renderPreview()}
+      {renderStampDutyModal()}
+    </>
+  );
+  if (currentScreen === 'success') return (
+    <>
+      {renderSuccess()}
+      {renderStampDutyModal()}
+    </>
+  );
 
   return (
     <View style={styles.container}>
