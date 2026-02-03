@@ -1,0 +1,43 @@
+diff --git a/frontend/app/(tabs)/documents.tsx b/frontend/app/(tabs)/documents.tsx
+index e0c7f17..2b01fbe 100644
+--- a/frontend/app/(tabs)/documents.tsx
++++ b/frontend/app/(tabs)/documents.tsx
+@@ -67,15 +67,6 @@ interface DocumentTemplate {
+   requiresStampDuty?: boolean; // Documents requiring government stamp duty
+ }
+ 
+-interface SavedDocument {
+-  id: string;
+-  name: string;
+-  type: string;
+-  createdAt: string;
+-  size: string;
+-  isSaved: boolean;
+-}
+-
+ const TEMPLATES: DocumentTemplate[] = [
+   {
+     id: 'consumer_complaint',
+@@ -165,12 +156,6 @@ const TEMPLATES: DocumentTemplate[] = [
+   },
+ ];
+ 
+-const INITIAL_DOCUMENTS: SavedDocument[] = [
+-  { id: 'doc-1', name: 'Rent Agreement - Flat 302', type: 'Rent Agreement', createdAt: '2025-01-20', size: '245 KB', isSaved: true },
+-  { id: 'doc-2', name: 'Consumer Complaint - Amazon', type: 'Consumer Complaint', createdAt: '2025-01-18', size: '189 KB', isSaved: false },
+-  { id: 'doc-3', name: 'NDA - TechCorp India', type: 'NDA', createdAt: '2025-01-15', size: '156 KB', isSaved: true },
+-];
+-
+ // Swipe threshold configuration
+ const SWIPE_THRESHOLD = 50;
+ 
+@@ -182,7 +167,8 @@ export default function DocumentsScreen() {
+   const [currentScreen, setCurrentScreen] = useState<Screen>('list');
+   const [selectedTemplate, setSelectedTemplate] = useState<DocumentTemplate | null>(null);
+   const [formData, setFormData] = useState<Record<string, string>>({});
+-  const [documents, setDocuments] = useState<SavedDocument[]>(INITIAL_DOCUMENTS);
++  const { savedDocuments } = useSavedDocuments();
++  const [documents, setDocuments] = useState<SavedDocument[]>([]);
+   const [generatedDocId, setGeneratedDocId] = useState<string | null>(null);
+   const [showStampDutyModal, setShowStampDutyModal] = useState(false);
+   const { savedLaws, unsaveLaw } = useSavedLaws();
