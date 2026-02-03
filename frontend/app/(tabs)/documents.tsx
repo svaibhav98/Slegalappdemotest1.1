@@ -61,6 +61,7 @@ interface DocumentTemplate {
   subtitle: string;
   icon: string;
   fields: { key: string; label: string; placeholder: string; multiline?: boolean }[];
+  requiresStampDuty?: boolean; // Documents requiring government stamp duty
 }
 
 interface SavedDocument {
