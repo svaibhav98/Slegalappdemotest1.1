@@ -52,15 +52,19 @@ export default function OnboardingScreen() {
     if (currentIndex < ONBOARDING_SCREENS.length - 1) {
       const nextIndex = currentIndex + 1;
       setCurrentIndex(nextIndex);
-      flatListRef.current?.scrollToIndex({ index: nextIndex, animated: true });
+      // Use scrollToOffset for reliable scrolling (more reliable than scrollToIndex)
+      flatListRef.current?.scrollToOffset({ 
+        offset: nextIndex * width, 
+        animated: true 
+      });
     } else {
       handleSkip();
     }
   };
 
   const onViewableItemsChanged = useRef(({ viewableItems }: any) => {
-    if (viewableItems.length > 0) {
-      setCurrentIndex(viewableItems[0].index || 0);
+    if (viewableItems.length > 0 && viewableItems[0].index !== null) {
+      setCurrentIndex(viewableItems[0].index);
     }
   }).current;
 
