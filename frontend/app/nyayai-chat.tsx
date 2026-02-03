@@ -796,6 +796,51 @@ const styles = StyleSheet.create({
     color: COLORS.textSecondary,
   },
 
+  // Message Actions (ChatGPT-style)
+  messageActionsContainer: {
+    marginLeft: 40,
+    marginTop: 4,
+    marginBottom: 8,
+  },
+  messageActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  actionButton: {
+    padding: 6,
+    borderRadius: 6,
+  },
+
+  // Toast
+  toastContainer: {
+    position: 'absolute',
+    bottom: 100,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    zIndex: 1000,
+  },
+  toast: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.aiBubble,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 20,
+    gap: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  toastText: {
+    color: COLORS.white,
+    fontSize: 14,
+    fontWeight: '500',
+  },
+
   // Input
   inputSection: {
     paddingHorizontal: 16,
