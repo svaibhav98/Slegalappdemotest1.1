@@ -98,7 +98,12 @@ export default function LawDetailScreen() {
   }, [id]);
 
   const handleBack = () => {
-    router.back();
+    // Check if we can go back, otherwise navigate to laws screen
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      router.replace('/(tabs)/laws');
+    }
   };
 
   const handleOpenLink = async (url: string) => {
