@@ -349,6 +349,41 @@ export default function ConsultationChatScreen() {
             </TouchableOpacity>
           </View>
         )}
+        
+        {/* End Chat Confirmation Modal */}
+        <Modal
+          visible={showEndChatModal}
+          transparent
+          animationType="fade"
+          onRequestClose={() => setShowEndChatModal(false)}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              <View style={styles.modalIconContainer}>
+                <Ionicons name="chatbubbles-outline" size={32} color="#EF4444" />
+              </View>
+              <Text style={styles.modalTitle}>End chat?</Text>
+              <Text style={styles.modalBody}>
+                This will end the consultation chat. You can start a new chat later.
+              </Text>
+              <View style={styles.modalButtons}>
+                <TouchableOpacity 
+                  style={styles.modalCancelButton}
+                  onPress={() => setShowEndChatModal(false)}
+                >
+                  <Text style={styles.modalCancelText}>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                  style={styles.modalEndButton}
+                  onPress={confirmEndChat}
+                  data-testid="confirm-end-chat-button"
+                >
+                  <Text style={styles.modalEndText}>End Chat</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
       </KeyboardAvoidingView>
     </>
   );
