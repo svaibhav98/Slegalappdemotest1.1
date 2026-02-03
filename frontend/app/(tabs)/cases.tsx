@@ -219,29 +219,6 @@ export default function CasesScreen() {
         </View>
       </View>
 
-      {/* Tab Bar for swipe navigation */}
-      <View style={styles.tabBar}>
-        {tabs.map((tab) => (
-          <TouchableOpacity 
-            key={tab}
-            style={[styles.tab, activeTab === tab && styles.tabActive]} 
-            onPress={() => setActiveTab(tab)}
-            data-testid={`case-tab-${tab}`}
-          >
-            <Text style={[styles.tabText, activeTab === tab && styles.tabTextActive]}>
-              {tabLabels[tab]} ({counts[tab]})
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      {/* Swipe indicator */}
-      <View style={styles.swipeIndicator}>
-        {tabs.map((tab) => (
-          <View key={tab} style={[styles.swipeDot, activeTab === tab && styles.swipeDotActive]} />
-        ))}
-      </View>
-
       {/* Content with swipe gesture */}
       <View style={styles.contentWrapper} {...panResponder.panHandlers}>
         <ScrollView 
@@ -249,17 +226,21 @@ export default function CasesScreen() {
           contentContainerStyle={styles.contentContainer}
           showsVerticalScrollIndicator={false}
         >
-          {/* My Cases Summary Card */}
+          {/* My Cases Summary Card - Acts as tab navigation */}
           <View style={styles.summaryCard}>
             <View style={styles.summaryHeader}>
               <Ionicons name="ribbon" size={20} color="#60A5FA" />
               <Text style={styles.summaryTitle}>My Cases</Text>
+              <View style={styles.swipeHintContainer}>
+                <Ionicons name="swap-horizontal" size={14} color={COLORS.textMuted} />
+                <Text style={styles.swipeHintText}>Swipe</Text>
+              </View>
             </View>
             <View style={styles.summaryRow}>
-              <View style={styles.summaryItem}>
-                <Text style={styles.summaryCount}>{counts.all}</Text>
-                <Text style={styles.summaryLabel}>All</Text>
-              </View>
+              <TouchableOpacity style={[styles.summaryItem, activeTab === 'all' && styles.summaryItemActive]} onPress={() => setActiveTab('all')}>
+                <Text style={[styles.summaryCount, activeTab === 'all' && styles.summaryCountActive]}>{counts.all}</Text>
+                <Text style={[styles.summaryLabel, activeTab === 'all' && styles.summaryLabelActive]}>All</Text>
+              </TouchableOpacity>
               <View style={styles.summaryDivider} />
               <TouchableOpacity style={[styles.summaryItem, activeTab === 'ongoing' && styles.summaryItemActive]} onPress={() => setActiveTab('ongoing')}>
                 <Text style={[styles.summaryCount, activeTab === 'ongoing' && styles.summaryCountActive]}>{counts.ongoing}</Text>
@@ -276,6 +257,13 @@ export default function CasesScreen() {
                 <Text style={[styles.summaryLabel, activeTab === 'closed' && styles.summaryLabelActive]}>Closed</Text>
               </TouchableOpacity>
             </View>
+          </View>
+
+          {/* Swipe indicator dots */}
+          <View style={styles.swipeIndicator}>
+            {tabs.map((tab) => (
+              <View key={tab} style={[styles.swipeDot, activeTab === tab && styles.swipeDotActive]} />
+            ))}
           </View>
 
           {/* Cases List */}
