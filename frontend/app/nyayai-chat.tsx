@@ -241,7 +241,7 @@ export default function NyayAIChatScreen() {
 
   const handleCopyMessage = async (content: string) => {
     try {
-      await ExpoClipboard.setStringAsync(content);
+      await Clipboard.setStringAsync(content);
       showToastMessage('Copied to clipboard');
     } catch (error) {
       // Fallback for web
