@@ -67,14 +67,7 @@ interface DocumentTemplate {
   requiresStampDuty?: boolean; // Documents requiring government stamp duty
 }
 
-interface SavedDocument {
-  id: string;
-  name: string;
-  type: string;
-  createdAt: string;
-  size: string;
-  isSaved: boolean;
-}
+ 
 
 const TEMPLATES: DocumentTemplate[] = [
   {
