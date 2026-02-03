@@ -113,7 +113,8 @@ export default function NyayAIChatScreen() {
     const userMessage: Message = {
       role: 'user',
       content: text,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      id: `user-${Date.now()}`,
     };
     
     setMessages(prev => [...prev, userMessage]);
@@ -125,7 +126,9 @@ export default function NyayAIChatScreen() {
       const aiMessage: Message = {
         role: 'assistant',
         content: response,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        id: `assistant-${Date.now()}`,
+        feedback: null,
       };
       setMessages(prev => [...prev, aiMessage]);
       setLoading(false);
