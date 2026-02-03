@@ -183,6 +183,7 @@ export default function DocumentsScreen() {
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [documents, setDocuments] = useState<SavedDocument[]>(INITIAL_DOCUMENTS);
   const [generatedDocId, setGeneratedDocId] = useState<string | null>(null);
+  const [showStampDutyModal, setShowStampDutyModal] = useState(false);
   const { savedLaws, unsaveLaw } = useSavedLaws();
 
   const tabs: Tab[] = ['create', 'documents', 'saved'];
