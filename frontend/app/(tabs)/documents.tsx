@@ -171,7 +171,8 @@ export default function DocumentsScreen() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('list');
   const [selectedTemplate, setSelectedTemplate] = useState<DocumentTemplate | null>(null);
   const [formData, setFormData] = useState<Record<string, string>>({});
-  const [documents, setDocuments] = useState<SavedDocument[]>(INITIAL_DOCUMENTS);
+  const { savedDocuments } = useSavedDocuments();
+  const [documents, setDocuments] = useState<SavedDocument[]>([]);
   const [generatedDocId, setGeneratedDocId] = useState<string | null>(null);
   const [showStampDutyModal, setShowStampDutyModal] = useState(false);
   const { savedLaws, unsaveLaw } = useSavedLaws();
