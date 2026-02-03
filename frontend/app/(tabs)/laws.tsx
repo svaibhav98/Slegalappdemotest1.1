@@ -189,6 +189,130 @@ export default function LawsScreen() {
     return cat?.icon || 'document-text';
   };
 
+  // Get context-relevant icon based on law/scheme id and title
+  const getLawSchemeIcon = (item: LawScheme): string => {
+    const id = item.id.toLowerCase();
+    const title = item.title.toLowerCase();
+    
+    // RTI / Information related
+    if (id.includes('rti') || title.includes('right to information') || title.includes('information')) {
+      return 'document-text';
+    }
+    
+    // Consumer Protection
+    if (id.includes('consumer') || title.includes('consumer')) {
+      return 'shield-checkmark';
+    }
+    
+    // Data Protection / Privacy / Cyber
+    if (id.includes('data-protection') || id.includes('privacy') || title.includes('data protection') || title.includes('privacy') || id.includes('cyber') || title.includes('cyber') || title.includes('it act') || title.includes('information technology')) {
+      return 'lock-closed';
+    }
+    
+    // RERA / Property / Building / Housing
+    if (id.includes('rera') || id.includes('property') || title.includes('real estate') || title.includes('property') || title.includes('building') || title.includes('flat') || title.includes('apartment') || id.includes('housing')) {
+      return 'business';
+    }
+    
+    // Tenancy / Rent
+    if (id.includes('tenancy') || id.includes('rent') || title.includes('tenant') || title.includes('rent') || title.includes('landlord')) {
+      return 'home';
+    }
+    
+    // Labour / Employment / Workers
+    if (id.includes('labour') || id.includes('labor') || id.includes('employment') || id.includes('wage') || title.includes('labour') || title.includes('worker') || title.includes('employee') || title.includes('wage') || title.includes('gratuity') || title.includes('provident fund') || id.includes('pf') || id.includes('epfo')) {
+      return 'briefcase';
+    }
+    
+    // Women / Family / Marriage / Domestic
+    if (id.includes('women') || id.includes('dowry') || id.includes('marriage') || id.includes('domestic') || id.includes('maternity') || title.includes('women') || title.includes('dowry') || title.includes('marriage') || title.includes('domestic') || title.includes('maternity') || title.includes('wife') || title.includes('widow')) {
+      return 'people';
+    }
+    
+    // Senior Citizens / Pension / Old Age
+    if (id.includes('senior') || id.includes('pension') || id.includes('old-age') || title.includes('senior citizen') || title.includes('pension') || title.includes('elderly') || title.includes('old age')) {
+      return 'accessibility';
+    }
+    
+    // Health / Medical / Insurance (Health)
+    if (id.includes('health') || id.includes('medical') || id.includes('ayushman') || title.includes('health') || title.includes('medical') || title.includes('hospital') || title.includes('ayushman')) {
+      return 'medkit';
+    }
+    
+    // Education / School / Scholarship
+    if (id.includes('education') || id.includes('school') || id.includes('scholarship') || title.includes('education') || title.includes('school') || title.includes('scholarship') || title.includes('student')) {
+      return 'school';
+    }
+    
+    // Finance / Money / Bank / Loan / Subsidy
+    if (id.includes('finance') || id.includes('bank') || id.includes('loan') || id.includes('subsidy') || id.includes('mudra') || title.includes('finance') || title.includes('bank') || title.includes('loan') || title.includes('subsidy') || title.includes('mudra') || title.includes('credit')) {
+      return 'wallet';
+    }
+    
+    // Insurance
+    if (id.includes('insurance') || title.includes('insurance') || title.includes('bima')) {
+      return 'umbrella';
+    }
+    
+    // Legal Aid / Grievance / Court
+    if (id.includes('legal-aid') || id.includes('grievance') || id.includes('lok-adalat') || title.includes('legal aid') || title.includes('grievance') || title.includes('lok adalat') || title.includes('tribunal')) {
+      return 'megaphone';
+    }
+    
+    // Motor Vehicle / Transport / Driving
+    if (id.includes('motor') || id.includes('vehicle') || id.includes('transport') || title.includes('motor') || title.includes('vehicle') || title.includes('driving') || title.includes('transport')) {
+      return 'car';
+    }
+    
+    // Environment / Pollution / Green
+    if (id.includes('environment') || id.includes('pollution') || id.includes('green') || title.includes('environment') || title.includes('pollution') || title.includes('green')) {
+      return 'leaf';
+    }
+    
+    // Food / Agriculture / Farmer
+    if (id.includes('food') || id.includes('agri') || id.includes('farmer') || id.includes('kisan') || title.includes('food') || title.includes('agriculture') || title.includes('farmer') || title.includes('kisan') || title.includes('crop')) {
+      return 'nutrition';
+    }
+    
+    // Business / MSME / Company / Startup
+    if (id.includes('business') || id.includes('msme') || id.includes('company') || id.includes('startup') || id.includes('gst') || title.includes('business') || title.includes('msme') || title.includes('company') || title.includes('startup') || title.includes('entrepreneur')) {
+      return 'storefront';
+    }
+    
+    // Certificate / Registration / Document
+    if (id.includes('certificate') || id.includes('registration') || id.includes('aadhaar') || id.includes('aadhar') || title.includes('certificate') || title.includes('registration') || title.includes('aadhaar') || title.includes('birth') || title.includes('death') || title.includes('domicile') || title.includes('caste')) {
+      return 'card';
+    }
+    
+    // Rights / Constitution / Fundamental
+    if (id.includes('fundamental') || id.includes('constitution') || title.includes('fundamental') || title.includes('constitution') || title.includes('right to')) {
+      return 'ribbon';
+    }
+    
+    // Criminal / Police / FIR
+    if (id.includes('criminal') || id.includes('police') || id.includes('fir') || id.includes('ipc') || title.includes('criminal') || title.includes('police') || title.includes('fir')) {
+      return 'alert-circle';
+    }
+    
+    // Contract / Agreement
+    if (id.includes('contract') || id.includes('agreement') || title.includes('contract') || title.includes('agreement')) {
+      return 'create';
+    }
+    
+    // Portal / Online Service / Digital
+    if (item.type === 'portal' || id.includes('portal') || id.includes('online') || id.includes('digital') || title.includes('portal') || title.includes('online') || title.includes('e-')) {
+      return 'globe';
+    }
+    
+    // Welfare / Social / Support
+    if (id.includes('welfare') || id.includes('social') || title.includes('welfare') || title.includes('social') || title.includes('support') || title.includes('assistance') || title.includes('benefit')) {
+      return 'heart';
+    }
+    
+    // Default - use category icon as fallback
+    return getCategoryIcon(item.category);
+  };
+
   const renderLawCard = ({ item }: { item: LawScheme }) => {
     // Get consistent category color
     const categoryColor = getCategoryColor(item.category);
