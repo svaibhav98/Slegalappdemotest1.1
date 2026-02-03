@@ -156,8 +156,6 @@ const TEMPLATES: DocumentTemplate[] = [
   },
 ];
 
- 
-
 // Swipe threshold configuration
 const SWIPE_THRESHOLD = 50;
 
