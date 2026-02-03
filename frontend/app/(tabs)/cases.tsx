@@ -89,7 +89,7 @@ export default function CasesScreen() {
   // Filter cases based on active tab
   const filteredCases = useMemo(() => {
     return allCases.filter(c => {
-      const matchesTab = c.status === activeTab;
+      const matchesTab = activeTab === 'all' || c.status === activeTab;
       const matchesSearch = searchQuery === '' || 
         c.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         c.caseNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
