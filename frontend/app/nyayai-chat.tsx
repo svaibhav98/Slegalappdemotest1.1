@@ -66,6 +66,10 @@ export default function NyayAIChatScreen() {
   
   // Input buttons state
   const [isRecording, setIsRecording] = useState(false);
+  
+  // Toast state for copy feedback
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
 
   useEffect(() => {
     // If there's an initial message, send it automatically
