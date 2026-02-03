@@ -11,6 +11,7 @@ import {
   StatusBar,
   Image,
   Alert,
+  Modal,
 } from 'react-native';
 import { Stack, useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
