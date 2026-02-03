@@ -13,11 +13,13 @@ import {
   Image,
   Modal,
   Share,
+  Clipboard,
 } from 'react-native';
 import { Stack, useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as ExpoClipboard from 'expo-clipboard';
 
 // Design System Colors
 const COLORS = {
