@@ -44,20 +44,20 @@ const COLORS = {
   searchBg: '#2D2D44',
 };
 
-type TabType = 'ongoing' | 'upcoming' | 'closed';
+type TabType = 'all' | 'ongoing' | 'upcoming' | 'closed';
 const SWIPE_THRESHOLD = 50;
 
 export default function CasesScreen() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState<TabType>('ongoing');
+  const [activeTab, setActiveTab] = useState<TabType>('all');
   const [counts, setCounts] = useState({ all: 0, ongoing: 0, closed: 0, upcoming: 0 });
   const [allCases, setAllCases] = useState<Case[]>([]);
   const [selectedCase, setSelectedCase] = useState<Case | null>(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
 
-  const tabs: TabType[] = ['ongoing', 'upcoming', 'closed'];
-  const tabLabels = { ongoing: 'Ongoing', upcoming: 'Upcoming', closed: 'Closed' };
+  const tabs: TabType[] = ['all', 'ongoing', 'upcoming', 'closed'];
+  const tabLabels = { all: 'All', ongoing: 'Ongoing', upcoming: 'Upcoming', closed: 'Closed' };
 
   // Use ref to track current tab index for PanResponder (avoids stale closure)
   const activeTabRef = useRef(activeTab);
