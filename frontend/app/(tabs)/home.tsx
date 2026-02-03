@@ -170,7 +170,7 @@ const quickAccessItems = [
   { 
     id: 'document',
     icon: 'document-text', 
-    label: 'Legal\nDocuments', 
+    label: 'Draft\nDocuments', 
     route: '/(tabs)/documents',
     iconColor: '#6B21A8',
     bgColor: '#F3E8FF',
