@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   StatusBar,
   ScrollView,
+  Share,
+  Alert,
 } from 'react-native';
 import { Stack, useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -21,12 +23,17 @@ const COLORS = {
   border: '#E5E7EB',
   success: '#10B981',
   teal: '#14B8A6',
+  amber: '#F59E0B',
+  blue: '#3B82F6',
 };
 
 export default function StampDutyThankYouScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const { docId, templateId, templateTitle } = params;
+  
+  // Save toggle state - starts unsaved
+  const [isSaved, setIsSaved] = useState(false);
 
   const handleContinueToLawyerReview = () => {
     router.push('/lawyers');
@@ -42,6 +49,34 @@ export default function StampDutyThankYouScreen() {
 
   const handleGoHome = () => {
     router.replace('/(tabs)/home');
+  };
+
+  // Toggle save/unsave document
+  const handleToggleSave = () => {
+    setIsSaved(!isSaved);
+    // In a real app, this would sync with backend/storage
+  };
+
+  // Handle download PDF
+  const handleDownload = () => {
+    Alert.alert(
+      'Download Started',
+      `Your ${templateTitle || 'document'} with stamp duty is being downloaded.`,
+      [{ text: 'OK' }]
+    );
+    // In a real app, this would trigger actual PDF download
+  };
+
+  // Handle share document
+  const handleShare = async () => {
+    try {
+      await Share.share({
+        message: `Check out my ${templateTitle || 'legal document'} created with SunoLegal (Stamp Duty Completed)`,
+        title: templateTitle || 'Legal Document',
+      });
+    } catch (error) {
+      console.log('Share error:', error);
+    }
   };
 
   return (
@@ -86,6 +121,42 @@ export default function StampDutyThankYouScreen() {
             </View>
           </View>
 
+          {/* Document Actions - Save / Share / Download */}
+          <View style={styles.documentActions}>
+            <TouchableOpacity 
+              style={styles.actionBtn} 
+              onPress={handleToggleSave}
+              activeOpacity={0.8}
+            >
+              <Ionicons 
+                name={isSaved ? 'bookmark' : 'bookmark-outline'} 
+                size={24} 
+                color={isSaved ? COLORS.amber : COLORS.textMuted} 
+              />
+              <Text style={[styles.actionBtnText, isSaved && { color: COLORS.amber }]}>
+                {isSaved ? 'Saved' : 'Save'}
+              </Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={styles.actionBtn}
+              onPress={handleShare}
+              activeOpacity={0.8}
+            >
+              <Ionicons name="share-social" size={24} color={COLORS.blue} />
+              <Text style={styles.actionBtnText}>Share</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={styles.actionBtn}
+              onPress={handleDownload}
+              activeOpacity={0.8}
+            >
+              <Ionicons name="download" size={24} color={COLORS.success} />
+              <Text style={styles.actionBtnText}>Download</Text>
+            </TouchableOpacity>
+          </View>
+
           {/* Info Box */}
           <View style={styles.infoBox}>
             <Ionicons name="information-circle" size={20} color={COLORS.teal} />
@@ -94,7 +165,7 @@ export default function StampDutyThankYouScreen() {
             </Text>
           </View>
 
-          {/* Action Buttons */}
+          {/* Navigation Buttons */}
           <View style={styles.actionButtons}>
             <TouchableOpacity 
               style={styles.primaryButton}
