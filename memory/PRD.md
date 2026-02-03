@@ -28,7 +28,26 @@ Build a comprehensive Laws & Government Schemes system for the SunoLegal / NyayA
 
 ## What's Been Implemented
 
-### 2024-02-03 - Bug Fixes (Latest)
+### 2024-02-03 - UI Cleanup Fixes (Latest)
+
+#### Fix A: Law Detail Back Navigation ✅
+- Back button now uses simple `router.back()` 
+- Properly returns to previous screen (Laws list, Home, Saved Items, etc.)
+- No forced redirect to specific screen - follows normal stack behavior
+
+#### Fix B: Cases Screen - Removed Dot-Dot-Dot Row ✅
+- Removed swipe indicator dots row below "My Cases" summary card
+- Kept "Swipe" hint text in top-right of summary card header
+- Tabs (All/Ongoing/Upcoming/Closed) remain clickable
+- Swipe gesture still works across all 4 tabs
+
+#### Fix C: Legal Documents - Removed Dot-Dot-Dot Row ✅  
+- Removed swipe indicator dots row below tab bar
+- Tab bar (Create New/My Documents/Saved Items) remains
+- Tabs are clickable and swipe gesture still works
+- Clean layout without extra rows
+
+### 2024-02-03 - Earlier Bug Fixes
 
 #### Fix 1: Laws Screen Swipe Gesture ✅
 - Central/State tabs are now click-only (NOT swipeable)
@@ -36,17 +55,13 @@ Build a comprehensive Laws & Government Schemes system for the SunoLegal / NyayA
 - "Swipe for categories" hint text added below results count
 - PanResponder implementation with refs to avoid stale closures
 
-#### Fix 2: Cases Screen Duplicate UI Removed ✅
-- Removed duplicate tab bar below search bar
+#### Fix 2: Cases Screen - Added "All" Tab ✅
 - Single "My Cases" summary card with All/Ongoing/Upcoming/Closed tabs
 - Added "All" tab (previously missing)
-- Swipe indicator dots visible below summary card
 - "Swipe" hint text in summary card header
 - Swipe gesture works across all 4 tabs
 
-#### Fix 3: Law Detail Page Navigation ✅
-- Back button now uses `router.canGoBack()` check
-- Falls back to `/(tabs)/laws` if no history
+#### Fix 3: Law Detail Page Scroll-to-Top ✅
 - ScrollViewRef added with `scrollTo({y: 0})` on id change
 - Related cards navigation scrolls to top automatically
 
