@@ -11,6 +11,8 @@ import {
   Modal,
   FlatList,
   PanResponder,
+  GestureResponderEvent,
+  PanResponderGestureState,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -32,6 +34,7 @@ import {
 } from '../../services/lawsDataExport';
 
 const { width } = Dimensions.get('window');
+const SWIPE_THRESHOLD = 50;
 
 const COLORS = {
   gradientStart: '#FFF5F0',
@@ -67,6 +70,45 @@ export default function LawsScreen() {
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [showStateSelector, setShowStateSelector] = useState(false);
   const { isLawSaved, toggleSaveLaw } = useSavedLaws();
+
+  // Get available categories for swipe navigation
+  const availableCategories = useMemo(() => {
+    const cats = categoriesWithCounts.filter(c => c.count > 0 || c.id === 'all');
+    return cats.map(c => c.id);
+  }, [categoriesWithCounts]);
+
+  // Track selected category index for swipe
+  const selectedCategoryRef = useRef(selectedCategory);
+  selectedCategoryRef.current = selectedCategory;
+  const availableCategoriesRef = useRef(availableCategories);
+  availableCategoriesRef.current = availableCategories;
+
+  // PanResponder for category swipe (only affects category filters, NOT Central/State tabs)
+  const categoryPanResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => false,
+      onMoveShouldSetPanResponder: (_: GestureResponderEvent, gestureState: PanResponderGestureState) => {
+        // Only respond to horizontal swipes
+        return Math.abs(gestureState.dx) > Math.abs(gestureState.dy) && Math.abs(gestureState.dx) > 15;
+      },
+      onPanResponderRelease: (_: GestureResponderEvent, gestureState: PanResponderGestureState) => {
+        const cats = availableCategoriesRef.current;
+        const currentIndex = cats.indexOf(selectedCategoryRef.current);
+        
+        if (gestureState.dx < -SWIPE_THRESHOLD) {
+          // Swipe left - go to next category
+          if (currentIndex < cats.length - 1) {
+            setSelectedCategory(cats[currentIndex + 1]);
+          }
+        } else if (gestureState.dx > SWIPE_THRESHOLD) {
+          // Swipe right - go to previous category
+          if (currentIndex > 0) {
+            setSelectedCategory(cats[currentIndex - 1]);
+          }
+        }
+      },
+    })
+  ).current;
 
   // Get base laws based on tab
   const baseLaws = useMemo(() => {
