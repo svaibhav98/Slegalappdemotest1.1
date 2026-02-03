@@ -158,11 +158,7 @@ const TEMPLATES: DocumentTemplate[] = [
   },
 ];
 
-const INITIAL_DOCUMENTS: SavedDocument[] = [
-  { id: 'doc-1', name: 'Rent Agreement - Flat 302', type: 'Rent Agreement', createdAt: '2025-01-20', size: '245 KB', isSaved: true },
-  { id: 'doc-2', name: 'Consumer Complaint - Amazon', type: 'Consumer Complaint', createdAt: '2025-01-18', size: '189 KB', isSaved: false },
-  { id: 'doc-3', name: 'NDA - TechCorp India', type: 'NDA', createdAt: '2025-01-15', size: '156 KB', isSaved: true },
-];
+ 
 
 // Swipe threshold configuration
 const SWIPE_THRESHOLD = 50;
