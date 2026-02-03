@@ -534,20 +534,13 @@ const styles = StyleSheet.create({
   },
   searchInput: { flex: 1, marginLeft: 12, marginRight: 8, fontSize: 14, color: COLORS.textPrimary },
 
-  // Tab Bar
-  tabBar: { flexDirection: 'row', backgroundColor: COLORS.white, paddingHorizontal: 20, paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: COLORS.border },
-  tab: { flex: 1, paddingVertical: 12, alignItems: 'center', borderRadius: 8 },
-  tabActive: { backgroundColor: COLORS.primary + '15' },
-  tabText: { fontSize: 14, fontWeight: '600', color: COLORS.textMuted },
-  tabTextActive: { color: COLORS.primary },
-
-  // Swipe Indicator
-  swipeIndicator: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingVertical: 8, gap: 6, backgroundColor: COLORS.white },
+  // Swipe Indicator (moved inside content)
+  swipeIndicator: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingVertical: 8, gap: 6 },
   swipeDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: COLORS.border },
   swipeDotActive: { width: 20, backgroundColor: COLORS.primary },
 
   contentWrapper: { flex: 1 },
-  content: { flex: 1, backgroundColor: COLORS.background, borderTopLeftRadius: 24, borderTopRightRadius: 24 },
+  content: { flex: 1, backgroundColor: COLORS.background },
   contentContainer: { padding: 20 },
 
   summaryCard: {
