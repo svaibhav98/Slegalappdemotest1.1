@@ -376,7 +376,7 @@ export default function DocumentsScreen() {
         <Ionicons name="arrow-forward" size={18} color={COLORS.textSecondary} />
       </TouchableOpacity>
       
-      <View style={{ height: 100 }} />
+      <View style={{ height: 24 }} />
     </ScrollView>
   );
 
@@ -596,7 +596,7 @@ export default function DocumentsScreen() {
           );
         })
       )}
-      <View style={{ height: 100 }} />
+      <View style={{ height: 24 }} />
     </ScrollView>
   );
 
@@ -671,7 +671,7 @@ export default function DocumentsScreen() {
         ))
       )}
 
-      <View style={{ height: 100 }} />
+      <View style={{ height: 24 }} />
     </ScrollView>
   );
 
