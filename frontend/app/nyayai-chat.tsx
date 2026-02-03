@@ -41,6 +41,8 @@ interface Message {
   role: 'user' | 'assistant';
   content: string;
   timestamp: string;
+  id: string;
+  feedback?: 'up' | 'down' | null;
 }
 
 export default function NyayAIChatScreen() {
